@@ -14,7 +14,6 @@ using DREAM.Models;
 namespace DREAM.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
     public class AccountController : Controller
     {
         //
@@ -35,8 +34,9 @@ namespace DREAM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
-            if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
+            if (ModelState.IsValid && Membership.ValidateUser(model.UserName, model.Password))
             {
+                FormsAuthentication.RedirectFromLoginPage(model.UserName, model.RememberMe);
                 return RedirectToLocal(returnUrl);
             }
 
@@ -52,7 +52,7 @@ namespace DREAM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            WebSecurity.Logout();
+            FormsAuthentication.SignOut();
 
             return RedirectToAction("Index", "Home");
         }
@@ -79,8 +79,8 @@ namespace DREAM.Controllers
                 // Attempt to register the user
                 try
                 {
-                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
-                    WebSecurity.Login(model.UserName, model.Password);
+                    Membership.CreateUser(model.UserName, model.Password, model.UserName + "@example.com");
+                    FormsAuthentication.RedirectFromLoginPage(model.UserName, false);
                     return RedirectToAction("Index", "Home");
                 }
                 catch (MembershipCreateUserException e)
