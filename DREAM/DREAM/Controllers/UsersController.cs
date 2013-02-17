@@ -14,7 +14,7 @@ using DREAM.Models;
 namespace DREAM.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class UsersController : Controller
     {
         //
         // GET: /Account/Login
