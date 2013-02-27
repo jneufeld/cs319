@@ -11,14 +11,14 @@ namespace DREAM.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        int ID;
-        DateTime CreationTime;
-        DateTime CompletionTime;
-        RequestType Type;
-        Caller Caller;
-        Patient Patient;
-        Guid CreatedBy;
-        Guid ClosedBy;
+        public int ID;
+        public DateTime CreationTime;
+        public DateTime CompletionTime;
+        public RequestType Type;
+        public Caller Caller;
+        public Patient Patient;
+        public Guid CreatedBy;
+        public Guid ClosedBy;
         //virtual ICollection<Question> Questions { get; set; }
     }
 }

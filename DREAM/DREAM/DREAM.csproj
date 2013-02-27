@@ -177,7 +177,9 @@
     <Compile Include="Models\Reference.cs" />
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\DREAMContext.cs" />
     <Compile Include="Models\DropDown.cs" />
+    <Compile Include="Models\Log.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\QuestionType.cs" />
     <Compile Include="Models\Region.cs" />
