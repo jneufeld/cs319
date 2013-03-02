@@ -169,6 +169,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
+    <Compile Include="Models\Caller.cs" />
+    <Compile Include="Models\DropDown.cs" />
+    <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\QuestionType.cs" />
+    <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\Request.cs" />
+    <Compile Include="Models\RequestType.cs" />
+    <Compile Include="Models\TumourGroup.cs" />
     <Compile Include="Models\UsersModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
