@@ -10,6 +10,8 @@ namespace DREAM.Models
     {
         public DbSet<Request> Requests { get; set; }
         public DbSet<Log> Logs { get; set; }
+        public DbSet<Caller> Callers { get; set; }
+        public DbSet<Patient> Patients { get; set; }
 
         public DREAMContext() : base("DefaultConnection") {}
     }

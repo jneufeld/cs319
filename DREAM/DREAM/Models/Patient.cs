@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DREAM.Models
 {
@@ -14,10 +16,12 @@ namespace DREAM.Models
 
     public class Patient
     {
-        int AgencyID;
-        string FirstName;
-        string LastName;
-        Gender Gender;
-        int Age;
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int PatientID { get; set; }
+        public int AgencyID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public Gender Gender { get; set; }
+        public int Age { get; set; }
     }
 }

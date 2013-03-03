@@ -1,0 +1,61 @@
+﻿@model DREAM.Models.Request
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Request</legend>
+
+        @Html.HiddenFor(model => model.RequestId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CreationTime)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CreationTime)
+            @Html.ValidationMessageFor(model => model.CreationTime)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CompletionTime)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CompletionTime)
+            @Html.ValidationMessageFor(model => model.CompletionTime)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CreatedBy)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CreatedBy)
+            @Html.ValidationMessageFor(model => model.CreatedBy)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ClosedBy)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ClosedBy)
+            @Html.ValidationMessageFor(model => model.ClosedBy)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
