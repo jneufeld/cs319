@@ -171,6 +171,9 @@
     </Compile>
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
     <Compile Include="Models\Caller.cs" />
+    <Compile Include="Models\ExternalLogin.cs" />
+    <Compile Include="Models\LocalPasswordModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\Reference.cs" />
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\Question.cs" />
@@ -178,10 +181,12 @@
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\QuestionType.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\RegisterExternalLoginModel.cs" />
+    <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\RequestType.cs" />
     <Compile Include="Models\TumourGroup.cs" />
-    <Compile Include="Models\UsersModels.cs" />
+    <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
