@@ -9,16 +9,16 @@ namespace DREAM.Models
 {
     public class Request
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        int ID;
-        DateTime CreationTime;
-        DateTime CompletionTime;
-        RequestType Type;
-        Caller Caller;
-        Patient Patient;
-        Guid CreatedBy;
-        Guid ClosedBy;
+        
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int RequestID { get; set; }
+        public DateTime CreationTime { get; set; }
+        public DateTime CompletionTime { get; set; }
+        //public RequestType Type { get; set; }
+        public Caller CallerID { get; set; }
+        public Patient PatientID { get; set; }
+        public Guid CreatedBy { get; set; }
+        public Guid ClosedBy { get; set; }
         //virtual ICollection<Question> Questions { get; set; }
     }
 }
