@@ -24,6 +24,7 @@ namespace DREAM.Models
          public TumourGroup tumourGroup { get; set; }
          public int requestID { get; set; }
          public List<string> keywords { get; set; }
+         public List<Reference> reference { get; set; }
     }
 
      public class QuestionContext : DbContext

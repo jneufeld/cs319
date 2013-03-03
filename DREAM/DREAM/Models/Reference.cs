@@ -18,9 +18,16 @@ namespace DREAM.Models
 
     public class Reference
     {
+        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         public ReferenceType referenceType { get; set; }
         public string value { get; set; }
         public int questionID { get; set; }
+    }
+
+    public class ReferenceContext : DbContext
+    {
+        public DbSet<Reference> Reference { get; set; }
     }
 }
