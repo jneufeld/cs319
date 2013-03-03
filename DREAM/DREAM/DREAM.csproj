@@ -171,6 +171,9 @@
     </Compile>
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
     <Compile Include="Models\Caller.cs" />
+    <Compile Include="Models\Reference.cs" />
+    <Compile Include="Models\Keyword.cs" />
+    <Compile Include="Models\Question.cs" />
     <Compile Include="Models\DropDown.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\QuestionType.cs" />
