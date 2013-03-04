@@ -174,7 +174,10 @@
     <Compile Include="Models\Caller.cs" />
     <Compile Include="Models\ExternalLogin.cs" />
     <Compile Include="Models\LocalPasswordModel.cs" />
+    <Compile Include="Models\Lock.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\PasswordResetRequest.cs" />
+    <Compile Include="Models\PreviousPassword.cs" />
     <Compile Include="Models\Reference.cs" />
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\Question.cs" />
