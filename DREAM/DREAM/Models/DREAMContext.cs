@@ -9,6 +9,7 @@ namespace DREAM.Models
     public class DREAMContext: DbContext
     {
         public DbSet<PreviousPassword> PreviousPasswords { get; set; }
+        public DbSet<PasswordResetRequest> PasswordResetRequests { get; set; }
         public DbSet<Request> Requests { get; set; }
         public DbSet<Log> Logs { get; set; }
         public DbSet<Caller> Callers { get; set; }
