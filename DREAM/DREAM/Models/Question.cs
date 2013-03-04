@@ -8,27 +8,20 @@ using System.Web;
 
 namespace DREAM.Models
 {
-    // based on following http://www.asp.net/mvc/tutorials/mvc-4/getting-started-with-aspnet-mvc4/adding-a-model
-
-     public class Question
+    public class Question
     {
-         [Key]
-         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-         public int id { get; set; }
-         public string question { get; set; }
-         public int timeTaken { get; set; }
-         public string response { get; set; }
-         public int probability { get; set; }
-         public int severity { get; set; }
-         public string specialNotes { get; set; }
-         public TumourGroup tumourGroup { get; set; }
-         public int requestID { get; set; }
-         public List<string> keywords { get; set; }
-         public List<Reference> reference { get; set; }
+        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public int ID { get; set; }
+        public string QuestionText { get; set; }
+        public int TimeTaken { get; set; }
+        public string Response { get; set; }
+        public int Probability { get; set; }
+        public int Severity { get; set; }
+        public string SpecialNotes { get; set; }
+        public TumourGroup TumourGroup { get; set; }
+        public int RequestID { get; set; }
+        public List<string> Keywords { get; set; }
+        public List<Reference> Reference { get; set; }
     }
-
-     public class QuestionContext : DbContext
-     {
-         public DbSet<Question> Question { get; set; }
-     }
 }

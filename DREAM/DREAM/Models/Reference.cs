@@ -10,24 +10,19 @@ namespace DREAM.Models
 {
     public enum ReferenceType
     {
-        URL_VALUE = 0,
-        FILE_VALUE = 1,
-        TEXT_VALUE = 2,
-        REQUEST_VALUE = 3,
+        URL = 0,
+        FILE = 1,
+        TEXT = 2,
+        REQUEST = 3,
     }
 
     public class Reference
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
-        public ReferenceType referenceType { get; set; }
-        public string value { get; set; }
-        public int questionID { get; set; }
-    }
-
-    public class ReferenceContext : DbContext
-    {
-        public DbSet<Reference> Reference { get; set; }
+        public int ID { get; set; }
+        public ReferenceType ReferenceType { get; set; }
+        public string Value { get; set; }
+        public int QuestionID { get; set; }
     }
 }

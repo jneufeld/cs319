@@ -9,12 +9,14 @@ namespace DREAM.Models
 {
     public class Caller
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CallerID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
+        // TODO Request Request { get; set; } ???
         public int RequestID { get; set; }
     }
 }

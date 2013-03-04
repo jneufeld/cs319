@@ -17,9 +17,9 @@ namespace DREAM.Models
     public class Log
     {
         public int ID { get; set; }
-	    public LogAction Action { get; set; }
-	    public Guid UserID { get; set; }
-	    public int RequestID { get; set; }
+        public LogAction Action { get; set; }
+        public Guid UserID { get; set; }
+        public int RequestID { get; set; }
 
         public virtual Request Request { get; set; }
 

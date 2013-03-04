@@ -12,13 +12,8 @@ namespace DREAM.Models
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
-        public string keyword { get; set; }
-        public bool enabled { get; set; }
-    }
-
-    public class KeywordContext : DbContext
-    {
-        public DbSet<Keyword> Keyword { get; set; }
+        public int ID { get; set; }
+        public string Keyword { get; set; }
+        public bool Enabled { get; set; }
     }
 }
