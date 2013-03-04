@@ -9,9 +9,8 @@ namespace DREAM.Models
 {
     public class Request
     {
-        
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RequestID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ID { get; set; }
         public DateTime CreationTime { get; set; }
         public DateTime CompletionTime { get; set; }
         //public RequestType Type { get; set; }
