@@ -13,7 +13,7 @@ namespace DREAM.Models
         public long ID;
 	    [Required]
 	    public MembershipUser User;
-	    //[DatabaseGenerated(DatabaseGenerationOption.Computed)]
+	    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 	    public DateTime timestamp;
 	    public bool Enabled = true;
 	
