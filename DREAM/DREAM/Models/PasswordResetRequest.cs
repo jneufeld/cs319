@@ -19,7 +19,7 @@ namespace DREAM.Models
 	    [Required]
 	    public Guid UserID { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime timestamp { get; set; }
+        public DateTime Timestamp { get; set; }
         public bool Enabled { get; set; }
 	
         public MembershipUser User
@@ -34,8 +34,13 @@ namespace DREAM.Models
         {
 		    byte[] buffer = Guid.NewGuid().ToByteArray();
 		    long id = BitConverter.ToInt64(buffer, 0);
-		   // if(another PasswordResetRequests have the same id)
-			 //   id = GenerateNewID();
+            using (DREAMContext db = new DREAMContext())
+            {
+                if (db.PasswordResetRequests.Where(p => p.ID == id).Count() != 0)
+                {
+                        id = GenerateNewID();
+                }
+            }
 		return id;
         }
 
