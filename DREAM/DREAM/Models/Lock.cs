@@ -11,7 +11,7 @@ namespace DREAM.Models
         public int ID;
         [Required]
         public DateTime ExpireTime { get; set; }
-	    [Required]
+        [Required]
         public Guid UserID { get; set; }
         [Required]
         public int RequestID { get; set; }
