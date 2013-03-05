@@ -21,6 +21,7 @@ namespace DREAM.Models
         public DbSet<Keyword> Keywords { get; set; }
         public DbSet<Reference> References { get; set; }
         public DbSet<Log> Logs { get; set; }
+        public DbSet<Lock> Locks { get; set; }
 
         public DbSet<PreviousPassword> PreviousPasswords { get; set; }
         public DbSet<PasswordResetRequest> PasswordResetRequests { get; set; }

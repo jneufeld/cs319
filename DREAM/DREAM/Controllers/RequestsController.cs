@@ -125,5 +125,85 @@ namespace DREAM.Controllers
             db.Dispose();
             base.Dispose(disposing);
         }
+
+        // Check if the given request is currently locked, returning true or false.
+        //
+        // Arguments:
+        //      request   -- The current Request object the user is viewing.
+        //      isEditing -- Set of the operation is editing the Request itself.
+        //
+        // Returns:
+        //      True if the given Request is currently locked, else false.
+        private bool isLocked(Request request, bool isEditing = false)
+        {
+            bool returnValue = false;
+            Lock requestLock = findRequestLock(request.ID);
+            MembershipUser lockingUser = getUserFromLock(requestLock);
+            MembershipUser currentUser = Membership.GetUser();
+
+            if ((requestLock != null) && (!currentUser.UserName.Equals(lockingUser.UserName)))
+            {
+                ViewBag.LockingUser = lockingUser;
+                returnValue = true;
+            }
+            else if (requestLock != null)
+            {
+                returnValue = false;
+            }
+            else if (isEditing)
+            {
+                ViewBag.NoLock = true;
+                returnValue = true;
+            }
+            else
+            {
+                returnValue = false;
+            }
+
+            return returnValue;
+        }
+
+        // Find and return the Lock for the given request. If there is no Lock, null is returned.
+        //
+        // Arguments:
+        //      requestID -- The ID (primary key) of the request.
+        //
+        // Returns:
+        //      The Lock holding the given Request or null if there is no lock.
+        private Lock findRequestLock(int requestID)
+        {
+            Lock returnValue = null;
+
+            List<Lock> locks = db.Locks.ToList();
+            foreach (Lock requestLock in locks)
+            {
+                if (requestLock.RequestID == requestID)
+                {
+                    returnValue = requestLock;
+                    break;
+                }
+            }
+
+            return returnValue;
+        }
+
+        // Find and return the MembershipUser associated with a Lock.
+        //
+        // Arguments:
+        //      requestLock -- The Lock to find the user object from (may be null).
+        //
+        // Returns:
+        //      The MembershipUser object of the user holding the Lock or null.
+        private MembershipUser getUserFromLock(Lock requestLock)
+        {
+            MembershipUser returnValue = null;
+
+            if (requestLock != null)
+            {
+                returnValue = Membership.GetUser(requestLock.UserID);
+            }
+
+            return returnValue;
+        }
     }
 }
