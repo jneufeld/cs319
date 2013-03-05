@@ -12,7 +12,7 @@ namespace DREAM.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public DateTime CreationTime { get; set; }
-        public DateTime CompletionTime { get; set; }
+        public DateTime? CompletionTime { get; set; }
         public RequestType Type { get; set; }
         public Caller CallerID { get; set; }
         public Patient PatientID { get; set; }

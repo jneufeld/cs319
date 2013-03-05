@@ -53,6 +53,10 @@ namespace DREAM.Controllers
         {
             if (ModelState.IsValid)
             {
+                request.CreationTime = DateTime.Now;
+                request.CompletionTime = null;
+                request.CreatedBy = (Guid)Membership.GetUser().ProviderUserKey;
+
                 db.Requests.Add(request);
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
                 db.SaveChanges();

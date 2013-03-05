@@ -7,45 +7,14 @@
 <h2>Create</h2>
 
 @using (Html.BeginForm()) {
-    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
 
     <fieldset>
-        <legend>Request</legend>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.CreationTime)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.CreationTime)
-            @Html.ValidationMessageFor(model => model.CreationTime)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.CompletionTime)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.CompletionTime)
-            @Html.ValidationMessageFor(model => model.CompletionTime)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.CreatedBy)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.CreatedBy)
-            @Html.ValidationMessageFor(model => model.CreatedBy)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ClosedBy)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.ClosedBy)
-            @Html.ValidationMessageFor(model => model.ClosedBy)
-        </div>
+        <legend>Add Request</legend>
 
         <p>
-            <input type="submit" value="Create" />
+            <input type="submit" value="Add" />
         </p>
     </fieldset>
 }
