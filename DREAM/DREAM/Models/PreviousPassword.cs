@@ -24,7 +24,6 @@ namespace DREAM.Models
 	    [Required]
 	    public Guid UserID { get; set; }
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 	    public DateTime Timestamp { get; set; }
 
         public MembershipUser User
@@ -33,6 +32,11 @@ namespace DREAM.Models
             {
                 return Membership.GetUser(UserID);
             }
+        }
+
+        public PreviousPassword()
+        {
+            Timestamp = DateTime.Now;
         }
 
         //Returns true if the password can be used by the user,
