@@ -13,7 +13,7 @@ namespace DREAM.Models
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        public string Keyword { get; set; }
+        public string KeywordText { get; set; }
         public bool Enabled { get; set; }
     }
 }
