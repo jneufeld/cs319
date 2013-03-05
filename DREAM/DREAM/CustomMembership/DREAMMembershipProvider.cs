@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DREAM.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -42,6 +43,30 @@ namespace DREAM.CustomMembership
             }
 
             return new Tuple<MembershipPasswordFormat, string, string>(passwordFormat, passwordSalt, password);
+        }
+
+        public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
+        {
+            MembershipUser user = base.CreateUser(username, password, email, passwordQuestion, passwordAnswer, isApproved, providerUserKey, out status);
+
+            if (user!=null)
+            {
+                Tuple<MembershipPasswordFormat, string, string> currentPasswordData = ExtractPasswordData(user);
+                using(DREAMContext db = new DREAMContext())
+                {
+                    PreviousPassword prevPwd = new PreviousPassword
+                    {
+                        UserID = (Guid)user.ProviderUserKey,
+                        PasswordFormat = currentPasswordData.Item1,
+                        PasswordSalt = currentPasswordData.Item2,
+                        Password = currentPasswordData.Item3
+                    };
+                    db.PreviousPasswords.Add(prevPwd);
+                    db.SaveChanges();
+                }
+            }
+
+            return user;
         }
     }
 }

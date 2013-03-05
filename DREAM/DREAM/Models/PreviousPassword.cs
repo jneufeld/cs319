@@ -14,29 +14,36 @@ namespace DREAM.Models
 {
     public class PreviousPassword
     {
-        public int ID;
+        public int ID { get; set; }
 	    [Required]
-	    public MembershipPasswordFormat PasswordFormat;
+	    public MembershipPasswordFormat PasswordFormat { get; set; }
 	    [Required]
-	    public string PasswordSalt;
+	    public string PasswordSalt { get; set; }
 	    [Required]
-	    public string Password;
+	    public string Password { get; set; }
 	    [Required]
-	    public Guid UserID;
-	    [Required]
-	    public MembershipUser User;
+	    public Guid UserID { get; set; }
         [Required]
-	    public DateTime timestamp;
-        
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+	    public DateTime Timestamp { get; set; }
+
+        public MembershipUser User
+        {
+            get
+            {
+                return Membership.GetUser(UserID);
+            }
+        }
+
         //Returns true if the password can be used by the user,
         //false if the password has been recently used by the user.
 	    public static bool CheckPassword(MembershipUser user, string password) 
         {
 		    string hashAlgorithm = Membership.HashAlgorithmType;
-		    DateTime checkPasswordsAfter = new DateTime() - new TimeSpan(253, 0, 0, 0);
+		    DateTime checkPasswordsAfter = DateTime.Now - new TimeSpan(253, 0, 0, 0);
             using(DREAMContext db = new DREAMContext())
             {
-			    foreach(PreviousPassword prevPwd in db.PreviousPasswords.Where(p => p.User.Equals(user) && p.timestamp > checkPasswordsAfter))
+			    foreach(PreviousPassword prevPwd in db.PreviousPasswords.Where(p => p.UserID.Equals((Guid)user.ProviderUserKey) && p.Timestamp > checkPasswordsAfter))
                 {
                     string passwordHash = prevPwd.EncodePassword(password, prevPwd.PasswordSalt);
 				    if(passwordHash == prevPwd.Password)

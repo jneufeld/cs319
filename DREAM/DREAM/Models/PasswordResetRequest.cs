@@ -10,13 +10,26 @@ namespace DREAM.Models
 {
     public class PasswordResetRequest
     {
-        public long ID;
+        public PasswordResetRequest()
+        {
+            this.Enabled = true;
+        }
+
+        public long ID { get; set; }
 	    [Required]
-	    public MembershipUser User;
-	    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-	    public DateTime timestamp;
-	    public bool Enabled = true;
+	    public Guid UserID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime timestamp { get; set; }
+        public bool Enabled { get; set; }
 	
+        public MembershipUser User
+        {
+            get
+            {
+                return Membership.GetUser(UserID);
+            }
+        }
+
 	    public static long GenerateNewID()
         {
 		    byte[] buffer = Guid.NewGuid().ToByteArray();
@@ -32,7 +45,7 @@ namespace DREAM.Models
 			    resetReq = new PasswordResetRequest();
 			    {
 				    resetReq.ID = PasswordResetRequest.GenerateNewID();
-				    resetReq.User = user;
+				    resetReq.UserID = (Guid)user.ProviderUserKey;
 			    }
 			    db.SaveChanges();
 			   // send email to user with a link to the PasswordResetRequest’s page;

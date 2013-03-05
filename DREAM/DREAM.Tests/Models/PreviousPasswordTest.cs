@@ -18,8 +18,6 @@ namespace DREAM.Tests.Models
             Membership.DeleteUser("user1");
 
             user = Membership.CreateUser("user1", "Password1!", "user1@example.com");
-
-            db.SaveChanges();
         }
 
         [TestMethod]
