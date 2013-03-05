@@ -8,12 +8,12 @@ namespace DREAM.Models
 {
     public class Lock
     {
-    public int ID;
-	[Required]
-	public DateTime ExpireTime;
-	[Required]
-	public Guid UserID;
-    [Required]
-    public int RequestID;
+        public int ID;
+        [Required]
+        public DateTime ExpireTime { get; set; }
+        [Required]
+        public Guid UserID { get; set; }
+        [Required]
+        public int RequestID { get; set; }
     }
 }
