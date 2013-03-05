@@ -5,10 +5,12 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using DREAM.Models;
 
 namespace DREAM.Controllers
 {
+    [Authorize]
     public class RequestsController : Controller
     {
         private DREAMContext db = new DREAMContext();
@@ -35,24 +37,31 @@ namespace DREAM.Controllers
         }
 
         //
-        // GET: /Requests/Create
+        // GET: /Requests/Add
 
-        public ActionResult Create()
+        public ActionResult Add()
         {
             return View();
         }
 
         //
-        // POST: /Requests/Create
+        // POST: /Requests/Add
 
         [HttpPost]
-        public ActionResult Create(Request request)
+        [ValidateAntiForgeryToken]
+        public ActionResult Add(Request request)
         {
             if (ModelState.IsValid)
             {
                 db.Requests.Add(request);
+                db.Logs.Add(Log.Create(request, Membership.GetUser()));
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                return RedirectToAction("Add", request);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Add request failed!");
             }
 
             return View(request);
