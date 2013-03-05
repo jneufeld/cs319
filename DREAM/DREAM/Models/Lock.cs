@@ -8,7 +8,7 @@ namespace DREAM.Models
 {
     public class Lock
     {
-        public int ID;
+        public int ID { get; set; }
         [Required]
         public DateTime ExpireTime { get; set; }
         [Required]
