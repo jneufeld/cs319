@@ -9,7 +9,8 @@ namespace DREAM.Models
     public class DropDown
     {
         [Key]
-        string Code;
-        string FullName;
+        public int ID { get; set; }
+        public string Code { get; set; }
+        public string FullName { get; set; }
     }
 }
