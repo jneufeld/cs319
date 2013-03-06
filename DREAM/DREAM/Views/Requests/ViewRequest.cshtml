@@ -1,0 +1,46 @@
+﻿@model DREAM.Models.Request
+
+@{
+    ViewBag.Title = "ViewRequests";
+}
+
+<h2>View Request</h2>
+
+@Html.AntiForgeryToken()
+@Html.ValidationSummary()
+
+<fieldset>
+    <legend>Request</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreationTime)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreationTime)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CompletionTime)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CompletionTime)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedBy)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ClosedBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ClosedBy)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -61,13 +61,55 @@ namespace DREAM.Controllers
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
                 db.SaveChanges();
 
-                return RedirectToAction("Add", request);
+                return RedirectToAction("Add", request.ID);
             }
             else
             {
                 ModelState.AddModelError("", "Add request failed!");
             }
 
+            return View(request);
+        }
+
+        //
+        // GET: /Requests/ViewRequest/5
+
+        public ActionResult ViewRequest(int id = 0)
+        {
+            Request request = db.Requests.Find(id);
+            if (request == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (isLocked(request))
+            {
+                return View();
+            }
+
+            Log.Create(request, Membership.GetUser());
+            return View(request);
+        }
+
+        //
+        // POST: /Requests/ViewRequest/5
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ViewRequest(Request request)
+        {
+            if (isLocked(request, true))
+            {
+                return View();
+            }
+
+            // Need Lock() method in Request for this check to work
+            //else if (request.Lock())
+            //{
+            return RedirectToAction("Edit", request.ID);
+            //}
+
+            ModelState.AddModelError("", "View Request failed!");
             return View(request);
         }
 
