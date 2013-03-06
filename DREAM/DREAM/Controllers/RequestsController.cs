@@ -125,7 +125,8 @@ namespace DREAM.Controllers
         //      The view for editing the request, or a 404 if the request doesn't exist.
         public ActionResult Edit(int id = 0)
         {
-            Request request = db.Requests.Find(id);
+            Request request  = db.Requests.Find(id);
+            ViewBag.IsLocked = false;
 
             if (request == null)
             {
@@ -134,6 +135,7 @@ namespace DREAM.Controllers
 
             if (isLocked(request, true))
             {
+                ViewBag.IsLocked = true;
                 return View();
             }
 

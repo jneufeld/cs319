@@ -6,6 +6,13 @@
 
 <h2>Edit Request</h2>
 
+@if (ViewBag.IsLocked)
+{
+<div class="editor-label">
+This request is currently locked and cannot be edited.
+</div>
+}
+
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
 
