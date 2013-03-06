@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
+using System.Net.Mail;
 
 namespace DREAM.Models
 {
@@ -30,6 +31,8 @@ namespace DREAM.Models
             }
         }
 
+        //Return the new ID generated
+        //If the ID already exists, generate a new ID 
 	    public static long GenerateNewID()
         {
 		    byte[] buffer = Guid.NewGuid().ToByteArray();
@@ -44,6 +47,8 @@ namespace DREAM.Models
 		return id;
         }
 
+        //Return the passwordResetRequest object for the given user
+        //Sends an email to the user with a link to the PasswordResetRequest's page
 	    public static PasswordResetRequest GenerateFor(MembershipUser user){
 		    PasswordResetRequest resetReq = null;
 		    using(DREAMContext db = new DREAMContext()) {
@@ -53,9 +58,42 @@ namespace DREAM.Models
 				    resetReq.UserID = (Guid)user.ProviderUserKey;
 			    }
 			    db.SaveChanges();
-			   // send email to user with a link to the PasswordResetRequest’s page;
+			   SendEmail("","","","","","");
 		    return resetReq;
             }
          }
+
+        // Sends an email address with the following properties
+        // "from": Sender address
+        // "to": Recepient address
+        // "bcc": Bcc recepient
+        // "cc": Cc recepient
+        // "subject": Subject of mail message
+        // "body": Body of mail message
+        public static void SendEmail(string from, string to, string bcc, string cc, string subject, string body)
+        {
+            MailMessage mMailMessage = new MailMessage();
+
+            mMailMessage.From = new MailAddress(from);
+            mMailMessage.To.Add(new MailAddress(to));
+
+            if ((bcc != null) && (bcc != string.Empty))
+            {
+                mMailMessage.Bcc.Add(new MailAddress(bcc));
+            }  
+            if ((cc != null) && (cc != string.Empty))
+            {
+                mMailMessage.CC.Add(new MailAddress(cc));
+            }  
+            mMailMessage.Subject = subject;
+            mMailMessage.Body = body;
+
+            mMailMessage.IsBodyHtml = true;
+            mMailMessage.Priority = MailPriority.Normal;
+
+            SmtpClient mSmtpClient = new SmtpClient();
+
+            mSmtpClient.Send(mMailMessage);
+        }
     }
 }
