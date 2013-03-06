@@ -113,16 +113,34 @@ namespace DREAM.Controllers
             return View(request);
         }
 
+        // Find a request and return a view for editing it. If no request exists, we send a HTTP 404 error.
+        // If the request is locked, return an empty view (for now).
         //
-        // GET: /Requests/Edit/5
-
+        // This method is invoked for GET requests on /requests/edit/<INT>.
+        //
+        // Arguments:
+        //      id -- The ID of the request to be edited.
+        //
+        // Returns:
+        //      The view for editing the request, or a 404 if the request doesn't exist.
         public ActionResult Edit(int id = 0)
         {
-            Request request = db.Requests.Find(id);
+            Request request  = db.Requests.Find(id);
+            ViewBag.IsLocked = false;
+
             if (request == null)
             {
                 return HttpNotFound();
             }
+
+            if (isLocked(request, true))
+            {
+                ViewBag.IsLocked = true;
+                return View();
+            }
+
+            ViewBag.Questions = new List<Question>(request.Questions);
+
             return View(request);
         }
 
@@ -195,11 +213,6 @@ namespace DREAM.Controllers
             else if (requestLock != null)
             {
                 returnValue = false;
-            }
-            else if (isEditing)
-            {
-                ViewBag.NoLock = true;
-                returnValue = true;
             }
             else
             {
