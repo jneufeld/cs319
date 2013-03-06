@@ -22,6 +22,7 @@ namespace DREAM.Controllers
 
         public ActionResult Edit(string username)
         {
+            return View();
         }
     }
 }
