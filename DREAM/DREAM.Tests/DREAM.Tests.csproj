@@ -107,6 +107,7 @@
     <Compile Include="CustomMembership\DREAMMembershipProviderTest.cs" />
     <Compile Include="Models\LogTest.cs" />
     <Compile Include="Models\PreviousPasswordTest.cs" />
+    <Compile Include="Models\PasswordResetRequestTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
