@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Security;
 using System.Net.Mail;
+using System.Net;
+using System.Security;
 
 namespace DREAM.Models
 {
@@ -58,7 +62,7 @@ namespace DREAM.Models
 				    resetReq.UserID = (Guid)user.ProviderUserKey;
 			    }
 			    db.SaveChanges();
-			   SendEmail("","","","","","");
+			   //SendEmail("","","","","","");
 		    return resetReq;
             }
          }
@@ -92,6 +96,25 @@ namespace DREAM.Models
             mMailMessage.Priority = MailPriority.Normal;
 
             SmtpClient mSmtpClient = new SmtpClient();
+
+            mSmtpClient.Host = "Need to determine a smtpServer";
+            String SmtpUserName = "Need to determine this";
+            String SmtpPassword = "Need to determine this";
+            //SecureString SmtpPassword = new SecureString("Need to determine this");
+
+            if (SmtpUserName != null && SmtpPassword != null)
+            {
+                mSmtpClient.UseDefaultCredentials = false;
+
+                mSmtpClient.Credentials = new NetworkCredential(SmtpUserName, SmtpPassword);
+            }
+            else
+            {
+                mSmtpClient.UseDefaultCredentials = true;
+                //mSmtpClient.Credentials.GetCredential(mSmtpClient.Host, 25, "NTMP");
+                //mSmtpClient.Credentials = (System.Net.ICredentialsByHost)System.Net.CredentialCache.DefaultNetworkCredentials;
+                mSmtpClient.Credentials = (System.Net.ICredentialsByHost)System.Net.CredentialCache.DefaultCredentials;
+            }
 
             mSmtpClient.Send(mMailMessage);
         }
