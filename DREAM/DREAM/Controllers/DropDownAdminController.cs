@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Web.Routing;
 using DREAM.Models;
 
 namespace DREAM.Controllers
@@ -35,7 +36,10 @@ namespace DREAM.Controllers
                 dropDowns = getDropDowns(dropDownClass);
 		        dropDowns.Add(model);
 			    db.SaveChanges();
-                return View(model);//RedirectTo(“Edit”, model.ID, dropDownClass);
+                RouteValueDictionary routes = new RouteValueDictionary();
+                routes.Add("id", model.ID);
+                routes.Add("dropDownClass", dropDownClass);
+                return RedirectToAction("Edit", "DropDownAdminController", routes);
             }
             else {
                 ModelState.AddModelError(model.ToString(), "ModelState is not valid");
@@ -56,7 +60,10 @@ namespace DREAM.Controllers
         public ActionResult Edit(DropDown model, string dropDownClass){
             if(ModelState.IsValid) {
                 db.SaveChanges();
-		        return View(model);//RedirectTo(“Edit”, model.ID, dropDownClass);
+                RouteValueDictionary routes = new RouteValueDictionary();
+                routes.Add("id", model.ID);
+                routes.Add("dropDownClass", dropDownClass);
+                return RedirectToAction("Edit", "DropDownAdminController", routes);
             }
 	        else {
                 ModelState.AddModelError(model.ToString(),"ModelState is not valid");
@@ -71,7 +78,9 @@ namespace DREAM.Controllers
 	        dropDowns = getDropDowns(dropDownClass);
 	        dropDown = (DropDown)dropDowns.Find(id);
 	        dropDowns.Remove(dropDown);
-	        return null;//RedirectTo(“Index”, dropDownName);
+            RouteValueDictionary routes = new RouteValueDictionary();
+            routes.Add("dropDownClass", dropDownClass);
+            return RedirectToAction("Index", "DropDownAdminController", routes);
         }
 
 	    private DbSet getDropDowns(string dropDownClass)
