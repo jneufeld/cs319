@@ -21,7 +21,7 @@ namespace DREAM.Models
         public string SpecialNotes { get; set; }
         public TumourGroup TumourGroup { get; set; }
         public int RequestID { get; set; }
-        public List<string> Keywords { get; set; }
+        public List<Keyword> Keywords { get; set; }
         public List<Reference> Reference { get; set; }
     }
 }

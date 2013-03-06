@@ -15,5 +15,6 @@ namespace DREAM.Models
         public int ID { get; set; }
         public string KeywordText { get; set; }
         public bool Enabled { get; set; }
+        public virtual List<Question> AssociatedQuestions { get; set; }
     }
 }
