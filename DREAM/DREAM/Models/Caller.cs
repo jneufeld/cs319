@@ -11,7 +11,7 @@ namespace DREAM.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CallerID { get; set; }
+        public int ID { get; set; }
 
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

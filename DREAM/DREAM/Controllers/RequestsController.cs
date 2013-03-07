@@ -41,6 +41,9 @@ namespace DREAM.Controllers
 
         public ActionResult Add()
         {
+            ViewData["types"] = new SelectList(RequestType.getDropdownList(), "Value", "Text");
+            ViewData["regions"] = new SelectList(Region.getDropdownList(), "Value", "Text");
+            ViewData["genders"] = new SelectList(Patient.getGenderDropdownList(), "Value", "Text");
             return View();
         }
 
@@ -51,11 +54,17 @@ namespace DREAM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add(Request request)
         {
+            ViewData["types"] = new SelectList(RequestType.getDropdownList(), "Value", "Text");
+            ViewData["regions"] = new SelectList(Region.getDropdownList(), "Value", "Text");
+            ViewData["genders"] = new SelectList(Patient.getGenderDropdownList(), "Value", "Text");
+
             if (ModelState.IsValid)
             {
                 request.CreationTime = DateTime.Now;
                 request.CompletionTime = null;
                 request.CreatedBy = (Guid)Membership.GetUser().ProviderUserKey;
+                request.ClosedBy = Guid.Empty;
+                request.CallerID.RequestID = request.ID;
 
                 db.Requests.Add(request);
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
@@ -65,7 +74,7 @@ namespace DREAM.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "Add request failed!");
+                ModelState.AddModelError(ModelState.ToString(), "The add request failed!");
             }
 
             return View(request);

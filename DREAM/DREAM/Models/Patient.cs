@@ -18,7 +18,7 @@ namespace DREAM.Models
     public class Patient
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PatientID { get; set; }
+        public int ID { get; set; }
         public int AgencyID { get; set; }
 
         [Display(Name = "First Name")]
