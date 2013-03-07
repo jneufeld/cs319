@@ -140,6 +140,9 @@ namespace DREAM.Controllers
             }
 
             ViewBag.Questions = new List<Question>(request.Questions);
+            ViewBag.RequestTypeList = RequestType.getDropdownList();
+            ViewBag.createdByUsername = findUsernameFromID(request.CreatedBy);
+            ViewBag.closedByUser = findUsernameFromID(request.ClosedBy);
 
             return View(request);
         }
@@ -260,6 +263,30 @@ namespace DREAM.Controllers
             if (requestLock != null)
             {
                 returnValue = Membership.GetUser(requestLock.UserID);
+            }
+
+            return returnValue;
+        }
+
+        // Find and return the username belonging to the given user ID.
+        //
+        // Arguments:
+        //      userID -- The user ID.
+        //
+        // Returns:
+        //      The username of the given user ID or null if none could be found.
+        private String findUsernameFromID(Guid userID)
+        {
+            String returnValue;
+            MembershipUser user = Membership.GetUser(userID);
+
+            if (user == null)
+            {
+                returnValue = null;
+            }
+            else
+            {
+                returnValue = user.UserName;
             }
 
             return returnValue;

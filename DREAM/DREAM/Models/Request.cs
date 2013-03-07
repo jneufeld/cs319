@@ -20,6 +20,7 @@ namespace DREAM.Models
         [Display(Name = "Date Completed")]
         public DateTime? CompletionTime { get; set; }
 
+        [Display(Name = "Request Type")]
         public RequestType Type { get; set; }
         public Caller CallerID { get; set; }
         public Patient PatientID { get; set; }

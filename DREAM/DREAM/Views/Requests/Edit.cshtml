@@ -21,116 +21,149 @@ This request is currently locked and cannot be edited.
         <fieldset>
             <legend>Request</legend>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.ID)
-            </div>
-            <div class="editor-field">
-                @Html.DisplayTextFor(model => model.ID)
-            </div>
+            <table>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayTextFor(model => model.ID)
+                    </td>
+                </tr>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.Type.FullName)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.Type.FullName)
-                @Html.ValidationMessageFor(model => model.Type.FullName)
-            </div>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Type)
+                    </td>
+                    <td>
+                        @Html.DropDownList("RequestTypeList")
+                        @Html.ValidationMessageFor(model => model.Type.FullName)
+                    </td>
+                </tr>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.CreationTime)
-            </div>
-            <div class="editor-field">
-                @Html.DisplayTextFor(model => model.CreationTime)
-            </div>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.CreationTime)
+                    </td>
+                    <td>
+                        @Html.DisplayTextFor(model => model.CreationTime)
+                    </td>
+                </tr>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.CreatedBy)
-            </div>
-            <div class="editor-field">
-                @Html.DisplayTextFor(model => model.CreatedBy)
-            </div>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.CreatedBy)
+                    </td>
+                    <td>
+                        @ViewBag.createdByUsername
+                    </td>
+                </tr>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.CompletionTime)
-            </div>
-            <div class="editor-field">
-                @Html.DisplayTextFor(model => model.CompletionTime)
-            </div>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.CompletionTime)
+                    </td>
+                    <td>
+                        @Html.DisplayTextFor(model => model.CompletionTime)
+                    </td>
+                </tr>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.ClosedBy)
-            </div>
-            <div class="editor-field">
-                @Html.DisplayTextFor(model => model.ClosedBy)
-            </div>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.ClosedBy)
+                    </td>
+                    <td>
+                        @ViewBag.closedByUsername
+                    </td>
+                </tr>
+            </table>
 
             <h3>Caller Data</h3>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.CallerID.FirstName)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.CallerID.FirstName)
-                @Html.ValidationMessageFor(model => model.CallerID.FirstName)
-            </div>
+            <table>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.CallerID.FirstName)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.CallerID.FirstName)
+                        @Html.ValidationMessageFor(model => model.CallerID.FirstName)
+                    </td>
+                </tr>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.CallerID.LastName)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.CallerID.LastName)
-                @Html.ValidationMessageFor(model => model.CallerID.LastName)
-            </div>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.CallerID.LastName)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.CallerID.LastName)
+                        @Html.ValidationMessageFor(model => model.CallerID.LastName)
+                    </td>
+                </tr>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.CallerID.Email)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.CallerID.Email)
-                @Html.ValidationMessageFor(model => model.CallerID.Email)
-            </div>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.CallerID.Email)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.CallerID.Email)
+                        @Html.ValidationMessageFor(model => model.CallerID.Email)
+                    </td>
+                </tr>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.CallerID.PhoneNumber)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.CallerID.PhoneNumber)
-                @Html.ValidationMessageFor(model => model.CallerID.PhoneNumber)
-            </div>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.CallerID.PhoneNumber)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.CallerID.PhoneNumber)
+                        @Html.ValidationMessageFor(model => model.CallerID.PhoneNumber)
+                    </td>
+                </tr>
+            </table>
 
             <h3>Patient Data</h3>
+            <table>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.PatientID.FirstName)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.PatientID.FirstName)
+                        @Html.ValidationMessageFor(model => model.PatientID.FirstName)
+                    </td>
+                </tr>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.PatientID.FirstName)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.PatientID.FirstName)
-                @Html.ValidationMessageFor(model => model.PatientID.FirstName)
-            </div>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.PatientID.LastName)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.PatientID.LastName)
+                        @Html.ValidationMessageFor(model => model.PatientID.LastName)
+                    </td>
+                </tr>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.PatientID.LastName)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.PatientID.LastName)
-                @Html.ValidationMessageFor(model => model.PatientID.LastName)
-            </div>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.PatientID.Gender)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.PatientID.Gender)
+                        @Html.ValidationMessageFor(model => model.PatientID.Gender)
+                    </td>
+                </tr>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.PatientID.Gender)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.PatientID.Gender)
-                @Html.ValidationMessageFor(model => model.PatientID.Gender)
-            </div>
-
-            <div class="editor-label">
-                @Html.LabelFor(model => model.PatientID.Age)
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.PatientID.Age)
-                @Html.ValidationMessageFor(model => model.PatientID.Age)
-            </div>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.PatientID.Age)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.PatientID.Age)
+                        @Html.ValidationMessageFor(model => model.PatientID.Age)
+                    </td>
+                </tr>
+            </table>
 
             <p>
                 <input type="submit" value="Save" />
