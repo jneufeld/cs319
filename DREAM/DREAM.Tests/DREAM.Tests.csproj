@@ -104,6 +104,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\KeywordAdminControllerTest.cs" />
     <Compile Include="CustomMembership\DREAMMembershipProviderTest.cs" />
     <Compile Include="Models\LogTest.cs" />
     <Compile Include="Models\PreviousPasswordTest.cs" />
