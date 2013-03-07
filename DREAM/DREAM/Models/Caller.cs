@@ -25,7 +25,9 @@ namespace DREAM.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        // TODO Request Request { get; set; } ???
+        [Display(Name = "Region")]
+        public Region Region { get; set; }
+
         public int RequestID { get; set; }
     }
 }

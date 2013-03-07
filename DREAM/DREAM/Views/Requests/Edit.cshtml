@@ -120,6 +120,16 @@ This request is currently locked and cannot be edited.
                         @Html.ValidationMessageFor(model => model.CallerID.PhoneNumber)
                     </td>
                 </tr>
+
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.CallerID.Region)
+                    </td>
+                    <td>
+                        @Html.DropDownList("RegionList")
+                        @Html.ValidationMessageFor(model => model.CallerID.Region.FullName)
+                    </td>
+                </tr>
             </table>
 
             <h3>Patient Data</h3>
@@ -149,7 +159,7 @@ This request is currently locked and cannot be edited.
                         @Html.LabelFor(model => model.PatientID.Gender)
                     </td>
                     <td>
-                        @Html.EditorFor(model => model.PatientID.Gender)
+                        @Html.DropDownList("GenderList")
                         @Html.ValidationMessageFor(model => model.PatientID.Gender)
                     </td>
                 </tr>

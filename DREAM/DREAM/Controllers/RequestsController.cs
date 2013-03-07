@@ -140,7 +140,11 @@ namespace DREAM.Controllers
             }
 
             ViewBag.Questions = new List<Question>(request.Questions);
+
             ViewBag.RequestTypeList = RequestType.getDropdownList();
+            ViewBag.RegionList = Region.getDropdownList();
+            ViewBag.GenderList = Patient.getGenderDropdownList();
+
             ViewBag.createdByUsername = findUsernameFromID(request.CreatedBy);
             ViewBag.closedByUser = findUsernameFromID(request.ClosedBy);
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -31,5 +32,16 @@ namespace DREAM.Models
 
         [Display(Name = "Age")]
         public int Age { get; set; }
+
+        public static List<SelectListItem> getGenderDropdownList()
+        {
+            List<SelectListItem> requestTypes = new List<SelectListItem>();
+
+            requestTypes.Add(new SelectListItem { Text = "Male", Value = "MALE" });
+            requestTypes.Add(new SelectListItem { Text = "Female", Value = "FEMALE" });
+            requestTypes.Add(new SelectListItem { Text = "Unknown", Value = "UNKNOWN" });
+
+            return requestTypes;
+        }
     }
 }
