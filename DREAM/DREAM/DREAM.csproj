@@ -164,7 +164,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DropDownAdminController.cs" />
-    <Compile Include="Controllers\KeywordsAdminController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="Controllers\UsersAdminController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -175,7 +174,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
-    <Compile Include="Models\AddRequestViewModel.cs" />
     <Compile Include="Models\Caller.cs" />
     <Compile Include="Models\ExternalLogin.cs" />
     <Compile Include="Models\LocalPasswordModel.cs" />
