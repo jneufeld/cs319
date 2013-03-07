@@ -8,66 +8,33 @@
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary()
 
     <fieldset>
         <legend>Add Request</legend>
         <ol>
             <li>
                 @Html.LabelFor(m => m.Type)
-                @Html.DropDownListFor(m => m.Type.Code, (SelectList)ViewData["types"])
+                @Html.DropDownListFor(m => m.Type.Code, (IEnumerable<SelectListItem>)ViewData["RequestTypeList"])
             </li>
             <li>
                 <h1>Caller</h1>
             </li>
             <li>
-                @Html.LabelFor(m => m.CallerID.FirstName)
-                @Html.TextBoxFor(m => m.CallerID.FirstName)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.CallerID.LastName)
-                @Html.TextBoxFor(m => m.CallerID.LastName)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.CallerID.PhoneNumber)
-                @Html.TextBoxFor(m => m.CallerID.PhoneNumber)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.CallerID.Email)
-                @Html.TextBoxFor(m => m.CallerID.Email)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.CallerID.Region)
-                @Html.DropDownListFor(m => m.CallerID.Region.Code, (SelectList)ViewData["regions"])
+                @Html.EditorFor(model => model.Caller)
             </li>
             <li>
                 <h1>Patient</h1>
             </li>
             <li>
-                @Html.LabelFor(m => m.PatientID.FirstName)
-                @Html.TextBoxFor(m => m.PatientID.FirstName)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.PatientID.LastName)
-                @Html.TextBoxFor(m => m.PatientID.LastName)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.PatientID.AgencyID)
-                @Html.TextBoxFor(m => m.PatientID.AgencyID)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.PatientID.Age)
-                @Html.TextBoxFor(m => m.PatientID.Age)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.PatientID.Gender)
-                @Html.DropDownListFor(m => m.PatientID.Gender, (SelectList)ViewData["genders"])
+                @Html.EditorFor(model => model.Patient)
             </li>
             <li>
                 <h1>Questions</h1>
             </li>
 
         </ol>
+
+        @Html.ValidationSummary()
 
         <p>
             <input type="submit" value="Add" />

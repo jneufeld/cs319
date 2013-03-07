@@ -25,7 +25,9 @@ namespace DREAM
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
 
+#if DEBUG && FALSE
             Database.SetInitializer(new DREAM.Models.DREAMContextInitializer());
+#endif
         }
     }
 }

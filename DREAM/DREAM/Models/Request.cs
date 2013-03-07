@@ -23,8 +23,8 @@ namespace DREAM.Models
         [Display(Name = "Request Type")]
         public RequestType Type { get; set; }
 
-        public Caller CallerID { get; set; }
-        public Patient PatientID { get; set; }
+        public Caller Caller { get; set; }
+        public Patient Patient { get; set; }
 
         [Display(Name = "Created By")]
         public Guid CreatedBy { get; set; }

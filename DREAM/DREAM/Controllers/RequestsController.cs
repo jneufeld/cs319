@@ -41,9 +41,9 @@ namespace DREAM.Controllers
 
         public ActionResult Add()
         {
-            ViewData["types"] = new SelectList(RequestType.getDropdownList(), "Value", "Text");
-            ViewData["regions"] = new SelectList(Region.getDropdownList(), "Value", "Text");
-            ViewData["genders"] = new SelectList(Patient.getGenderDropdownList(), "Value", "Text");
+            ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
+            ViewBag.RegionList = BuildRegionDropdownList();
+            ViewBag.GenderList = BuildGenderDropdownList();
             return View();
         }
 
@@ -54,9 +54,9 @@ namespace DREAM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add(Request request)
         {
-            ViewData["types"] = new SelectList(RequestType.getDropdownList(), "Value", "Text");
-            ViewData["regions"] = new SelectList(Region.getDropdownList(), "Value", "Text");
-            ViewData["genders"] = new SelectList(Patient.getGenderDropdownList(), "Value", "Text");
+            ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
+            ViewBag.RegionList = BuildRegionDropdownList();
+            ViewBag.GenderList = BuildGenderDropdownList();
 
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace DREAM.Controllers
                 request.CompletionTime = null;
                 request.CreatedBy = (Guid)Membership.GetUser().ProviderUserKey;
                 request.ClosedBy = Guid.Empty;
-                request.CallerID.RequestID = request.ID;
+                request.Caller.RequestID = request.ID;
 
                 db.Requests.Add(request);
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
@@ -134,7 +134,7 @@ namespace DREAM.Controllers
         //      The view for editing the request, or a 404 if the request doesn't exist.
         public ActionResult Edit(int id = 0)
         {
-            Request request  = db.Requests.Find(id);
+            Request request = db.Requests.Find(id);
             ViewBag.IsLocked = false;
 
             if (request == null)
@@ -150,12 +150,12 @@ namespace DREAM.Controllers
 
             ViewBag.Questions = new List<Question>(request.Questions);
 
-            ViewBag.RequestTypeList = RequestType.getDropdownList();
-            ViewBag.RegionList = Region.getDropdownList();
-            ViewBag.GenderList = Patient.getGenderDropdownList();
+            ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
+            ViewBag.RegionList = BuildRegionDropdownList();
+            ViewBag.GenderList = BuildGenderDropdownList();
 
-            ViewBag.createdByUsername = findUsernameFromID(request.CreatedBy);
-            ViewBag.closedByUser = findUsernameFromID(request.ClosedBy);
+            ViewBag.CreatedByUsername = FindUsernameFromID(request.CreatedBy);
+            ViewBag.ClosedByUsername = FindUsernameFromID(request.ClosedBy);
 
             return View(request);
         }
@@ -204,6 +204,38 @@ namespace DREAM.Controllers
         {
             db.Dispose();
             base.Dispose(disposing);
+        }
+
+        public IEnumerable<SelectListItem> BuildGenderDropdownList()
+        {
+            List<SelectListItem> requestTypes = new List<SelectListItem>();
+
+            requestTypes.Add(new SelectListItem { Text = "Male", Value = Gender.MALE.ToString() });
+            requestTypes.Add(new SelectListItem { Text = "Female", Value = Gender.FEMALE.ToString() });
+            requestTypes.Add(new SelectListItem { Text = "Unknown", Value = Gender.UNKNOWN.ToString() });
+
+            return requestTypes;
+        }
+
+        public IEnumerable<SelectListItem> BuildRequestTypeDropdownList()
+        {
+            return BuildTypedDropdownList<RequestType>(db.RequestTypes);
+        }
+
+        public IEnumerable<SelectListItem> BuildRegionDropdownList()
+        {
+            return BuildTypedDropdownList<Region>(db.Regions);
+        }
+
+        public IEnumerable<SelectListItem> BuildTypedDropdownList<T>(DbSet<T> dbSet) where T : DropDown
+        {
+            IEnumerable<T> ts = dbSet.AsEnumerable<T>();
+            IEnumerable<SelectListItem> list = ts.Select(r => new SelectListItem
+            {
+                Value = r.ID.ToString(),
+                Text = r.FullName,
+            });
+            return list;
         }
 
         // Check if the given request is currently locked, returning true or false.
@@ -288,7 +320,7 @@ namespace DREAM.Controllers
         //
         // Returns:
         //      The username of the given user ID or null if none could be found.
-        private String findUsernameFromID(Guid userID)
+        private String FindUsernameFromID(Guid userID)
         {
             String returnValue;
             MembershipUser user = Membership.GetUser(userID);

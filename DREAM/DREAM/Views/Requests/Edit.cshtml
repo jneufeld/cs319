@@ -16,7 +16,6 @@ This request is currently locked and cannot be edited.
 @if (!ViewBag.IsLocked)
 {
     using (Html.BeginForm()) {
-        @Html.ValidationSummary(true)
 
         <fieldset>
             <legend>Request</legend>
@@ -37,7 +36,7 @@ This request is currently locked and cannot be edited.
                     </td>
                     <td>
                         @Html.DropDownList("RequestTypeList")
-                        @Html.ValidationMessageFor(model => model.Type.FullName)
+                        @Html.ValidationMessageFor(model => model.Type.ID)
                     </td>
                 </tr>
 
@@ -55,7 +54,7 @@ This request is currently locked and cannot be edited.
                         @Html.LabelFor(model => model.CreatedBy)
                     </td>
                     <td>
-                        @ViewBag.createdByUsername
+                        @ViewBag.CreatedByUsername
                     </td>
                 </tr>
 
@@ -73,107 +72,20 @@ This request is currently locked and cannot be edited.
                         @Html.LabelFor(model => model.ClosedBy)
                     </td>
                     <td>
-                        @ViewBag.closedByUsername
+                        @ViewBag.ClosedByUsername
                     </td>
                 </tr>
             </table>
 
             <h3>Caller Data</h3>
 
-            <table>
-                <tr>
-                    <td>
-                        @Html.LabelFor(model => model.CallerID.FirstName)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => model.CallerID.FirstName)
-                        @Html.ValidationMessageFor(model => model.CallerID.FirstName)
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        @Html.LabelFor(model => model.CallerID.LastName)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => model.CallerID.LastName)
-                        @Html.ValidationMessageFor(model => model.CallerID.LastName)
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        @Html.LabelFor(model => model.CallerID.Email)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => model.CallerID.Email)
-                        @Html.ValidationMessageFor(model => model.CallerID.Email)
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        @Html.LabelFor(model => model.CallerID.PhoneNumber)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => model.CallerID.PhoneNumber)
-                        @Html.ValidationMessageFor(model => model.CallerID.PhoneNumber)
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        @Html.LabelFor(model => model.CallerID.Region)
-                    </td>
-                    <td>
-                        @Html.DropDownList("RegionList")
-                        @Html.ValidationMessageFor(model => model.CallerID.Region.FullName)
-                    </td>
-                </tr>
-            </table>
+            @Html.EditorFor(model => model.Caller)
 
             <h3>Patient Data</h3>
-            <table>
-                <tr>
-                    <td>
-                        @Html.LabelFor(model => model.PatientID.FirstName)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => model.PatientID.FirstName)
-                        @Html.ValidationMessageFor(model => model.PatientID.FirstName)
-                    </td>
-                </tr>
+            
+            @Html.EditorFor(model => model.Patient)
 
-                <tr>
-                    <td>
-                        @Html.LabelFor(model => model.PatientID.LastName)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => model.PatientID.LastName)
-                        @Html.ValidationMessageFor(model => model.PatientID.LastName)
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        @Html.LabelFor(model => model.PatientID.Gender)
-                    </td>
-                    <td>
-                        @Html.DropDownList("GenderList")
-                        @Html.ValidationMessageFor(model => model.PatientID.Gender)
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        @Html.LabelFor(model => model.PatientID.Age)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => model.PatientID.Age)
-                        @Html.ValidationMessageFor(model => model.PatientID.Age)
-                    </td>
-                </tr>
-            </table>
+            @Html.ValidationSummary(true)
 
             <p>
                 <input type="submit" value="Save" />

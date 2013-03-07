@@ -1,0 +1,63 @@
+﻿@model DREAM.Models.Patient
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <div style="border:solid;border-width:1px;margin:5px">
+    <fieldset>
+        <legend>Patient</legend>
+
+        @Html.HiddenFor(model => model.ID)
+
+        <table>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.FirstName)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FirstName)
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.LastName)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.LastName)
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.AgencyID)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.AgencyID)
+                    @Html.ValidationMessageFor(model => model.AgencyID)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Gender)
+                </td>
+                <td>
+                    @Html.DropDownListFor(m => m.Gender, (IEnumerable<SelectListItem>)ViewData["GenderList"])
+                    @Html.ValidationMessageFor(model => model.Gender)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Age)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Age)
+                    @Html.ValidationMessageFor(model => model.Age)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    </div>
+}

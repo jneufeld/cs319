@@ -174,6 +174,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
+    <Compile Include="Migrations\201303072119078_CurrentSchema.cs" />
+    <Compile Include="Migrations\201303072119078_CurrentSchema.Designer.cs">
+      <DependentUpon>201303072119078_CurrentSchema.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201303072149596_RenameCallerID.cs" />
+    <Compile Include="Migrations\201303072149596_RenameCallerID.Designer.cs">
+      <DependentUpon>201303072149596_RenameCallerID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Caller.cs" />
     <Compile Include="Models\DREAMContextInitializer.cs" />
     <Compile Include="Models\ExternalLogin.cs" />
@@ -319,12 +328,22 @@
     <Content Include="Views\Requests\Delete.cshtml" />
     <Content Include="Views\Requests\ViewRequest.cshtml" />
     <Content Include="Views\UsersAdmin\Index.cshtml" />
+    <Content Include="Views\Requests\EditorTemplates\Caller.cshtml" />
+    <Content Include="Views\Requests\EditorTemplates\Patient.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201303072119078_CurrentSchema.resx">
+      <DependentUpon>201303072119078_CurrentSchema.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201303072149596_RenameCallerID.resx">
+      <DependentUpon>201303072149596_RenameCallerID.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
