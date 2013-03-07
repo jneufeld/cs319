@@ -175,6 +175,7 @@
     </Compile>
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
     <Compile Include="Models\Caller.cs" />
+    <Compile Include="Models\DREAMContextInitializer.cs" />
     <Compile Include="Models\ExternalLogin.cs" />
     <Compile Include="Models\LocalPasswordModel.cs" />
     <Compile Include="Models\Lock.cs" />
