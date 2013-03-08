@@ -11,7 +11,7 @@ using DREAM.Models;
 
 namespace DREAM.Controllers
 {
-    [Authorize(Roles="ADMIN")]
+    //[Authorize(Roles="ADMIN")]
     public class DropDownAdminController : Controller
     {
         private DREAMContext db = new DREAMContext();
@@ -20,7 +20,9 @@ namespace DREAM.Controllers
         public ActionResult Index(string dropDownClass) {
             DbSet dropDowns;
 		    dropDowns = getDropDowns(dropDownClass);
-		    return View(dropDowns);
+            //DbSet testDropDown;
+            //testDropDown = getDropDowns("Regions");
+            return View(dropDowns);
         }
 
 	    [HttpGet]
