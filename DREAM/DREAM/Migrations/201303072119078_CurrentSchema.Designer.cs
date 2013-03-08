@@ -11,7 +11,7 @@ namespace DREAM.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201303072119078_IntialCreate"; }
+            get { return "201303072119078_CurrentSchema"; }
         }
         
         string IMigrationMetadata.Source
