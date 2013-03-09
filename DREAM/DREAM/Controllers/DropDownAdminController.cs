@@ -20,8 +20,6 @@ namespace DREAM.Controllers
         public ActionResult Index(string dropDownClass) {
             DbSet dropDowns;
 		    dropDowns = getDropDowns(dropDownClass);
-            //DbSet testDropDown;
-            //testDropDown = getDropDowns("Regions");
             return View(dropDowns);
         }
 

@@ -1,18 +1,18 @@
-﻿<!--(at)model System.Data.Entity.DbSet-->
+﻿@model System.Data.Entity.DbSet
 
 @{
     ViewBag.Title = "IndexDropDown";
 }
 
 <h2>IndexDropDown</h2>
-<!--
+
 <table>
     <tr>
         <th>Code</th>
         <th>FullName</th>
     </tr>
 
-(at)if (Model == null)
+@if (Model == null)
 {
     <tr>
         <td>
@@ -29,13 +29,12 @@ else
     {
         <tr>
             <td>
-                (at)Html.DisplayFor(d => dp.Code)
+                @Html.DisplayFor(d => dp.Code)
             </td>
             <td>
-                (at)Html.DisplayFor(d => dp.FullName)
+                @Html.DisplayFor(d => dp.FullName)
             </td>
         </tr>
     }
 }
 </table>
--->
