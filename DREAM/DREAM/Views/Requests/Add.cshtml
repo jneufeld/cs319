@@ -19,14 +19,120 @@
             <li>
                 <h1>Caller</h1>
             </li>
-            <li>
+            @*<li>
                 @Html.EditorFor(model => model.Caller)
+            </li>*@
+            <li>
+                <table>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Caller.FirstName)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Caller.FirstName)
+                            @Html.ValidationMessageFor(model => model.Caller.FirstName)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Caller.LastName)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Caller.LastName)
+                            @Html.ValidationMessageFor(model => model.Caller.LastName)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Caller.Email)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Caller.Email)
+                            @Html.ValidationMessageFor(model => model.Caller.Email)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Caller.PhoneNumber)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Caller.PhoneNumber)
+                            @Html.ValidationMessageFor(model => model.Caller.PhoneNumber)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Caller.Region)
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.Caller.Region.Code, (IEnumerable<SelectListItem>)ViewData["RegionList"])
+                            @Html.ValidationMessageFor(model => model.Caller.Region.Code)
+                        </td>
+                    </tr>
+                </table>
             </li>
             <li>
                 <h1>Patient</h1>
             </li>
-            <li>
+            @*<li>
                 @Html.EditorFor(model => model.Patient)
+            </li>*@
+            <li>
+                @*@Html.HiddenFor(model => model.ID)*@
+
+                <table>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Patient.FirstName)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Patient.FirstName)
+                            @Html.ValidationMessageFor(model => model.Patient.FirstName)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Patient.LastName)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Patient.LastName)
+                            @Html.ValidationMessageFor(model => model.Patient.LastName)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Patient.AgencyID)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Patient.AgencyID)
+                            @Html.ValidationMessageFor(model => model.Patient.AgencyID)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Patient.Gender)
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.Patient.Gender, (IEnumerable<SelectListItem>)ViewData["GenderList"])
+                            @Html.ValidationMessageFor(model => model.Patient.Gender)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Patient.Age)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Patient.Age)
+                            @Html.ValidationMessageFor(model => model.Patient.Age)
+                        </td>
+                    </tr>
+                </table>
             </li>
             <li>
                 <h1>Questions</h1>

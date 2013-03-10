@@ -60,11 +60,18 @@ namespace DREAM.Controllers
 
             if (ModelState.IsValid)
             {
+                // Converts String ID into numerical ID, then grabs the Type with that ID
+                int typeID = Convert.ToInt32(request.Type.Code);
+                request.Type = db.RequestTypes.Find(typeID);
+
+                // Converts String ID into numerical ID, then grabs the Region with that ID
+                int regionID = Convert.ToInt32(request.Caller.Region.Code);
+                request.Caller.Region = db.Regions.Find(regionID);
+
                 request.CreationTime = DateTime.Now;
                 request.CompletionTime = null;
                 request.CreatedBy = (Guid)Membership.GetUser().ProviderUserKey;
                 request.ClosedBy = Guid.Empty;
-                request.Caller.RequestID = request.ID;
 
                 db.Requests.Add(request);
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
