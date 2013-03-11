@@ -31,7 +31,7 @@
             @Html.DisplayFor(u => user.IsOnline)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit")
+            @Html.ActionLink("Edit", "Edit", new { username = user.UserName })
         </td>
     </tr>
 }

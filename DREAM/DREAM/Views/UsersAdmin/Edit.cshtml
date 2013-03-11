@@ -1,0 +1,105 @@
+﻿@model DREAM.Models.EditUserModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Add User</legend>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => Model.UserName)
+        </div>
+      
+        <div class="editor-field">
+            @Html.DisplayFor(model => model.UserName)
+            @Html.HiddenFor(model => Model.UserName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => Model.FirstName)
+        </div>
+      
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FirstName)
+            @Html.ValidationMessageFor(model => model.FirstName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => Model.LastName)
+        </div>
+      
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastName)
+            @Html.ValidationMessageFor(model => model.LastName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => Model.Email)
+        </div>
+      
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => Model.Enabled)
+        </div>
+      
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Enabled)
+            @Html.ValidationMessageFor(model => model.Enabled)
+        </div>
+
+        <div class="editor-field">
+            <h4>Groups</h4>
+            <ul>
+                @{
+                    List<DREAM.Models.AssignedGroupModel> groups = ViewBag.Groups;
+
+                    foreach (DREAM.Models.AssignedGroupModel group in groups) {
+                        <li>
+                            <input type="checkbox" 
+                                   name="selectedGroups" 
+                                   value="@group.GroupID" 
+                                   @(Html.Raw(group.Assigned ? "checked=\"checked\"" : "")) /> 
+                            @group.GroupName
+                        </li>
+                    }
+                    @:
+                }
+            </ul>
+        </div>
+
+        <div class="editor-field">
+            <h4>Roles</h4>
+            <ul>
+                @{
+                    List<DREAM.Models.AssignedRoleModel> roles = ViewBag.Roles;
+
+                    foreach (DREAM.Models.AssignedRoleModel role in roles) {
+                        @: <li>
+                            <input type="checkbox" 
+                                   name="selectedRoles" 
+                                   value="@role.RoleName" 
+                                   @(Html.Raw(role.Assigned ? "checked=\"checked\"" : "")) />
+                            @role.RoleName
+                        @:</li>
+                    }
+                }
+            </ul>
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}

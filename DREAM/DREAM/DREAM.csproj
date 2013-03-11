@@ -188,10 +188,14 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AutoMapperConfiguration.cs" />
-    <Compile Include="Models\Caller.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
     <Compile Include="Models\DREAMContextInitializer.cs" />
+    <Compile Include="Models\AssignedGroupModel.cs" />
+    <Compile Include="Models\AssignedRoleModel.cs" />
+    <Compile Include="Models\Caller.cs" />
+    <Compile Include="Models\EditUserModel.cs" />
     <Compile Include="Models\ExternalLogin.cs" />
+    <Compile Include="Models\Group.cs" />
     <Compile Include="Models\LocalPasswordModel.cs" />
     <Compile Include="Models\Lock.cs" />
     <Compile Include="Models\LoginModel.cs" />
@@ -209,11 +213,14 @@
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\RegisterExternalLoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\RegisterUserModel.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\RequestType.cs" />
     <Compile Include="Models\RequestViewModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
+    <Compile Include="Models\Roles.cs" />
     <Compile Include="Models\TumourGroup.cs" />
+    <Compile Include="Models\UserGroup.cs" />
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -290,6 +297,7 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Views\Shared\DisplayTemplates\Boolean.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -344,6 +352,8 @@
     <Content Include="Views\DropDownAdmin\Add.cshtml" />
     <Content Include="Views\DropDownAdmin\Edit.cshtml" />
     <Content Include="Views\DropDownAdmin\Delete.cshtml" />
+    <Content Include="Views\UsersAdmin\Register.cshtml" />
+    <Content Include="Views\UsersAdmin\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

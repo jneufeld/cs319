@@ -25,6 +25,8 @@ namespace DREAM.Models
         public DbSet<Reference> References { get; set; }
         public DbSet<Log> Logs { get; set; }
         public DbSet<Lock> Locks { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
 
         public DbSet<PreviousPassword> PreviousPasswords { get; set; }
         public DbSet<PasswordResetRequest> PasswordResetRequests { get; set; }

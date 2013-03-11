@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DREAM.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -25,9 +26,7 @@ namespace DREAM
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
 
-            DREAM.Models.AutoMapperConfiguration.Configure();
-
-            AutoMapper.Mapper.AssertConfigurationIsValid();
+            Role.CreateRoles();
 
 #if DEBUG && FALSE
             Database.SetInitializer(new DREAM.Models.DREAMContextInitializer());
