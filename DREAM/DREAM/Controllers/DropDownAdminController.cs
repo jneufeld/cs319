@@ -16,6 +16,11 @@ namespace DREAM.Controllers
     {
         private DREAMContext db = new DREAMContext();
 
+        /// <summary>
+        /// Index of the given drop down menu showing all items from that drop down
+        /// </summary>
+        /// <param name="dropDownClass"> The drop down menu </param>
+        /// <returns> The view of the given drop down menu's index of all items </returns>
         [HttpGet]
         public ActionResult Index(string dropDownClass)
         {
@@ -24,6 +29,11 @@ namespace DREAM.Controllers
             return View(dropDowns);
         }
 
+        /// <summary>
+        /// To add an element to a specified drop down
+        /// </summary>
+        /// <param name="dropDownClass"> The drop down menu </param>
+        /// <returns> The view for adding an element to the given drop down </returns>
         [HttpGet]
         public ActionResult Add(string dropDownClass)
         {
@@ -46,6 +56,12 @@ namespace DREAM.Controllers
             return View(m);
         }
 
+        /// <summary>
+        /// The logic for actually adding the specified element to the given drop down menu
+        /// </summary>
+        /// <param name="model"> The element to add </param>
+        /// <param name="dropDownClass"> The drop down menu to add to </param>
+        /// <returns> Redirects to the Edit page for the given item that was added else stays on the same page </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add(DropDown model, string dropDownClass)
@@ -75,9 +91,8 @@ namespace DREAM.Controllers
                 dropDowns.Add(m);
                 db.SaveChanges();
                 RouteValueDictionary routes = new RouteValueDictionary();
-                routes.Add("dropDownId", m.ID);
                 routes.Add("dropDownClass", dropDownClass);
-                return RedirectToAction("Edit", "DropDownAdmin", routes);
+                return RedirectToAction("Index", "DropDownAdmin", routes);
             }
             else
             {
@@ -85,6 +100,15 @@ namespace DREAM.Controllers
                 return View(m);
             }
         }
+
+        /// <summary>
+        ///  To edit a specified element in a drop down list
+        /// </summary>
+        /// <param name="dropDownId"> The ID of the element to be edited </param>
+        /// <param name="dropDownCode"> The code of the element to be edited </param>
+        /// <param name="dropDownFullName"> The full name of the element to be edited </param>
+        /// <param name="dropDownClass"> The drop down menu of the element to be edited </param>
+        /// <returns>The view for editing an element from a given drop down </returns>
         [HttpGet]
         public ActionResult Edit(int dropDownId, string dropDownCode, string dropDownFullName, string dropDownClass)
         {
@@ -110,6 +134,12 @@ namespace DREAM.Controllers
             return View(m);
         }
 
+        /// <summary>
+        /// The logic for actually editing a specified element from a given drop down menu
+        /// </summary>
+        /// <param name="model"> The element to be edited </param>
+        /// <param name="dropDownClass"> The drop down menu of the element to be edited </param>
+        /// <returns> Redirects to the Index of the given drop down menu else stays on the same page </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(DropDown model, string dropDownClass)
@@ -134,6 +164,14 @@ namespace DREAM.Controllers
             }
         }
 
+        /// <summary>
+        /// To delete an element from a specified drop down
+        /// </summary>
+        /// <param name="dropDownId"> The ID of the element to be deleted </param>
+        /// <param name="dropDownCode"> The code of the element to be deleted </param>
+        /// <param name="dropDownFullName"> The full name of the element to be deleted </param>
+        /// <param name="dropDownClass"> The drop down menu of the element to be deleted </param>
+        /// <returns>The view for deleting an element from a given drop down </returns>
         [HttpGet]
         public ActionResult Delete(int dropDownId, string dropDownCode, string dropDownFullName, string dropDownClass)
         {
@@ -159,6 +197,12 @@ namespace DREAM.Controllers
             return View(m);
         }
 
+        /// <summary>
+        /// The logic for actually deleting the specified element from the given drop down menu
+        /// </summary>
+        /// <param name="dropDownId"> The ID of the element to be deleted</param>
+        /// <param name="dropDownClass"> The drop down menu to delete an element from</param>
+        /// <returns> Redirects to the Index of the given drop down menu </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int dropDownId, string dropDownClass)
@@ -174,6 +218,11 @@ namespace DREAM.Controllers
             return RedirectToAction("Index", "DropDownAdmin", routes);
         }
 
+        /// <summary>
+        /// Method to get a DbSet of all elements of the given drop down menu
+        /// </summary>
+        /// <param name="dropDownClass"> The drop down menu </param>
+        /// <returns> The desired DbSet else null</returns>
         private DbSet getDropDowns(string dropDownClass)
         {
             switch (dropDownClass)
