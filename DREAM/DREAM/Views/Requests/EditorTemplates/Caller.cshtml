@@ -53,8 +53,8 @@
                     @Html.LabelFor(model => model.Region)
                 </td>
                 <td>
-                    @Html.DropDownListFor(m => m.Region.Code, (IEnumerable<SelectListItem>)ViewData["RegionList"])
-                    @Html.ValidationMessageFor(model => model.Region.Code)
+                    @Html.DropDownListFor(m => m.Region.StringID, (IEnumerable<SelectListItem>)ViewData["RegionList"])
+                    @Html.ValidationMessageFor(model => model.Region.StringID)
                 </td>
             </tr>
         </table>

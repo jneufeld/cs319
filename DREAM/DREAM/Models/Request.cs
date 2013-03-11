@@ -10,8 +10,8 @@ namespace DREAM.Models
 {
     public class Request
     {
+        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
         [Display(Name = "Request ID")]
         public int ID { get; set; }
 
@@ -33,7 +33,12 @@ namespace DREAM.Models
         [Display(Name = "Closed By")]
         public Guid ClosedBy { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; }
+        private ICollection<Question> _Questions;
+        public virtual ICollection<Question> Questions
+        {
+            get { return _Questions ?? (_Questions = new HashSet<Question>()); }
+            set { _Questions = value; }
+        }
 
         public Lock Lock()
         {

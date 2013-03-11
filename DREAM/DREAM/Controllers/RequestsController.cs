@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using System.Web.Security;
 using DREAM.Models;
 
@@ -24,27 +25,21 @@ namespace DREAM.Controllers
         }
 
         //
-        // GET: /Requests/Details/5
-
-        public ActionResult Details(int id = 0)
-        {
-            Request request = db.Requests.Find(id);
-            if (request == null)
-            {
-                return HttpNotFound();
-            }
-            return View(request);
-        }
-
-        //
         // GET: /Requests/Add
 
         public ActionResult Add()
         {
+            Request request = new Request();
+            request.Caller = new Caller();
+            request.Patient = new Patient();
+            RequestViewModel rv = RequestViewModel.CreateFromRequest(request);
             ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
             ViewBag.RegionList = BuildRegionDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
-            return View();
+            rv.RequestTypeDropDownList = BuildRequestTypeDropdownList();
+            rv.RegionDropDownList = BuildRegionDropdownList();
+            rv.GenderDropDownList = BuildGenderDropdownList();
+            return View(rv);
         }
 
         //
@@ -52,7 +47,7 @@ namespace DREAM.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(Request request)
+        public ActionResult Add(RequestViewModel rv)
         {
             ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
             ViewBag.RegionList = BuildRegionDropdownList();
@@ -60,31 +55,57 @@ namespace DREAM.Controllers
 
             if (ModelState.IsValid)
             {
-                // Converts String ID into numerical ID, then grabs the Type with that ID
-                int typeID = Convert.ToInt32(request.Type.Code);
-                request.Type = db.RequestTypes.Find(typeID);
+                Request request = db.Requests.Create();
+                request.Caller = db.Callers.Create();
+                request.Patient = db.Patients.Create();
 
-                // Converts String ID into numerical ID, then grabs the Region with that ID
-                int regionID = Convert.ToInt32(request.Caller.Region.Code);
-                request.Caller.Region = db.Regions.Find(regionID);
+                rv.MapToRequest(request);
 
-                request.CreationTime = DateTime.Now;
+                Patient patient = null;
+                if (rv.PatientAgencyID != 0)
+                {
+                    patient = db.Patients.SingleOrDefault(p => p.AgencyID == rv.PatientAgencyID);
+                    if (patient != null)
+                        request.Patient = patient;
+                }
+                if (patient == null)
+                {
+                    request.Patient = db.Patients.Create();
+                    rv.MapToRequestPatient(request);
+                }
+
+                request.Type = db.RequestTypes.Single(rt => rt.ID == request.Type.ID);
+                request.Caller.Region = db.Regions.Single(reg => reg.ID == request.Caller.Region.ID);
+
+                request.CreationTime = DateTime.UtcNow;
                 request.CompletionTime = null;
-                request.CreatedBy = (Guid)Membership.GetUser().ProviderUserKey;
+                request.CreatedBy = (Guid) Membership.GetUser().ProviderUserKey;
                 request.ClosedBy = Guid.Empty;
 
+                // TODO: Parse Gender enum
+
+                Question q1 = new Question { QuestionText = "ldkflsdjgkls", Response = "skdlfksdjl" };
+                Question q2 = new Question { QuestionText = "dkjgdkh", Response = "jkldsgldjsk" };
+                db.Questions.Add(q1);
+                db.Questions.Add(q2);
+                request.Questions.Add(q1);
+                request.Questions.Add(q2);
+
                 db.Requests.Add(request);
+                db.Callers.Add(request.Caller);
+                if (request.Patient.ID == 0)
+                    db.Patients.Add(request.Patient);
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
                 db.SaveChanges();
 
-                return RedirectToAction("Add", request.ID);
+                return RedirectToAction("Edit", new RouteValueDictionary(new { Id = request.ID }));
             }
             else
             {
                 ModelState.AddModelError(ModelState.ToString(), "The add request failed!");
             }
 
-            return View(request);
+            return View(rv);
         }
 
         //
@@ -92,7 +113,7 @@ namespace DREAM.Controllers
 
         public ActionResult ViewRequest(int id = 0)
         {
-            Request request = db.Requests.Find(id);
+            Request request = FindRequest(id);
             if (request == null)
             {
                 return HttpNotFound();
@@ -103,7 +124,7 @@ namespace DREAM.Controllers
                 return View();
             }
 
-            Log.Create(request, Membership.GetUser());
+            Log.View(request, Membership.GetUser());
             return View(request);
         }
 
@@ -141,7 +162,7 @@ namespace DREAM.Controllers
         //      The view for editing the request, or a 404 if the request doesn't exist.
         public ActionResult Edit(int id = 0)
         {
-            Request request = db.Requests.Find(id);
+            Request request = FindRequest(id);
             ViewBag.IsLocked = false;
 
             if (request == null)
@@ -159,6 +180,8 @@ namespace DREAM.Controllers
 
             ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
             ViewBag.RegionList = BuildRegionDropdownList();
+            ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
+            ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
 
             ViewBag.CreatedByUsername = FindUsernameFromID(request.CreatedBy);
@@ -252,7 +275,21 @@ namespace DREAM.Controllers
             base.Dispose(disposing);
         }
 
-        public IEnumerable<SelectListItem> BuildGenderDropdownList()
+        #region Helper Methods
+
+        private Request FindRequest(int id)
+        {
+            return db.Requests.Include(r => r.Caller)
+                              .Include(r => r.Patient)
+                              .Include(r => r.Type)
+                              .Include(r => r.Caller.Region)
+                              .Include(p => p.Questions.Select(c => c.Keywords))
+                              .Include(p => p.Questions.Select(c => c.Reference))
+                              .Single(r => r.ID == id);
+        }
+
+        #region DropDown Lists
+        private IEnumerable<SelectListItem> BuildGenderDropdownList()
         {
             List<SelectListItem> requestTypes = new List<SelectListItem>();
 
@@ -263,26 +300,37 @@ namespace DREAM.Controllers
             return requestTypes;
         }
 
-        public IEnumerable<SelectListItem> BuildRequestTypeDropdownList()
+        private IEnumerable<SelectListItem> BuildRequestTypeDropdownList()
         {
             return BuildTypedDropdownList<RequestType>(db.RequestTypes);
         }
 
-        public IEnumerable<SelectListItem> BuildRegionDropdownList()
+        private IEnumerable<SelectListItem> BuildRegionDropdownList()
         {
             return BuildTypedDropdownList<Region>(db.Regions);
         }
 
-        public IEnumerable<SelectListItem> BuildTypedDropdownList<T>(DbSet<T> dbSet) where T : DropDown
+        private IEnumerable<SelectListItem> BuildQuestionTypeDropdownList()
+        {
+            return BuildTypedDropdownList<QuestionType>(db.QuestionTypes);
+        }
+
+        private IEnumerable<SelectListItem> BuildTumourGroupDropdownList()
+        {
+            return BuildTypedDropdownList<TumourGroup>(db.TumourGroups);
+        }
+
+        private IEnumerable<SelectListItem> BuildTypedDropdownList<T>(DbSet<T> dbSet) where T : DropDown
         {
             IEnumerable<T> ts = dbSet.AsEnumerable<T>();
             IEnumerable<SelectListItem> list = ts.Select(r => new SelectListItem
             {
-                Value = r.ID.ToString(),
+                Value = r.StringID,
                 Text = r.FullName,
             });
             return list;
         }
+        #endregion
 
         // Check if the given request is currently locked, returning true or false.
         //
@@ -366,21 +414,13 @@ namespace DREAM.Controllers
         //
         // Returns:
         //      The username of the given user ID or null if none could be found.
-        private String FindUsernameFromID(Guid userID)
+        private string FindUsernameFromID(Guid userID)
         {
-            String returnValue;
             MembershipUser user = Membership.GetUser(userID);
 
-            if (user == null)
-            {
-                returnValue = null;
-            }
-            else
-            {
-                returnValue = user.UserName;
-            }
-
-            return returnValue;
+            return user != null ? user.UserName : null;
         }
+
+        #endregion
     }
 }

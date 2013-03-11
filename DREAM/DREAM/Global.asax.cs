@@ -25,6 +25,10 @@ namespace DREAM
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
 
+            DREAM.Models.AutoMapperConfiguration.Configure();
+
+            AutoMapper.Mapper.AssertConfigurationIsValid();
+
 #if DEBUG && FALSE
             Database.SetInitializer(new DREAM.Models.DREAMContextInitializer());
 #endif

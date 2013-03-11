@@ -8,7 +8,10 @@ namespace DREAM.Models
 {
     public class DREAMContext : DbContext
     {
-        public DREAMContext() : base("DefaultConnection") { }
+        public DREAMContext() : base("DefaultConnection")
+        {
+            this.Configuration.LazyLoadingEnabled = false;
+        }
 
         public DbSet<Request> Requests { get; set; }
         public DbSet<Question> Questions { get; set; }

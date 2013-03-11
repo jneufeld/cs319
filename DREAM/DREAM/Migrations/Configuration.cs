@@ -72,6 +72,43 @@ namespace DREAM.Migrations
                 new Region { FullName = "Yukon", Code = "YK" },
             };
             regions.ForEach(r => context.Regions.AddOrUpdate(r));
+
+            List<QuestionType> questionTypes = new List<QuestionType>
+            {
+                new QuestionType { FullName = "Other", Code = "OTHER" },
+                new QuestionType { FullName = "Adverse Effects", Code = "A/E" },
+                new QuestionType { FullName = "CAM", Code = "CAM" },
+                new QuestionType { FullName = "Coverage/Funding/Reimbursement", Code = "COST" },
+                new QuestionType { FullName = "Drug Administration", Code = "ADMIN" },
+                new QuestionType { FullName = "Drug Availability", Code = "AVAIL" },
+                new QuestionType { FullName = "Drug Dosing", Code = "DOSE" },
+                new QuestionType { FullName = "Drug Interactions", Code = "DI" },
+                new QuestionType { FullName = "Therapy Selection", Code = "THER" },
+            };
+            questionTypes.ForEach(q => context.QuestionTypes.AddOrUpdate(q));
+
+            List<TumourGroup> tumourGroups = new List<TumourGroup>
+            {
+                new TumourGroup { FullName = "General", Code = "GEN" },
+                new TumourGroup { FullName = "Breast", Code = "BR" },
+                new TumourGroup { FullName = "Central Nervous System", Code = "CNS" },
+                new TumourGroup { FullName = "Endocrine", Code = "ENDO" },
+                new TumourGroup { FullName = "Gastrointestinal", Code = "GI" },
+                new TumourGroup { FullName = "Genitourinary", Code = "GU" },
+                new TumourGroup { FullName = "Gynaecology", Code = "GO" },
+                new TumourGroup { FullName = "Head and Neck", Code = "H&N" },
+                new TumourGroup { FullName = "Leukemia", Code = "LEU" },
+                new TumourGroup { FullName = "Lung", Code = "LU" },
+                new TumourGroup { FullName = "Lymphoma", Code = "LY" },
+                new TumourGroup { FullName = "Melanoma", Code = "ME" },
+                new TumourGroup { FullName = "Multiple Myeloma", Code = "MM" },
+                new TumourGroup { FullName = "Ocular", Code = "OC" },
+                new TumourGroup { FullName = "Pediatrics", Code = "PED" },
+                new TumourGroup { FullName = "Primary Unknown", Code = "PU" },
+                new TumourGroup { FullName = "Sarcoma", Code = "SA" },
+                new TumourGroup { FullName = "Supportive Care", Code = "SUPP" },
+            };
+            tumourGroups.ForEach(t => context.TumourGroups.AddOrUpdate(t));
         }
     }
 }
