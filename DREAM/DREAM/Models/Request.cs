@@ -42,12 +42,17 @@ namespace DREAM.Models
 
         public Lock Lock()
         {
+            DREAMContext db = new DREAMContext();
+
             Lock reqLock = new Lock
             {
                 ExpireTime = DateTime.Now.AddMinutes(1.0),
                 UserID = (Guid)Membership.GetUser().ProviderUserKey,
                 RequestID = this.ID,
             };
+
+            db.Locks.Add(reqLock);
+            db.SaveChanges();
             return reqLock;
         }
 
