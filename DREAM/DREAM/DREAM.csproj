@@ -334,6 +334,9 @@
     <Content Include="Views\Requests\EditorTemplates\Caller.cshtml" />
     <Content Include="Views\Requests\EditorTemplates\Patient.cshtml" />
     <Content Include="Views\DropDownAdmin\Index.cshtml" />
+    <Content Include="Views\DropDownAdmin\Add.cshtml" />
+    <Content Include="Views\DropDownAdmin\Edit.cshtml" />
+    <Content Include="Views\DropDownAdmin\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

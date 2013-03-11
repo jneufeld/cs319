@@ -10,11 +10,19 @@
     <tr>
         <th>Code</th>
         <th>FullName</th>
+        <th></th>
+        <th></th>
     </tr>
 
 @if (Model == null)
 {
     <tr>
+        <td>
+            NoValues
+        </td>
+        <td>
+            NoValues
+        </td>
         <td>
             NoValues
         </td>
@@ -34,7 +42,23 @@ else
             <td>
                 @Html.DisplayFor(d => dp.FullName)
             </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass="Regions"})
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass="Regions"})
+            </td>
         </tr>
     }
 }
+</table>
+<table>
+    <tr>
+        <th></th>
+    </tr>
+    <tr>
+            <td>
+                @Html.ActionLink("Add", "Add", new {dropDownClass="Regions"})
+            </td>
+    </tr>
 </table>
