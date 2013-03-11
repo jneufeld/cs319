@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -33,5 +34,25 @@ namespace DREAM.Models
         public Guid ClosedBy { get; set; }
 
         public virtual ICollection<Question> Questions { get; set; }
+
+        public Lock Lock()
+        {
+            Lock reqLock = new Lock
+            {
+                ExpireTime = DateTime.Now.AddMinutes(1.0),
+                UserID = (Guid)Membership.GetUser().ProviderUserKey,
+                RequestID = this.ID,
+            };
+            return reqLock;
+        }
+
+        public void Unlock()
+        {
+            DREAMContext db = new DREAMContext();
+
+            Lock reqLock = db.Locks.Single(Lock => Lock.RequestID == this.ID);
+            db.Locks.Remove(reqLock);
+            db.SaveChanges();
+        }
     }
 }
