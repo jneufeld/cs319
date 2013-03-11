@@ -7,7 +7,7 @@
     <fieldset>
         <legend>Patient</legend>
 
-        Html.HiddenFor(model => model.ID)
+        @Html.HiddenFor(model => model.ID)
 
         <table>
             <tr>
@@ -38,7 +38,7 @@
                     @Html.ValidationMessageFor(model => model.AgencyID)
                 </td>
             </tr>
-            <tr>
+            @*<tr>
                 <td>
                     @Html.LabelFor(model => model.Gender)
                 </td>
@@ -46,8 +46,7 @@
                     @Html.DropDownListFor(m => m.Gender, (IEnumerable<SelectListItem>)ViewData["GenderList"])
                     @Html.ValidationMessageFor(model => model.Gender)
                 </td>
-            </tr>
-
+            </tr>*@
             <tr>
                 <td>
                     @Html.LabelFor(model => model.Age)

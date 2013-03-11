@@ -35,8 +35,7 @@ This request is currently locked and cannot be edited.
                         @Html.LabelFor(model => model.Type)
                     </td>
                     <td>
-                        @Html.DropDownList("RequestTypeList")
-                        @Html.ValidationMessageFor(model => model.Type.ID)
+                        @Html.DropDownListFor(m => m.Type.StringID, (IEnumerable<SelectListItem>)ViewData["RequestTypeList"])
                     </td>
                 </tr>
 
@@ -84,6 +83,8 @@ This request is currently locked and cannot be edited.
             <h3>Patient Data</h3>
             
             @Html.EditorFor(model => model.Patient)
+
+            <h3>Questions</h3>
 
             @Html.ValidationSummary(true)
 
