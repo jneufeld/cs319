@@ -171,6 +171,43 @@ namespace DREAM.Controllers
         // POST: /Requests/Edit/5
 
         [HttpPost]
+        public ActionResult Edit(int id, FormCollection formCollection)
+        {
+            Request request = db.Requests.Find(id);
+            ViewBag.IsLocked = false;
+
+            if (request == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (isLocked(request, true))
+            {
+                ViewBag.IsLocked = true;
+                return View();
+            }
+
+            //db.Requests.Attach(request);
+            //db.Entry(request).State = EntityState.Modified;
+            //TryUpdateModel<Request>(request, formCollection;
+
+            if (ModelState.IsValid)
+            {
+                UpdateModel<Request>(request, formCollection);
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            //request.Unlock();
+            return View(request);
+        }
+
+        /*
+        
+        Old version...
+        
+        [HttpPost]
         public ActionResult Edit(Request request)
         {
             if (ModelState.IsValid)
@@ -181,6 +218,8 @@ namespace DREAM.Controllers
             }
             return View(request);
         }
+        
+         */
 
         //
         // GET: /Requests/Delete/5
