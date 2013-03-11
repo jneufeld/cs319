@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -189,12 +189,14 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AutoMapperConfiguration.cs" />
     <Compile Include="Models\Caller.cs" />
+    <Compile Include="Models\ChangePasswordModel.cs" />
     <Compile Include="Models\DREAMContextInitializer.cs" />
     <Compile Include="Models\ExternalLogin.cs" />
     <Compile Include="Models\LocalPasswordModel.cs" />
     <Compile Include="Models\Lock.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\PasswordResetRequest.cs" />
+    <Compile Include="Models\PasswordResetRequestModel.cs" />
     <Compile Include="Models\PreviousPassword.cs" />
     <Compile Include="Models\Reference.cs" />
     <Compile Include="Models\Keyword.cs" />
@@ -210,6 +212,7 @@
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\RequestType.cs" />
     <Compile Include="Models\RequestViewModel.cs" />
+    <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\TumourGroup.cs" />
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
