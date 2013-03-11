@@ -22,7 +22,7 @@ namespace DREAM.Tests.Controllers
             ViewResult result = controller.Index() as ViewResult;
 
             // Assert
-            Assert.AreEqual("Modify this template to jump-start your ASP.NET MVC application.", result.ViewBag.Message);
+            Assert.AreEqual("Please login to start using the system.", result.ViewBag.Message);
         }
 
         [TestMethod]
