@@ -131,11 +131,10 @@ namespace DREAM.Controllers
                 return View();
             }
 
-            // Need Lock() method in Request for this check to work
-            //else if (request.Lock())
-            //{
-            return RedirectToAction("Edit", request.ID);
-            //}
+            else if (request.Lock() != null)
+            {
+                return RedirectToAction("Edit", request.ID);
+            }
 
             ModelState.AddModelError("", "View Request failed!");
             return View(request);
