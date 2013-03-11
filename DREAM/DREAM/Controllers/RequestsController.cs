@@ -82,15 +82,6 @@ namespace DREAM.Controllers
                 request.CreatedBy = (Guid) Membership.GetUser().ProviderUserKey;
                 request.ClosedBy = Guid.Empty;
 
-                // TODO: Parse Gender enum
-
-                Question q1 = new Question { QuestionText = "ldkflsdjgkls", Response = "skdlfksdjl" };
-                Question q2 = new Question { QuestionText = "dkjgdkh", Response = "jkldsgldjsk" };
-                db.Questions.Add(q1);
-                db.Questions.Add(q2);
-                request.Questions.Add(q1);
-                request.Questions.Add(q2);
-
                 db.Requests.Add(request);
                 db.Callers.Add(request.Caller);
                 if (request.Patient.ID == 0)
