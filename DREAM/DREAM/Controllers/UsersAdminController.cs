@@ -1,6 +1,7 @@
 ﻿using DREAM.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Transactions;
 using System.Web;
@@ -43,6 +44,14 @@ namespace DREAM.Controllers
                             );
                         user.IsApproved = model.Enabled;
                         Membership.UpdateUser(user);
+
+                        UserProfile profile = new UserProfile
+                        {
+                            FirstName = model.FirstName,
+                            LastName = model.LastName,
+                            UserId = (Guid)user.ProviderUserKey,
+                        };
+                        db.UserProfiles.Add(profile);
 
                         if (user != null)
                         {
@@ -91,6 +100,11 @@ namespace DREAM.Controllers
                         user.Email = model.Email;
                         user.IsApproved = model.Enabled;
                         Membership.UpdateUser(user);
+
+                        UserProfile profile = UserProfile.GetFor(user);
+                        profile.FirstName = model.FirstName;
+                        profile.LastName = model.LastName;
+                        db.Entry(profile).State = EntityState.Modified;
 
                         updateRoles(user, selectedRoles);
                         updateGroups(user, selectedGroups);

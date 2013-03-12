@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using DREAM.Models;
+using System.Web.Security;
 
 namespace DREAM.Migrations
 {
@@ -109,6 +110,31 @@ namespace DREAM.Migrations
                 new TumourGroup { FullName = "Supportive Care", Code = "SUPP" },
             };
             tumourGroups.ForEach(t => context.TumourGroups.AddOrUpdate(t));
+
+            List<Group> groups = new List<Group>
+            {
+                new Group { Code = "VC",  Name = "VANCOUVER CANCER CENTRE"}, 
+                new Group { Code = "VIC", Name = "VANCOUVER ISLAND CENTRE"},
+                new Group { Code = "AC", Name = "ABBOTSFORD CANCER CENTRE"},
+                new Group { Code = "FVC", Name = "FRASER VALLEY CENTRE"},
+                new Group { Code = "CSI", Name = "CENTRE FOR THE SOUTHERN INTERIOR"},
+                new Group { Code = "CN", Name = "DON'T KNOW"},
+                new Group { Code = "Provincial", Name = "PROVINCIAL"}
+            };
+            groups.ForEach(g => context.Groups.AddOrUpdate(g));
+
+            foreach (MembershipUser user in Membership.GetAllUsers())
+            {
+                if (context.UserProfiles.Find((Guid)user.ProviderUserKey) == null)
+                {
+                    UserProfile up = new UserProfile
+                    {
+                        UserId = (Guid)user.ProviderUserKey,
+                        FirstName = "First",
+                        LastName = "Last",
+                    };
+                }
+            }
         }
     }
 }

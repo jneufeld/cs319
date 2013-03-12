@@ -173,7 +173,6 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="CustomMembership\PreviouslyUsedPasswordException.cs" />
-    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -200,7 +199,6 @@
     <Compile Include="Models\Lock.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\PasswordResetRequest.cs" />
-    <Compile Include="Models\PasswordResetRequestModel.cs" />
     <Compile Include="Models\PreviousPassword.cs" />
     <Compile Include="Models\Reference.cs" />
     <Compile Include="Models\Keyword.cs" />
@@ -216,6 +214,7 @@
     <Compile Include="Models\RegisterUserModel.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\RequestType.cs" />
+    <Compile Include="Models\PasswordResetRequestModel.cs" />
     <Compile Include="Models\RequestViewModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\Roles.cs" />
@@ -283,6 +282,7 @@
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Images\BC_Cancer_logo.png" />
+    <Content Include="Migrations\migration.sql" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -340,6 +340,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Requests\Index.cshtml" />
+    <Content Include="Views\Requests\Details.cshtml" />
     <Content Include="Views\Requests\Add.cshtml" />
     <Content Include="Views\Requests\Edit.cshtml" />
     <Content Include="Views\Requests\Delete.cshtml" />
@@ -347,7 +348,6 @@
     <Content Include="Views\UsersAdmin\Index.cshtml" />
     <Content Include="Views\Requests\EditorTemplates\Caller.cshtml" />
     <Content Include="Views\Requests\EditorTemplates\Patient.cshtml" />
-    <Content Include="Views\Requests\EditorTemplates\Question.cshtml" />
     <Content Include="Views\DropDownAdmin\Index.cshtml" />
     <Content Include="Views\DropDownAdmin\Add.cshtml" />
     <Content Include="Views\DropDownAdmin\Edit.cshtml" />
@@ -357,6 +357,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

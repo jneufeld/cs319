@@ -9,23 +9,19 @@ using System.Web.Security;
 
 namespace DREAM.Models
 {
-    public class UsersContext : DbContext
-    {
-        public UsersContext()
-            : base("DefaultConnection")
-        {
-        }
-
-        public DbSet<UserProfile> UserProfiles { get; set; }
-    }
-
-    [Table("UserProfile")]
     public class UserProfile
     {
         [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int UserId { get; set; }
-        public string UserName { get; set; }
-    }
+        public Guid UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
+        public static UserProfile GetFor(MembershipUser user)
+        {
+            using (DREAMContext db = new DREAMContext())
+            {
+                return db.UserProfiles.Find((Guid)user.ProviderUserKey);
+            }
+        }
+    }
 }

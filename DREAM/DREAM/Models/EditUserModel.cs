@@ -33,6 +33,10 @@ namespace DREAM.Models
             LastName = "Last Name";
             Email = user.Email;
             Enabled = user.IsApproved;
+
+            UserProfile profile = UserProfile.GetFor(user);
+            FirstName = profile.FirstName;
+            LastName = profile.LastName;
         }
     }
 }
