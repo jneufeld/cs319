@@ -11,15 +11,15 @@ using DREAM.Models;
 
 namespace DREAM.Controllers
 {
-    [Authorize(Roles="ADMIN")]
+   // [Authorize(Roles="ADMIN")]
     public class KeywordsAdminController : Controller
     {
         private DREAMContext db = new DREAMContext();
 
         [HttpGet]
         public ActionResult Index(int page = 1) {
-            List<Keyword> keywords = db.Keywords.ToList();
-            
+           DbSet keywords = db.Keywords;
+
             return View(keywords);  
         }
 

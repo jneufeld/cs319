@@ -1,0 +1,50 @@
+﻿@model System.Data.Entity.DbSet
+
+@{
+    ViewBag.Title = "Keyword Administration Index";
+}
+
+<h2>Index</h2>
+
+<style>
+table, th {
+    border:1px;
+    padding: 15px;
+    background-color:lightyellow;
+    color:black;
+    text-align:center;
+
+}
+td
+{
+    background-color:white;
+    color:black;
+}
+</style>
+
+<table>
+    <tr>
+        <th>Word</th>
+        <th>Enabled</th>
+        <th>Number of Tagged Questions</th>
+        <th>Edit Button</th>
+        <th> </th>
+    </tr>
+
+@if (Model == null) {
+    <tr>
+        <td>NoValues</td>
+        <td>NoValues</td>
+        <td>NoValues</td>
+    </tr>
+} else {
+    foreach (DREAM.Models.Keyword dp in Model)  {
+        <tr>
+            <td>@Html.DisplayFor(d => dp.KeywordText)</td>
+            <td>@Html.DisplayFor(d => dp.Enabled)</td>
+            <td>@Html.DisplayFor(d => dp.AssociatedQuestions.Count)</td>
+            <td><button>Edit</button></td>
+        </tr>
+    }
+}
+</table>
