@@ -28,5 +28,12 @@ namespace DREAM.Controllers
 
             return View();
         }
+
+        public ActionResult Admin()
+        {
+            ViewBag.Message = "Administration Panel";
+
+            return View();
+        }
     }
 }
