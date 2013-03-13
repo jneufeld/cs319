@@ -53,32 +53,32 @@
         <div id="RightPanel" style="float: right; width: 80%;">
             <div id="UsersPanel" style="display: inline">
                 <h2>Users</h2>
-                <a href="~/UsersAdmin/Index">404: UserAdmin</a>
+                 @Html.ActionLink("UserAdmin", "Index", "UsersAdmin", "","")
             </div>
 
             <div id="RequestTypesPanel" style="display: none">
                 <h2>Request Types</h2>
-                 <a href="~/DropDownAdmin/Index?dropdownclass=RequestTypes">BROKEN: RequestTypesDownDownAdmin</a>
+                 @Html.ActionLink("RequestTypesDropDownAdmin", "Index", "DropDownAdmin", "RequestTypes","")
             </div>
 
             <div id="RegionsPanel" style="display: none">
                 <h2>Regions</h2>
-                <a href="~/DropDownAdmin/Index?dropdownclass=Regions">RegionsDownDownAdmin</a>
+                @Html.ActionLink("RegionsDropDownAdmin", "Index", "DropDownAdmin", "Regions","")
             </div>
 
             <div id="TumourGroupsPanel" style="display: none">
                 <h2>Tumour Groups</h2>
-                 <a href="~/DropDownAdmin/Index?dropdownclass=TumourGroups">BROKEN: TumourGroupsDownDownAdmin</a>
+                 @Html.ActionLink("TumourGroupDropDownAdmin", "Index", "DropDownAdmin", "TumourGroups","")
             </div>
 
             <div id="QuestionTypesPanel" style="display: none">
                 <h2>Question Types</h2>
-                 <a href="~/DropDownAdmin/Index?dropdownclass=QuestionTypes">BROKEN: QuestionTypesDownDownAdmin</a>
+                  @Html.ActionLink("QuestionTypesDropDownAdmin", "Index", "DropDownAdmin", "QuestionTypes","")
             </div>
 
             <div id="KeywordsPanel" style="display: none">
                 <h2>Keywords</h2>
-                 <a href="~/KeywordsAdmin/Index">KeywordAdmin</a>
+                 @Html.ActionLink("KeywordAdmin", "Index", "KeywordsAdmin", "","")
             </div>
 
             <div id="LogsPanel" style="display:none">
