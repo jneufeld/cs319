@@ -58,22 +58,22 @@
 
             <div id="RequestTypesPanel" style="display: none">
                 <h2>Request Types</h2>
-                 @Html.ActionLink("RequestTypesDropDownAdmin", "Index", "DropDownAdmin", "RequestTypes","")
+                 @Html.ActionLink("RequestTypesDropDownAdmin", "Index", "DropDownAdmin", new { dropDownClass = "RequestType"}, "")
             </div>
 
             <div id="RegionsPanel" style="display: none">
                 <h2>Regions</h2>
-                @Html.ActionLink("RegionsDropDownAdmin", "Index", "DropDownAdmin", "Regions","")
+                @Html.ActionLink("RegionsDropDownAdmin", "Index", "DropDownAdmin", new { dropDownClass = "Regions" }, "")
             </div>
 
             <div id="TumourGroupsPanel" style="display: none">
                 <h2>Tumour Groups</h2>
-                 @Html.ActionLink("TumourGroupDropDownAdmin", "Index", "DropDownAdmin", "TumourGroups","")
+                 @Html.ActionLink("TumourGroupDropDownAdmin", "Index", "DropDownAdmin", new { dropDownClass = "TumourGroup" }, "")
             </div>
 
             <div id="QuestionTypesPanel" style="display: none">
                 <h2>Question Types</h2>
-                  @Html.ActionLink("QuestionTypesDropDownAdmin", "Index", "DropDownAdmin", "QuestionTypes","")
+                  @Html.ActionLink("QuestionTypesDropDownAdmin", "Index", "DropDownAdmin", new { dropDownClass = "QuestionType" }, "")
             </div>
 
             <div id="KeywordsPanel" style="display: none">
