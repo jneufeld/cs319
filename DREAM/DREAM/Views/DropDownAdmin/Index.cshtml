@@ -43,10 +43,10 @@ else
                 @Html.DisplayFor(d => dp.FullName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass="Regions"})
+                @Html.ActionLink("Edit", "Edit", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass=dp.GetType().Name})
             </td>
             <td>
-                @Html.ActionLink("Delete", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass="Regions"})
+                @Html.ActionLink("Delete", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass=dp.GetType().Name})
             </td>
         </tr>
     }
@@ -58,7 +58,7 @@ else
     </tr>
     <tr>
             <td>
-                @Html.ActionLink("Add", "Add", new {dropDownClass="Regions"})
+                @Html.ActionLink("Add", "Add", new {dropDownClass=Model.ElementType.Name})
             </td>
     </tr>
 </table>
