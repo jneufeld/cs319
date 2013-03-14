@@ -35,5 +35,12 @@ namespace DREAM.Controllers
 
             return View();
         }
+
+        public ActionResult OtherRolesHome()
+        {
+            ViewBag.Message = "Home Page";
+
+            return View();
+        }
     }
 }

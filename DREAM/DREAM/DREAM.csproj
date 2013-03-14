@@ -354,6 +354,9 @@
     <Content Include="Views\DropDownAdmin\Delete.cshtml" />
     <Content Include="Views\UsersAdmin\Register.cshtml" />
     <Content Include="Views\UsersAdmin\Edit.cshtml" />
+    <Content Include="Views\KeywordsAdmin\Index.cshtml" />
+    <Content Include="Views\Home\Admin.cshtml" />
+    <Content Include="Views\Home\OtherRolesHome.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
