@@ -78,6 +78,7 @@ namespace DREAM.Controllers
                     // redirect to the GET page, so if a user refreshes the page they won’t try to change their password again
                     RouteValueDictionary routes = new RouteValueDictionary();
                     routes.Add("user", model.UserName);
+                    routes.Add("statusMessage", "Your Password has been successfully changed");
                     return RedirectToAction("Manage", "Users", routes);
                 }
                 else return View(model); //add error message saying user can't be null or new passwords must match...;
@@ -89,8 +90,9 @@ namespace DREAM.Controllers
         }
 
         [HttpGet]
-        public ActionResult Manage(String user)
+        public ActionResult Manage(String user, String statusMessage)
         {
+            ViewBag.StatusMessage = statusMessage;
             return View();
         }
 

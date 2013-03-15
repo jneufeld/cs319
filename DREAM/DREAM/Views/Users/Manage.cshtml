@@ -22,7 +22,7 @@
                 }
                 else
                 {
-                    @Html.ActionLink("ChangePassword", "ChangePassword", new { success = false });
+                    @Html.ActionLink("ChangePassword", "ChangePassword", new { userName = User.Identity.Name, success = false });
                 }
             </td>
     </tr>
