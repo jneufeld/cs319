@@ -58,7 +58,6 @@ namespace DREAM.Controllers
         }
 
         [HttpGet]
-        //[AllowAnonymous] - allow only logged in user?
         public ActionResult ChangePassword(String userName, bool success=false){
             ChangePasswordModel pm = new ChangePasswordModel();
             pm.UserName = userName;
@@ -67,17 +66,23 @@ namespace DREAM.Controllers
         }
 
         [HttpPost]
-        //[AllowAnonymous] - allow only logged in user?
         [ValidateAntiForgeryToken]
         public ActionResult ChangePassword(ChangePasswordModel model){
             if(ModelState.IsValid) {
                 MembershipUser user = Membership.GetUser(model.UserName);
                 if (user != null)
                 {
-                    user.ChangePassword(model.CurrentPassword, model.NewPassword);
+                    bool success = ViewBag.success = user.ChangePassword(model.CurrentPassword, model.NewPassword);
                     RouteValueDictionary routes = new RouteValueDictionary();
                     routes.Add("user", model.UserName);
-                    routes.Add("statusMessage", "Your Password has been successfully changed");
+                    if (success)
+                    {
+                        routes.Add("statusMessage", "Your Password has been successfully changed");
+                    }
+                    else
+                    {
+                        routes.Add("statusMessage", "Your Password was not changed");
+                    }
                     return RedirectToAction("Manage", "Users", routes);
                 }
                 else return RedirectToAction("Index", "Home");
