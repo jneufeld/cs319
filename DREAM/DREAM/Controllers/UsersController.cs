@@ -59,9 +59,11 @@ namespace DREAM.Controllers
 
         [HttpGet]
         //[AllowAnonymous] - allow only logged in user
-        public ActionResult ChangePassword(bool success=false){
+        public ActionResult ChangePassword(String userName, bool success=false){
+            ChangePasswordModel pm = new ChangePasswordModel();
+            pm.UserName = userName;
             ViewBag.success = success;
-            return View();
+            return View(pm);
         }
 
         [HttpPost]
@@ -75,8 +77,8 @@ namespace DREAM.Controllers
                     user.ChangePassword(model.CurrentPassword, model.NewPassword);
                     // redirect to the GET page, so if a user refreshes the page they won’t try to change their password again
                     RouteValueDictionary routes = new RouteValueDictionary();
-                    routes.Add("success", true);
-                    return RedirectToAction("ChangePassword", "Users", routes);
+                    routes.Add("user", model.UserName);
+                    return RedirectToAction("Manage", "Users", routes);
                 }
                 else return View(model); //add error message saying user can't be null or new passwords must match...;
             }
@@ -84,6 +86,12 @@ namespace DREAM.Controllers
                 ModelState.AddModelError(model.UserName, "ModelState is not valid");
                 return View(model);
             }
+        }
+
+        [HttpGet]
+        public ActionResult Manage(String user)
+        {
+            return View();
         }
 
         #region Helpers

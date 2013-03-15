@@ -11,7 +11,7 @@ using DREAM.Models;
 
 namespace DREAM.Controllers
 {
-    //[Authorize(Roles=Role.ADMIN)]
+    [Authorize(Roles=Role.ADMIN)]
     public class DropDownAdminController : Controller
     {
         private DREAMContext db = new DREAMContext();
