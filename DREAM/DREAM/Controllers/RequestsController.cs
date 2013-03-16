@@ -100,6 +100,26 @@ namespace DREAM.Controllers
         }
 
         //
+        // GET: /Requests/Search
+
+        public ActionResult Search()
+        {
+            SearchModel sm = new SearchModel();
+            return View(sm);
+        }
+
+        //
+        // POST: /Requests/Search
+
+        [HttpPost]
+        public ActionResult Search(SearchModel search)
+        {
+            search.results = db.Requests.Where(request => request.Patient.FirstName.Equals(search.query));
+            search.executed = true;
+            return View(search);
+        }
+
+        //
         // GET: /Requests/ViewRequest/5
 
         public ActionResult ViewRequest(int id = 0)

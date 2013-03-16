@@ -1,0 +1,60 @@
+﻿@model DREAM.Models.SearchModel
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search</h2>
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td>
+                @Html.EditorFor(m => m.query)
+            </td>
+            <td>
+                <p>
+                    <input type="submit" value="Search" />
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.ValidationMessageFor(m => m.query)
+            </td>
+        </tr>
+    </table>
+}
+@if (Model.executed == true)
+{
+    if (Model.results.ToList().Count == 0)
+    {
+        <p>No results found!</p>
+    }
+    else
+    {
+        <table>
+            <tr>
+                <th>Request</th>
+                <th></th>
+                <th></th>
+            </tr>
+
+        @foreach (var request in Model.results)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(u => request.ID)
+                </td>
+                <td>
+                    @Html.ActionLink("View", "ViewRequest", new { id = request.ID })
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = request.ID })
+                </td>
+            </tr>
+        }
+        </table>
+    }
+}

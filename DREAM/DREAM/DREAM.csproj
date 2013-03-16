@@ -218,6 +218,7 @@
     <Compile Include="Models\RequestViewModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\Roles.cs" />
+    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\TumourGroup.cs" />
     <Compile Include="Models\UserGroup.cs" />
     <Compile Include="Models\UserProfile.cs" />
@@ -358,6 +359,7 @@
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\Home\OtherRolesHome.cshtml" />
     <Content Include="Views\Users\ChangePassword.cshtml" />
+    <Content Include="Views\Requests\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
