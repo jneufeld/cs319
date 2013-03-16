@@ -74,14 +74,15 @@ namespace DREAM.Controllers
                     rv.MapToRequestPatient(request);
                 }
 
-                request.Type = db.RequestTypes.Single(rt => rt.ID == request.Type.ID);
-                request.Caller.Region = db.Regions.Single(reg => reg.ID == request.Caller.Region.ID);
+                request.Type = db.RequestTypes.SingleOrDefault(rt => rt.ID == rv.RequestTypeID);
+                request.Caller.Region = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID);
 
                 request.CreationTime = DateTime.UtcNow;
                 request.CompletionTime = null;
                 request.CreatedBy = (Guid) Membership.GetUser().ProviderUserKey;
                 request.ClosedBy = Guid.Empty;
 
+                // TODO Probably wrap this whole thing in a transaction
                 db.Requests.Add(request);
                 db.Callers.Add(request.Caller);
                 if (request.Patient.ID == 0)
@@ -170,23 +171,26 @@ namespace DREAM.Controllers
         //
         // Returns:
         //      The view for editing the request, or a 404 if the request doesn't exist.
-        public ActionResult Edit(int id = 0)
+        public ActionResult Edit(int id)
         {
             Request request = FindRequest(id);
-            ViewBag.IsLocked = false;
 
             if (request == null)
             {
                 return HttpNotFound();
             }
 
+            ViewBag.IsLocked = false;
             if (isLocked(request, true))
             {
                 ViewBag.IsLocked = true;
                 return View();
             }
 
-            ViewBag.Questions = new List<Question>(request.Questions);
+            RequestViewModel rv = RequestViewModel.CreateFromRequest(request);
+
+            rv.CreatedBy = FindUsernameFromID(request.CreatedBy);
+            rv.ClosedBy = FindUsernameFromID(request.ClosedBy);
 
             ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
             ViewBag.RegionList = BuildRegionDropdownList();
@@ -194,19 +198,17 @@ namespace DREAM.Controllers
             ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
 
-            ViewBag.CreatedByUsername = FindUsernameFromID(request.CreatedBy);
-            ViewBag.ClosedByUsername = FindUsernameFromID(request.ClosedBy);
-
-            return View(request);
+            return View(rv);
         }
 
         //
         // POST: /Requests/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection formCollection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(RequestViewModel rv)
         {
-            Request request = db.Requests.Find(id);
+            Request request = FindRequest(rv.RequestID);
             ViewBag.IsLocked = false;
 
             if (request == null)
@@ -220,46 +222,25 @@ namespace DREAM.Controllers
                 return View();
             }
 
-            //db.Requests.Attach(request);
-            //db.Entry(request).State = EntityState.Modified;
-            //TryUpdateModel<Request>(request, formCollection;
-
             if (ModelState.IsValid)
             {
-                UpdateModel<Request>(request, formCollection);
+                rv.MapToRequest(request);
+
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
 
             //request.Unlock();
-            return View(request);
+            return View(rv);
         }
-
-        /*
-        
-        Old version...
-        
-        [HttpPost]
-        public ActionResult Edit(Request request)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(request).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(request);
-        }
-        
-         */
 
         //
         // GET: /Requests/Delete/5
 
-        public ActionResult Delete(int id = 0)
+        public ActionResult Delete(int id)
         {
-            Request request = db.Requests.Find(id);
+            Request request = FindRequest(id);
             if (request == null)
             {
                 return HttpNotFound();
@@ -301,13 +282,13 @@ namespace DREAM.Controllers
         #region DropDown Lists
         private IEnumerable<SelectListItem> BuildGenderDropdownList()
         {
-            List<SelectListItem> requestTypes = new List<SelectListItem>();
+            List<SelectListItem> genders = new List<SelectListItem>();
 
-            requestTypes.Add(new SelectListItem { Text = "Male", Value = Gender.MALE.ToString() });
-            requestTypes.Add(new SelectListItem { Text = "Female", Value = Gender.FEMALE.ToString() });
-            requestTypes.Add(new SelectListItem { Text = "Unknown", Value = Gender.UNKNOWN.ToString() });
+            genders.Add(new SelectListItem { Text = "Unknown", Value = Gender.UNKNOWN.ToString() });
+            genders.Add(new SelectListItem { Text = "Male", Value = Gender.MALE.ToString() });
+            genders.Add(new SelectListItem { Text = "Female", Value = Gender.FEMALE.ToString() });
 
-            return requestTypes;
+            return genders;
         }
 
         private IEnumerable<SelectListItem> BuildRequestTypeDropdownList()
@@ -335,7 +316,7 @@ namespace DREAM.Controllers
             IEnumerable<T> ts = dbSet.AsEnumerable<T>();
             IEnumerable<SelectListItem> list = ts.Select(r => new SelectListItem
             {
-                Value = r.StringID,
+                Value = r.ID.ToString(),
                 Text = r.FullName,
             });
             return list;

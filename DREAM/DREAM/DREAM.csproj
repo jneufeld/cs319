@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -185,6 +185,10 @@
     <Compile Include="Migrations\201303072149596_RenameCallerID.Designer.cs">
       <DependentUpon>201303072149596_RenameCallerID.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201303112347175_AddGender.cs" />
+    <Compile Include="Migrations\201303112347175_AddGender.Designer.cs">
+      <DependentUpon>201303112347175_AddGender.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AutoMapperConfiguration.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
@@ -283,7 +287,6 @@
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Images\BC_Cancer_logo.png" />
-    <Content Include="Migrations\migration.sql" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -341,7 +344,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Requests\Index.cshtml" />
-    <Content Include="Views\Requests\Details.cshtml" />
     <Content Include="Views\Requests\Add.cshtml" />
     <Content Include="Views\Requests\Edit.cshtml" />
     <Content Include="Views\Requests\Delete.cshtml" />
@@ -375,6 +377,9 @@
     <EmbeddedResource Include="Migrations\201303072149596_RenameCallerID.resx">
       <DependentUpon>201303072149596_RenameCallerID.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201303112347175_AddGender.resx">
+      <DependentUpon>201303112347175_AddGender.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -405,6 +410,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

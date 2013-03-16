@@ -13,22 +13,5 @@ namespace DREAM.Models
         public int ID { get; set; }
         public string Code { get; set; }
         public string FullName { get; set; }
-
-        [NotMapped]
-        public string StringID
-        {
-            get
-            {
-                return ID.ToString();
-            }
-            set
-            {
-                int tmp;
-                Int32.TryParse(value, out tmp);
-                // Check to see if parsing failed
-                if (tmp != 0)
-                    ID = tmp;
-            }
-        }
     }
 }

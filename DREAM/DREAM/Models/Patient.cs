@@ -10,7 +10,7 @@ namespace DREAM.Models
 {
     public enum Gender
     {
-        UNKNOWN,
+        UNKNOWN = 0,
         MALE,
         FEMALE,
     }
@@ -28,7 +28,7 @@ namespace DREAM.Models
         public string LastName { get; set; }
 
         [Display(Name = "Gender")]
-        public Gender Gender { get; set; }
+        public int Gender { get; set; }
 
         [Display(Name = "Age")]
         public int Age { get; set; }

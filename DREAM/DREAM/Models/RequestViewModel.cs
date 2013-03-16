@@ -27,6 +27,14 @@ namespace DREAM.Models
 
         [Display(Name = "Request Type")]
         public string RequestTypeStringID { get; set; }
+        public int RequestTypeID
+        {
+            get
+            { 
+                int tmp = 0; Int32.TryParse(RequestTypeStringID, out tmp); return tmp;
+            }
+            set { RequestTypeStringID = value.ToString(); }
+        }
 
         public int CallerID { get; set; }
 
@@ -44,6 +52,14 @@ namespace DREAM.Models
 
         [Display(Name = "Region")]
         public string CallerRegionStringID { get; set; }
+        public int CallerRegionID
+        {
+            get
+            {
+                int tmp = 0; Int32.TryParse(CallerRegionStringID, out tmp); return tmp;
+            }
+            set { CallerRegionStringID = value.ToString(); }
+        }
 
         public int PatientID { get; set; }
 
@@ -62,6 +78,7 @@ namespace DREAM.Models
         [Display(Name = "Age")]
         public int PatientAge { get; set; }
 
+        // Not used at the moment
         public IEnumerable<SelectListItem> RequestTypeDropDownList { get; set; }
         public IEnumerable<SelectListItem> RegionDropDownList { get; set; }
         public IEnumerable<SelectListItem> GenderDropDownList { get; set; }
@@ -73,20 +90,18 @@ namespace DREAM.Models
                 RequestID = r.ID,
                 CreationTime = r.CreationTime.ToLocalTime().ToString(),
                 CompletionTime = r.CompletionTime != null ? r.CompletionTime.Value.ToLocalTime().ToString() : "",
-                //CreatedBy = Membership.GetUser(r.CreatedBy).UserName,
-                //ClosedBy = Membership.GetUser(r.ClosedBy).UserName,
-                RequestTypeStringID = r.Type != null ? r.Type.StringID : "",
+                RequestTypeID = r.Type != null ? r.Type.ID : 0,
                 CallerID = r.Caller.ID,
                 CallerFirstName = r.Caller.FirstName,
                 CallerLastName = r.Caller.LastName,
                 CallerPhoneNumber = r.Caller.PhoneNumber,
                 CallerEmail = r.Caller.Email,
-                CallerRegionStringID = r.Caller.Region != null ? r.Caller.Region.StringID : "",
+                CallerRegionID = r.Caller.Region != null ? r.Caller.Region.ID : 0,
                 PatientID = r.Patient.ID,
                 PatientAgencyID = r.Patient.AgencyID,
                 PatientFirstName = r.Patient.FirstName,
                 PatientLastName = r.Patient.LastName,
-                PatientGender = r.Patient.Gender.ToString(),
+                PatientGender = ((Gender)r.Patient.Gender).ToString(),
                 PatientAge = r.Patient.Age,
             };
             return requestViewModel;
@@ -95,18 +110,12 @@ namespace DREAM.Models
         public void MapToRequest(Request r)
         {
             r.ID = RequestID;
-            int rtID;
-            Int32.TryParse(RequestTypeStringID, out rtID);
-            r.Type = new RequestType { ID = rtID };
 
             r.Caller.ID = CallerID;
             r.Caller.FirstName = CallerFirstName;
             r.Caller.LastName = CallerLastName;
             r.Caller.PhoneNumber = CallerPhoneNumber;
             r.Caller.Email = CallerEmail;
-            int regID;
-            Int32.TryParse(CallerRegionStringID, out regID);
-            r.Caller.Region = new Region { ID = regID };
         }
 
         public void MapToRequestPatient(Request r)
@@ -118,7 +127,7 @@ namespace DREAM.Models
             Gender gender;
             bool parse = Enum.TryParse(PatientGender, true, out gender);
             if (parse)
-                r.Patient.Gender = gender;
+                r.Patient.Gender = (int)gender;
             r.Patient.Age = PatientAge;
         }
     }
