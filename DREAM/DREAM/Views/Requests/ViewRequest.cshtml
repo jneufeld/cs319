@@ -1,46 +1,150 @@
 ﻿@model DREAM.Models.Request
 
 @{
-    ViewBag.Title = "ViewRequests";
+    ViewBag.Title = "ViewRequest";
 }
 
-<h2>View Request</h2>
+<h2>View Request @Html.DisplayTextFor(m => m.ID)</h2>
 
-@Html.AntiForgeryToken()
-@Html.ValidationSummary()
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-<fieldset>
-    <legend>Request</legend>
+    <fieldset>
+        <legend>View Request</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.Type)
+                @Html.DisplayTextFor(m => m.Type.FullName)
+            </li>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.CreationTime)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreationTime)
-    </div>
+            <li>
+                <h1>Caller</h1>
+            </li>
+            <li>
+                <div style="border: solid; border-width: 1px; margin: 5px">
+                    <fieldset>
+                        <legend>Caller</legend>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.CompletionTime)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CompletionTime)
-    </div>
+                        <table>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(m => m.Caller.FirstName)
+                                </td>
+                                <td>
+                                    @Html.DisplayTextFor(m => m.Caller.FirstName)
+                                </td>
+                            </tr>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.CreatedBy)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreatedBy)
-    </div>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(m => m.Caller.LastName)
+                                </td>
+                                <td>
+                                    @Html.DisplayTextFor(m => m.Caller.LastName)
+                                </td>
+                            </tr>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.ClosedBy)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.ClosedBy)
-    </div>
-</fieldset>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(m => m.Caller.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayTextFor(m => m.Caller.Email)
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(m => m.Caller.PhoneNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayTextFor(m => m.Caller.PhoneNumber)
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(m => m.Caller.Region)
+                                </td>
+                                <td>
+                                    @Html.DisplayTextFor(m => m.Caller.Region.FullName)
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+            </li>
+
+            <li>
+                <h1>Patient</h1>
+            </li>
+            <li>
+                <div style="border: solid; border-width: 1px; margin: 5px">
+                    <fieldset>
+                        <legend>Patient</legend>
+
+                        <table>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(m => m.Patient.FirstName)
+                                </td>
+                                <td>
+                                    @Html.DisplayTextFor(m => m.Patient.FirstName)
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(m => m.Patient.LastName)
+                                </td>
+                                <td>
+                                    @Html.DisplayTextFor(m => m.Patient.LastName)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(m => m.Patient.AgencyID)
+                                </td>
+                                <td>
+                                    @Html.DisplayTextFor(m => m.Patient.AgencyID)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(m => m.Patient.Gender)
+                                </td>
+                                <td>
+                                    @Html.DisplayTextFor(m => m.Patient.Gender)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(m => m.Patient.Age)
+                                </td>
+                                <td>
+                                    @Html.DisplayTextFor(m => m.Patient.Age)
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+            </li>
+
+        </ol>
+
+        @Html.ValidationSummary()
+
+        <p>
+            <input type="submit" value="Add" />
+        </p>
+    </fieldset>
+}
+
+<div>
     @Html.ActionLink("Back to List", "Index")
-</p>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
