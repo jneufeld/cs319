@@ -69,6 +69,9 @@
       <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.2.1.13026\lib\net40-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\packages\EPPlus.3.1.2\lib\net35\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -170,6 +173,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DropDownAdminController.cs" />
     <Compile Include="Controllers\KeywordsAdminController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="Controllers\UsersAdminController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -183,6 +187,8 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AutoMapperConfiguration.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
+    <Compile Include="Models\ChartModel.cs" />
+    <Compile Include="Models\ChartValueModel.cs" />
     <Compile Include="Models\DREAMContextInitializer.cs" />
     <Compile Include="Models\AssignedGroupModel.cs" />
     <Compile Include="Models\AssignedRoleModel.cs" />
@@ -208,6 +214,7 @@
     <Compile Include="Models\RegisterExternalLoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Models\RegisterUserModel.cs" />
+    <Compile Include="Models\ReportModel.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\RequestType.cs" />
     <Compile Include="Models\PasswordResetRequestModel.cs" />
@@ -215,6 +222,8 @@
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\Roles.cs" />
     <Compile Include="Models\SearchModel.cs" />
+    <Compile Include="Models\StatFunctions.cs" />
+    <Compile Include="Models\TimeRange.cs" />
     <Compile Include="Models\TumourGroup.cs" />
     <Compile Include="Models\UserGroup.cs" />
     <Compile Include="Models\UserProfile.cs" />
@@ -355,11 +364,15 @@
     <Content Include="Views\Users\ChangePassword.cshtml" />
     <Content Include="Views\Requests\Search.cshtml" />
     <Content Include="Views\Requests\QuestionEntry.cshtml" />
+    <Content Include="Views\Reports\Generate.cshtml" />
+    <Content Include="Views\Reports\ChartModel.cshtml" />
+    <Content Include="Views\Reports\ChartValueModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Templates\" />
+    <Folder Include="Views\Reports\EditorTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -398,5 +411,6 @@
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
+<<<<<<< HEAD
   </Target> -->
 </Project>

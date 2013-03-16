@@ -1,0 +1,19 @@
+﻿@model DREAM.Models.ChartValueModel
+<span>Value</span>
+<br />
+@using DREAM.Helpers
+
+@using (Html.BeginCollectionItem(ViewData.TemplateInfo.HtmlFieldPrefix + ".Values"))
+{
+    @Html.LabelFor(model => model.Name)
+    @Html.EditorFor(model => model.Name)
+    @Html.ValidationMessageFor(model => model.Name)
+
+    @Html.LabelFor(model => model.PropertyName)
+    @Html.EditorFor(model => model.PropertyName)
+    @Html.ValidationMessageFor(model => model.PropertyName)
+
+    @Html.LabelFor(model => model.Function)
+    @Html.EditorFor(model => model.Function)
+    @Html.ValidationMessageFor(model => model.Function)
+}

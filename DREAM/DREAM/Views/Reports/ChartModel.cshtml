@@ -1,0 +1,35 @@
+﻿@model DREAM.Models.ChartModel
+<span>Chart</span>
+<br />
+@using DREAM.Helpers
+
+@using (var scope = Html.BeginCollectionItem("Charts"))
+{
+    @Html.LabelFor(model => model.Name)
+    @Html.EditorFor(model => model.Name)
+    @Html.ValidationMessageFor(model => model.Name)
+
+    @Html.LabelFor(model => model.StartDate)
+    @Html.EditorFor(model => model.StartDate)
+    @Html.ValidationMessageFor(model => model.StartDate)
+
+    @Html.LabelFor(model => model.TimeRange)
+    @Html.EditorFor(model => model.TimeRange)
+    @Html.ValidationMessageFor(model => model.TimeRange)
+
+    @Html.LabelFor(model => model.Granularity)
+    @Html.EditorFor(model => model.Granularity)
+    @Html.ValidationMessageFor(model => model.Granularity)
+
+    @Html.LabelFor(model => model.ChartType)
+    @Html.EditorFor(model => model.ChartType)
+    @Html.ValidationMessageFor(model => model.ChartType)
+
+    @Html.LabelFor(model => model.Comparison)
+    @Html.EditorFor(model => model.Comparison)
+    @Html.ValidationMessageFor(model => model.Comparison)
+
+    <h3>Values</h3>
+
+    @Html.Partial("ChartValueModel", null);
+}
