@@ -10,6 +10,7 @@ namespace DREAM.Models
     public class ChangePasswordModel
     {
         [Required]
+        [Display(Name = "User")]
         public string UserName { get; set; }
 
         [Required]
