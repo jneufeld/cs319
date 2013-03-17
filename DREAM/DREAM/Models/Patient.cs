@@ -21,16 +21,12 @@ namespace DREAM.Models
         public int ID { get; set; }
         public int AgencyID { get; set; }
 
-        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
-        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Display(Name = "Gender")]
         public int Gender { get; set; }
 
-        [Display(Name = "Age")]
         public int Age { get; set; }
     }
 }

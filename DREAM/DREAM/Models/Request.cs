@@ -12,25 +12,19 @@ namespace DREAM.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Request ID")]
         public int ID { get; set; }
 
-        [Display(Name = "Date Created")]
         public DateTime CreationTime { get; set; }
 
-        [Display(Name = "Date Completed")]
         public DateTime? CompletionTime { get; set; }
 
-        [Display(Name = "Request Type")]
         public RequestType Type { get; set; }
 
         public Caller Caller { get; set; }
         public Patient Patient { get; set; }
 
-        [Display(Name = "Created By")]
         public Guid CreatedBy { get; set; }
 
-        [Display(Name = "Closed By")]
         public Guid ClosedBy { get; set; }
 
         private ICollection<Question> _Questions;
