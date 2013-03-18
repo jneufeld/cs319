@@ -1,0 +1,85 @@
+﻿@model DREAM.Models.QuestionViewModel
+@using DREAM.Helpers
+
+<li>
+    @using (Html.BeginCollectionItem("Questions"))
+    {
+        <h4>Question @Html.ValueFor(m => m.Index)</h4>
+        @*<a class="deleteQuestion" href="#">Delete</a>*@
+        
+        @Html.HiddenFor(m => m.QuestionID)
+        @Html.HiddenFor(m => m.Delete)
+
+        <table>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.QuestionTypeStringID)
+                </td>
+                <td>
+                    @Html.DropDownListFor(m => m.QuestionTypeStringID, (IEnumerable<SelectListItem>)ViewData["QuestionTypeList"])
+                </td>
+                <td>
+                    @Html.LabelFor(m => m.TumourGroupStringID)
+                </td>
+                <td>
+                    @Html.DropDownListFor(m => m.TumourGroupStringID, (IEnumerable<SelectListItem>)ViewData["TumourGroupList"])
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.QuestionText)
+                </td>
+                <td>
+                    @Html.TextAreaFor(m => m.QuestionText)
+                    @Html.ValidationMessageFor(m => m.QuestionText)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.Response)
+                </td>
+                <td>
+                    @Html.TextAreaFor(m => m.Response)
+                    @Html.ValidationMessageFor(m => m.Response)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.SpecialNotes)
+                </td>
+                <td>
+                    @Html.TextAreaFor(m => m.SpecialNotes)
+                    @Html.ValidationMessageFor(m => m.SpecialNotes)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.Severity)
+                </td>
+                <td>
+                    @Html.EditorFor(m => m.Severity)
+                    @Html.ValidationMessageFor(m => m.Severity)
+                </td>
+                <td>
+                    @Html.LabelFor(m => m.Probability)
+                </td>
+                <td>
+                    @Html.EditorFor(m => m.Probability)
+                    @Html.ValidationMessageFor(m => m.Probability)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.TimeTaken)
+                </td>
+                <td>
+                    @Html.EditorFor(m => m.TimeTaken)
+                    @Html.ValidationMessageFor(m => m.TimeTaken)
+                </td>
+            </tr>
+        </table>
+
+        @Html.ValidationSummary(true)
+
+    }
+</li>

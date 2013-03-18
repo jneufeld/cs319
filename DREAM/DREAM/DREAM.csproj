@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -177,6 +177,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
+    <Compile Include="Helpers\CollectionEditingHtmlExtensions.cs" />
     <Compile Include="Migrations\201303072119078_CurrentSchema.cs" />
     <Compile Include="Migrations\201303072119078_CurrentSchema.Designer.cs">
       <DependentUpon>201303072119078_CurrentSchema.cs</DependentUpon>
@@ -188,6 +189,14 @@
     <Compile Include="Migrations\201303112347175_AddGender.cs" />
     <Compile Include="Migrations\201303112347175_AddGender.Designer.cs">
       <DependentUpon>201303112347175_AddGender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201303171735454_AddQuestionType.cs" />
+    <Compile Include="Migrations\201303171735454_AddQuestionType.Designer.cs">
+      <DependentUpon>201303171735454_AddQuestionType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201303171737204_CreateGroupTables.cs" />
+    <Compile Include="Migrations\201303171737204_CreateGroupTables.Designer.cs">
+      <DependentUpon>201303171737204_CreateGroupTables.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AutoMapperConfiguration.cs" />
@@ -204,6 +213,7 @@
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\PasswordResetRequest.cs" />
     <Compile Include="Models\PreviousPassword.cs" />
+    <Compile Include="Models\QuestionViewModel.cs" />
     <Compile Include="Models\Reference.cs" />
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\Question.cs" />
@@ -362,6 +372,8 @@
     <Content Include="Views\Home\OtherRolesHome.cshtml" />
     <Content Include="Views\Users\ChangePassword.cshtml" />
     <Content Include="Views\Requests\Search.cshtml" />
+    <Content Include="Views\Requests\EditorTemplates\QuestionViewModel.cshtml" />
+    <Content Include="Views\Requests\QuestionEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -379,6 +391,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201303112347175_AddGender.resx">
       <DependentUpon>201303112347175_AddGender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201303171735454_AddQuestionType.resx">
+      <DependentUpon>201303171735454_AddQuestionType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201303171737204_CreateGroupTables.resx">
+      <DependentUpon>201303171737204_CreateGroupTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
@@ -410,7 +428,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

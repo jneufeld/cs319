@@ -27,6 +27,7 @@ namespace DREAM.Controllers
         //
         // GET: /Requests/Add
 
+        [HttpGet]
         public ActionResult Add()
         {
             Request request = new Request();
@@ -36,9 +37,6 @@ namespace DREAM.Controllers
             ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
             ViewBag.RegionList = BuildRegionDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
-            rv.RequestTypeDropDownList = BuildRequestTypeDropdownList();
-            rv.RegionDropDownList = BuildRegionDropdownList();
-            rv.GenderDropDownList = BuildGenderDropdownList();
             return View(rv);
         }
 
@@ -49,10 +47,6 @@ namespace DREAM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add(RequestViewModel rv)
         {
-            ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
-            ViewBag.RegionList = BuildRegionDropdownList();
-            ViewBag.GenderList = BuildGenderDropdownList();
-
             if (ModelState.IsValid)
             {
                 Request request = db.Requests.Create();
@@ -82,6 +76,14 @@ namespace DREAM.Controllers
                 request.CreatedBy = (Guid) Membership.GetUser().ProviderUserKey;
                 request.ClosedBy = Guid.Empty;
 
+                // FIXME Remove debug code
+                Question q1 = new Question { QuestionText = "ldkflsdjgkls", Response = "skdlfksdjl" };
+                Question q2 = new Question { QuestionText = "dkjgdkh", Response = "jkldsgldjsk" };
+                db.Questions.Add(q1);
+                db.Questions.Add(q2);
+                request.Questions.Add(q1);
+                request.Questions.Add(q2);
+
                 // TODO Probably wrap this whole thing in a transaction
                 db.Requests.Add(request);
                 db.Callers.Add(request.Caller);
@@ -97,12 +99,17 @@ namespace DREAM.Controllers
                 ModelState.AddModelError(ModelState.ToString(), "The add request failed!");
             }
 
+            ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
+            ViewBag.RegionList = BuildRegionDropdownList();
+            ViewBag.GenderList = BuildGenderDropdownList();
+
             return View(rv);
         }
 
         //
         // GET: /Requests/Search
 
+        [HttpGet]
         public ActionResult Search()
         {
             SearchModel sm = new SearchModel();
@@ -123,6 +130,7 @@ namespace DREAM.Controllers
         //
         // GET: /Requests/ViewRequest/5
 
+        [HttpGet]
         public ActionResult ViewRequest(int id = 0)
         {
             Request request = FindRequest(id);
@@ -171,6 +179,7 @@ namespace DREAM.Controllers
         //
         // Returns:
         //      The view for editing the request, or a 404 if the request doesn't exist.
+        [HttpGet]
         public ActionResult Edit(int id)
         {
             Request request = FindRequest(id);
@@ -226,6 +235,30 @@ namespace DREAM.Controllers
             {
                 rv.MapToRequest(request);
 
+                foreach (var qv in rv.Questions)
+                {
+                    Question question = null;
+                    if (qv.QuestionID != 0 && qv.Delete == false)
+                    {
+                        question = request.Questions.SingleOrDefault(q => q.ID == qv.QuestionID);
+                    }
+                    else if (qv.QuestionID != 0 && qv.Delete == true)
+                    {
+                        // Delete question
+                    }
+                    else if (qv.QuestionID == 0 && qv.Delete == false)
+                    {
+                        question = db.Questions.Create();
+                    }
+
+                    if (question != null)
+                    {
+                        qv.MapToQuestion(question);
+                        question.QuestionType = db.QuestionTypes.SingleOrDefault(qt => qt.ID == qv.QuestionTypeID);
+                        question.TumourGroup = db.TumourGroups.SingleOrDefault(tg => tg.ID == qv.TumourGroupID);
+                    }
+                }
+
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
@@ -235,9 +268,22 @@ namespace DREAM.Controllers
             return View(rv);
         }
 
+        [HttpGet]
+        public ActionResult QuestionEntryItem(int id)
+        {
+            ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
+            ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
+            QuestionViewModel qv = new QuestionViewModel
+            {
+                Index = id,
+            };
+            return PartialView("QuestionEntry", qv);
+        }
+
         //
         // GET: /Requests/Delete/5
 
+        [HttpGet]
         public ActionResult Delete(int id)
         {
             Request request = FindRequest(id);
@@ -276,6 +322,8 @@ namespace DREAM.Controllers
                               .Include(r => r.Caller.Region)
                               .Include(p => p.Questions.Select(c => c.Keywords))
                               .Include(p => p.Questions.Select(c => c.Reference))
+                              .Include(p => p.Questions.Select(c => c.QuestionType))
+                              .Include(p => p.Questions.Select(c => c.TumourGroup))
                               .Single(r => r.ID == id);
         }
 

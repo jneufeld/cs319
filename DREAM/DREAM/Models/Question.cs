@@ -17,10 +17,11 @@ namespace DREAM.Models
         public int TimeTaken { get; set; }
         public string Response { get; set; }
         public int Probability { get; set; }
+        public QuestionType QuestionType { get; set; }
         public int Severity { get; set; }
         public string SpecialNotes { get; set; }
         public TumourGroup TumourGroup { get; set; }
-        public int RequestID { get; set; }
+        public Request Request { get; set; }
         public List<Keyword> Keywords { get; set; }
         public List<Reference> Reference { get; set; }
     }

@@ -1,4 +1,5 @@
 ﻿@model DREAM.Models.RequestViewModel
+@using DREAM.Models
 
 @{
     ViewBag.Title = "Edit Request";
@@ -12,6 +13,8 @@
         This request is currently locked and cannot be edited.
     </div>
 }
+
+@Scripts.Render("~/bundles/jquery")
 
 @if (!ViewBag.IsLocked)
 {
@@ -204,6 +207,59 @@
                 </table>
             </fieldset>
         </div>
+
+        <h3>Questions</h3>
+
+        <!--
+        <div style="border: solid; border-width: 1px; margin: 5px">
+            @*Html.EditorFor(m => m.Questions) *@
+        </div>
+        -->
+        
+        @if (Model.Questions == null || Model.Questions.Count == 0)
+        {
+            <p>None.</p>
+        }
+        <div style="border: solid; border-width: 1px; margin: 5px">
+            <ul id="questionEditor" style="list-style-type: none">
+                @if (Model.Questions != null)
+                {
+                    foreach (QuestionViewModel qv in Model.Questions)
+                    {
+                        Html.RenderPartial("QuestionEntry", qv);
+                    }
+                }
+            </ul>
+            <a id="addQuestion" href="#">Add another question</a>
+        </div>
+        @Html.HiddenFor(m => m.QuestionCount)
+
+        <script type="text/javascript">
+            $(function () {
+                $("#addQuestion").click(function () {
+                    var count = $("input[name=QuestionCount]:hidden");
+                    var idx = count.val();
+                    var next = +idx + 1;
+                    count.val(next);
+                    $.get('/Requests/QuestionEntryItem/' + idx, function (template) {
+                        $("#questionEditor").append(template);
+                    });
+                });
+            });
+        </script>
+
+        @*<script>
+           $(function () {
+               $(".deleteQuestion").click(function () {
+                   var par = $(this).parent();
+                   var deleted = par.find("input[name$=Delete]:hidden");
+                   console.log(par);
+                   console.log(deleted);
+                   deleted.val('True');
+                   par.hide(0.5);
+               });
+           });
+        </script>*@
 
         @Html.ValidationSummary(true)
 

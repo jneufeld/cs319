@@ -78,11 +78,15 @@ namespace DREAM.Models
         [Display(Name = "Age")]
         public int PatientAge { get; set; }
 
+        public int QuestionCount { get; set; }
+        public IList<QuestionViewModel> Questions { get; set; }
+
         // Not used at the moment
         public IEnumerable<SelectListItem> RequestTypeDropDownList { get; set; }
         public IEnumerable<SelectListItem> RegionDropDownList { get; set; }
         public IEnumerable<SelectListItem> GenderDropDownList { get; set; }
 
+        #region Constructor Methods
         public static RequestViewModel CreateFromRequest(Request r)
         {
             RequestViewModel requestViewModel = new RequestViewModel
@@ -103,7 +107,15 @@ namespace DREAM.Models
                 PatientLastName = r.Patient.LastName,
                 PatientGender = ((Gender)r.Patient.Gender).ToString(),
                 PatientAge = r.Patient.Age,
+                Questions = new List<QuestionViewModel>(),
             };
+            int idx = 0;
+            foreach (Question q in r.Questions)
+            {
+                requestViewModel.Questions.Add(QuestionViewModel.CreateFromQuestion(q, idx));
+                idx++;
+            }
+            requestViewModel.QuestionCount = idx;
             return requestViewModel;
         }
 
@@ -130,5 +142,6 @@ namespace DREAM.Models
                 r.Patient.Gender = (int)gender;
             r.Patient.Age = PatientAge;
         }
+        #endregion
     }
 }
