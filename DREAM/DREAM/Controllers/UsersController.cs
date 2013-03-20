@@ -113,5 +113,66 @@ namespace DREAM.Controllers
             }
         }
         #endregion
+
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult ResetPassword(String email, String statusMessage, bool success = false)
+        {
+            PasswordResetRequestModel passwordResetRequestModel = new PasswordResetRequestModel();
+            passwordResetRequestModel.Email = email;
+            ViewBag.success = success;
+            ViewBag.StatusMessage = statusMessage;
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult ResetPassword(PasswordResetRequestModel passwordResetRequestModel)
+        {
+            if (ModelState.IsValid)
+            {
+                String username = Membership.GetUserNameByEmail(passwordResetRequestModel.Email);
+
+                if (username != null)
+                {
+                    MembershipUser user = Membership.GetUser(username);
+
+                    try
+                    {
+                        PasswordResetRequest.GenerateFor(user);
+                        RouteValueDictionary rVDictionary = new RouteValueDictionary();
+                        rVDictionary.Add("email", passwordResetRequestModel.Email);
+                        rVDictionary.Add("success", true);
+                        rVDictionary.Add("statusMessage", "Password Reset Successfully");
+                        return RedirectToAction("ResetPassword", "Users", rVDictionary);
+                    }
+                    catch
+                    {
+                        ModelState.AddModelError(passwordResetRequestModel.Email, "Error in trying to reset password for user.");
+                        return View(passwordResetRequestModel);
+                    }
+
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError(passwordResetRequestModel.Email, "This user does not exist in the DREAM system.");
+                    RouteValueDictionary rVDictionary = new RouteValueDictionary();
+                    rVDictionary.Add("email", "");
+                    rVDictionary.Add("success", true);
+                    rVDictionary.Add("statusMessage", "There is no registered user in DREAM with that email.");
+                    return RedirectToAction("ResetPassword", "Users", rVDictionary);
+                }
+            }
+            else
+            {
+                //RouteValueDictionary rVDictionary = new RouteValueDictionary();
+                //rVDictionary.Add("email", "");
+                //rVDictionary.Add("success", true);
+                //rVDictionary.Add("statusMessage", "There is no registered user in DREAM with that email.");
+                return View(passwordResetRequestModel) ;
+            }
+        }
     }
+
 }
