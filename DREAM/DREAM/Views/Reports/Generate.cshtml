@@ -1,0 +1,87 @@
+﻿@model DREAM.Models.ReportModel
+
+@{
+    ViewBag.Title = "Generate Report";
+}
+
+@using DREAM.Helpers
+
+<hgroup class="title">
+    <h1>@ViewBag.Title</h1>
+</hgroup>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <fieldset>
+        <legend>Report</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => Model.Name)
+        </div>
+      
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <h2>Charts</h2>
+        <a href="#" onclick="viewModel.addNewChart();">Add another</a>
+        <ul id="charts" style="list-style-type: none">
+            @if(Model == null || Model.Charts == null || Model.Charts.Count == 0)
+            {
+                @Html.Partial("ChartModel", null)
+            }
+            else
+            {
+                foreach(DREAM.Models.ChartModel chart in Model.Charts)
+                {
+                    @Html.Partial("ChartModel", chart)
+                }
+            }
+        </ul>
+
+        <p>
+            <input type="submit" value="Generate" />
+        </p>
+    </fieldset>
+}
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/jQuery.tmpl.min.js")" type="text/javascript"></script>
+
+    <script type="text/x-jquery-tmpl" id="chartTemplate">
+        @(Html.CollectionItemJQueryTemplate<DREAM.Models.ReportModel, DREAM.Models.ChartModel>("ChartModel", null))
+    </script>
+    <script type="text/x-jquery-tmpl" id="valueTemplate">
+        @(Html.CollectionItemJQueryTemplate<DREAM.Models.ReportModel, DREAM.Models.ChartValueModel>("ChartValueModel", null))
+    </script>
+
+    <script type="text/javascript">
+        var viewModel = {
+            addNewChart: function () {
+                $("#charts").append($("#chartTemplate").tmpl({ Charts_index: viewModel._generateGuid(), Values_index: viewModel._generateGuid() }));
+            },
+
+            addNewValue: function ($valuesList, chartIndex) {
+                $valuesList.append($("#valueTemplate").tmpl({ Charts_index: chartIndex, Values_index: viewModel._generateGuid() }));
+            },
+
+            _generateGuid: function () {
+                // Source: http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/105074#105074
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+        };
+
+        $(".addNewValue").click(function () {
+            var $valueList = $(this).siblings(".chartValues");
+            var chartIndex = $(this).siblings("input['hidden']").val();
+            viewModel.addNewValue($valueList, chartIndex);
+        });
+    </script>
+}
