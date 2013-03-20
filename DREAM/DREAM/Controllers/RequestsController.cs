@@ -239,6 +239,7 @@ namespace DREAM.Controllers
             if (ModelState.IsValid)
             {
                 rv.MapToRequest(request);
+                rv.MapToRequestPatient(request);
 
                 foreach (var qv in rv.Questions)
                 {
@@ -263,6 +264,9 @@ namespace DREAM.Controllers
                         question.TumourGroup = db.TumourGroups.SingleOrDefault(tg => tg.ID == qv.TumourGroupID);
                     }
                 }
+
+                request.Type = db.RequestTypes.SingleOrDefault(rt => rt.ID == rv.RequestTypeID);
+                request.Caller.Region = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID);
 
                 db.SaveChanges();
 
