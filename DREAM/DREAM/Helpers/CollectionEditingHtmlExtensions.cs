@@ -45,10 +45,15 @@ namespace DREAM.Helpers
 
             string collectionIndexFieldName = String.Format("{0}.Index", collectionName);
 
+            if (html.ViewData.TemplateInfo.HtmlFieldPrefix != "")
+            {
+                collectionIndexFieldName = html.ViewData.TemplateInfo.HtmlFieldPrefix + "." + collectionIndexFieldName;
+            }
+
             string itemIndex = null;
             if (html.ViewData.ContainsKey(JQueryTemplatingEnabledKey))
             {
-                itemIndex = "${index}";
+                itemIndex = "${" + collectionName + "_index}";
             }
             else
             {
@@ -114,7 +119,14 @@ namespace DREAM.Helpers
                 this._templateInfo = templateInfo;
 
                 _previousPrefix = templateInfo.HtmlFieldPrefix;
-                templateInfo.HtmlFieldPrefix = collectionItemName;
+                if (_previousPrefix != "")
+                {
+                    templateInfo.HtmlFieldPrefix = _previousPrefix + "." + collectionItemName;
+                }
+                else
+                {
+                    templateInfo.HtmlFieldPrefix = collectionItemName;
+                }
             }
 
             public void Dispose()
