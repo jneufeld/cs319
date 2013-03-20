@@ -12,6 +12,7 @@ using DREAM.Models;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
+using System.Reflection;
 
 namespace DREAM.Controllers
 {
@@ -322,12 +323,12 @@ namespace DREAM.Controllers
         public ActionResult Export(int reqId)
         {
             Request request = db.Requests.Find(reqId);
-            //if (isLocked(request))
-            //{
-              //  return View();
-            //}
-            //Need to make this not user specific
-            ExportDoc("../../Users/Jacqui/Documents/GitHub/cs319/DREAM/DREAM/Templates/Export_Report.docx");
+            if (isLocked(request))
+            {
+                return View();
+            }
+
+            ExportDoc(Server.MapPath(@"~/") + "/Templates/Export_Report.docx");
             //Could change the name of the file, right now it's just the request ID...
             return File("../Templates/Export_Report.docx", "application/ms-word", "Request" + reqId + ".docx");
         }
