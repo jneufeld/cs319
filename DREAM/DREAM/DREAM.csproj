@@ -180,26 +180,6 @@
     </Compile>
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
     <Compile Include="Helpers\CollectionEditingHtmlExtensions.cs" />
-    <Compile Include="Migrations\201303072119078_CurrentSchema.cs" />
-    <Compile Include="Migrations\201303072119078_CurrentSchema.Designer.cs">
-      <DependentUpon>201303072119078_CurrentSchema.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201303072149596_RenameCallerID.cs" />
-    <Compile Include="Migrations\201303072149596_RenameCallerID.Designer.cs">
-      <DependentUpon>201303072149596_RenameCallerID.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201303112347175_AddGender.cs" />
-    <Compile Include="Migrations\201303112347175_AddGender.Designer.cs">
-      <DependentUpon>201303112347175_AddGender.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201303171735454_AddQuestionType.cs" />
-    <Compile Include="Migrations\201303171735454_AddQuestionType.Designer.cs">
-      <DependentUpon>201303171735454_AddQuestionType.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201303171737204_CreateGroupTables.cs" />
-    <Compile Include="Migrations\201303171737204_CreateGroupTables.Designer.cs">
-      <DependentUpon>201303171737204_CreateGroupTables.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AutoMapperConfiguration.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
@@ -383,23 +363,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201303072119078_CurrentSchema.resx">
-      <DependentUpon>201303072119078_CurrentSchema.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201303072149596_RenameCallerID.resx">
-      <DependentUpon>201303072149596_RenameCallerID.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201303112347175_AddGender.resx">
-      <DependentUpon>201303112347175_AddGender.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201303171735454_AddQuestionType.resx">
-      <DependentUpon>201303171735454_AddQuestionType.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201303171737204_CreateGroupTables.resx">
-      <DependentUpon>201303171737204_CreateGroupTables.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

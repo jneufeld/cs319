@@ -28,6 +28,13 @@ namespace DREAM
 
             Role.CreateRoles();
 
+            var context = new DREAMContext();
+            var initializeDomain = new CreateDatabaseIfNotExists<DREAMContext>();
+            var initializeMigrations = new MigrateDatabaseToLatestVersion<DREAMContext, DREAM.Migrations.Configuration>();
+
+            initializeDomain.InitializeDatabase(context);
+            initializeMigrations.InitializeDatabase(context);
+
 #if DEBUG && FALSE
             Database.SetInitializer(new DREAM.Models.DREAMContextInitializer());
 #endif
