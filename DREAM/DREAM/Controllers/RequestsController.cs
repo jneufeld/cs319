@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using DREAM.Models;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentFormat.OpenXml.Packaging;
 
 namespace DREAM.Controllers
 {
@@ -312,6 +316,40 @@ namespace DREAM.Controllers
             base.Dispose(disposing);
         }
 
+        //
+        // GET: /Requests/Export
+        [HttpGet]
+        public ActionResult Export(int reqId)
+        {
+            Request request = db.Requests.Find(reqId);
+            //if (isLocked(request))
+            //{
+              //  return View();
+            //}
+            //Need to make this not user specific
+            ExportDoc("../../Users/Jacqui/Documents/GitHub/cs319/DREAM/DREAM/Templates/Export_Report.docx");
+            //Could change the name of the file, right now it's just the request ID...
+            return File("../Templates/Export_Report.docx", "application/ms-word", "Request" + reqId + ".docx");
+        }
+        // Need to put proper code in here for inputting the request info
+        // Need a Template with markers to find where to put request info
+        public void ExportDoc(string docName)
+        {
+            using (WordprocessingDocument exportDoc = WordprocessingDocument.Open(docName, true))
+            {
+                MainDocumentPart mainPart = exportDoc.MainDocumentPart;
+
+                exportDoc.MainDocumentPart.Document =
+                  new Document(
+                    new Body(
+                      new Paragraph(
+                        new Run(
+                          new Text("Hello World!")))));
+
+                exportDoc.MainDocumentPart.Document.Save();
+            }
+        }
+
         #region Helper Methods
 
         private Request FindRequest(int id)
@@ -382,7 +420,7 @@ namespace DREAM.Controllers
         private bool isLocked(Request request, bool isEditing = false)
         {
             bool returnValue = false;
-            Lock requestLock = findRequestLock(request.ID);
+            DREAM.Models.Lock requestLock = findRequestLock(request.ID);
             MembershipUser lockingUser = getUserFromLock(requestLock);
             MembershipUser currentUser = Membership.GetUser();
 
@@ -410,12 +448,12 @@ namespace DREAM.Controllers
         //
         // Returns:
         //      The Lock holding the given Request or null if there is no lock.
-        private Lock findRequestLock(int requestID)
+        private DREAM.Models.Lock findRequestLock(int requestID)
         {
-            Lock returnValue = null;
+            DREAM.Models.Lock returnValue = null;
 
-            List<Lock> locks = db.Locks.ToList();
-            foreach (Lock requestLock in locks)
+            List<DREAM.Models.Lock> locks = db.Locks.ToList();
+            foreach (DREAM.Models.Lock requestLock in locks)
             {
                 if (requestLock.RequestID == requestID)
                 {
@@ -434,7 +472,7 @@ namespace DREAM.Controllers
         //
         // Returns:
         //      The MembershipUser object of the user holding the Lock or null.
-        private MembershipUser getUserFromLock(Lock requestLock)
+        private MembershipUser getUserFromLock(DREAM.Models.Lock requestLock)
         {
             MembershipUser returnValue = null;
 

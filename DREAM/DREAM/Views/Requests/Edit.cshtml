@@ -266,6 +266,9 @@
         <p>
             <input type="submit" value="Save" />
         </p>
+        <p>
+            @Html.ActionLink("Export", "Export", new { reqId = Model.RequestID });
+        </p>
     </fieldset>
     }
 }
