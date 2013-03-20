@@ -196,6 +196,10 @@
     <Compile Include="Migrations\201303171735454_AddQuestionType.Designer.cs">
       <DependentUpon>201303171735454_AddQuestionType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201303171737204_CreateGroupTables.cs" />
+    <Compile Include="Migrations\201303171737204_CreateGroupTables.Designer.cs">
+      <DependentUpon>201303171737204_CreateGroupTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AutoMapperConfiguration.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
@@ -370,7 +374,6 @@
     <Content Include="Views\Home\OtherRolesHome.cshtml" />
     <Content Include="Views\Users\ChangePassword.cshtml" />
     <Content Include="Views\Requests\Search.cshtml" />
-    <Content Include="Views\Requests\EditorTemplates\QuestionViewModel.cshtml" />
     <Content Include="Views\Requests\QuestionEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -393,6 +396,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201303171735454_AddQuestionType.resx">
       <DependentUpon>201303171735454_AddQuestionType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201303171737204_CreateGroupTables.resx">
+      <DependentUpon>201303171737204_CreateGroupTables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
