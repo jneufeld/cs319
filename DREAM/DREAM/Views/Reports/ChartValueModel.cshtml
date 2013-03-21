@@ -1,6 +1,4 @@
 ﻿@model DREAM.Models.ChartValueModel
-<span>Value</span>
-<br />
 @using DREAM.Helpers
 
 <li>
@@ -15,7 +13,7 @@
         @Html.ValidationMessageFor(model => model.PropertyName)
 
         @Html.LabelFor(model => model.Function)
-        @Html.EditorFor(model => model.Function)
+        @Html.DropDownListFor(model => model.Function, (IEnumerable<SelectListItem>)ViewData["StatFunctionList"])
         @Html.ValidationMessageFor(model => model.Function)
     }
 </li>

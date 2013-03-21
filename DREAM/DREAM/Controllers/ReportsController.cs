@@ -30,17 +30,11 @@ namespace DREAM.Controllers
         [HttpGet]
         public ActionResult Generate()
         {
-            ReportModel emptyReport = new ReportModel
-            {
-                Charts = new List<ChartModel>{
-                    new ChartModel{
-                        Values = new List<ChartValueModel>{
-                            new ChartValueModel()
-                        }
-                    }
-                }
-            };
-            return View();//emptyReport);
+            ViewBag.TimeRangeList = BuildTimeRangeDropdownList();
+            ViewBag.StatFunctionList = BuildStatFunctionDropdownList();
+            ViewBag.ChartTypeList = BuildChartTypeDropdownList();
+
+            return View();
         }
 
         [HttpPost]
@@ -179,6 +173,11 @@ namespace DREAM.Controllers
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", report.Name + ".xlsx");
                 }
             }
+
+            ViewBag.TimeRangeList = BuildTimeRangeDropdownList();
+            ViewBag.StatFunctionList = BuildStatFunctionDropdownList();
+            ViewBag.ChartTypeList = BuildChartTypeDropdownList();
+
             return View();
         }
 
@@ -350,6 +349,45 @@ namespace DREAM.Controllers
 
             return rowData.ToArray();
         }
+
+        #region Helpers
+        private IEnumerable<SelectListItem> BuildTimeRangeDropdownList()
+        {
+            List<SelectListItem> timeRanges = new List<SelectListItem>();
+
+            timeRanges.Add(new SelectListItem { Text = "Hour", Value = TimeRange.HOUR.ToString() });
+            timeRanges.Add(new SelectListItem { Text = "Day", Value = TimeRange.DAY.ToString() });
+            timeRanges.Add(new SelectListItem { Text = "Week", Value = TimeRange.WEEK.ToString() });
+            timeRanges.Add(new SelectListItem { Text = "Month", Value = TimeRange.MONTH.ToString() });
+            timeRanges.Add(new SelectListItem { Text = "Year", Value = TimeRange.YEAR.ToString() });
+            timeRanges.Add(new SelectListItem { Text = "All Time", Value = TimeRange.ALL_TIME.ToString() });
+
+            return timeRanges;
+        }
+
+        private IEnumerable<SelectListItem> BuildStatFunctionDropdownList()
+        {
+            List<SelectListItem> statFunctions = new List<SelectListItem>();
+
+            statFunctions.Add(new SelectListItem { Text = "Sum", Value = StatFunction.SUM.ToString() });
+            statFunctions.Add(new SelectListItem { Text = "Maximum", Value = StatFunction.MAX.ToString() });
+            statFunctions.Add(new SelectListItem { Text = "Minimum", Value = StatFunction.MIN.ToString() });
+            statFunctions.Add(new SelectListItem { Text = "Average", Value = StatFunction.AVG.ToString() });
+            statFunctions.Add(new SelectListItem { Text = "Count", Value = StatFunction.COUNT.ToString() });
+
+            return statFunctions;
+        }
+
+        private IEnumerable<SelectListItem> BuildChartTypeDropdownList()
+        {
+            List<SelectListItem> chartTypes = new List<SelectListItem>();
+
+            chartTypes.Add(new SelectListItem { Text = "Line", Value = eChartType.Line.ToString() });
+            chartTypes.Add(new SelectListItem { Text = "Clustered Column", Value = eChartType.ColumnClustered.ToString() });
+
+            return chartTypes;
+        }
+        #endregion
 
         public class TimeRangeStepper
         {

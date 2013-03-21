@@ -62,6 +62,12 @@ namespace DREAM.Helpers
 
             string collectionItemName = String.Format("{0}[{1}]", collectionName, itemIndex);
 
+            if (html.ViewData.ContainsKey(JQueryTemplatingEnabledKey))
+            {
+                collectionIndexFieldName = "${prefix}" + collectionIndexFieldName;
+                collectionItemName = "${prefix}" + collectionItemName;
+            }
+
             TagBuilder indexField = new TagBuilder("input");
             indexField.MergeAttributes(new Dictionary<string, string>() {
                 { "name", collectionIndexFieldName },
@@ -80,7 +86,7 @@ namespace DREAM.Helpers
                                                                                           string partialViewName,
                                                                                           TCollectionItem modelDefaultValues)
         {
-            ViewDataDictionary<TCollectionItem> viewData = new ViewDataDictionary<TCollectionItem>(modelDefaultValues);
+            ViewDataDictionary<TCollectionItem> viewData = new ViewDataDictionary<TCollectionItem>(html.ViewData);
             viewData.Add(JQueryTemplatingEnabledKey, true);
             return html.Partial(partialViewName, modelDefaultValues, viewData);
         }
