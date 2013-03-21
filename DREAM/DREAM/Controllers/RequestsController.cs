@@ -324,27 +324,27 @@ namespace DREAM.Controllers
                 return View();
             }
 
-            ExportDoc(Server.MapPath(@"~/") + "/Templates/Export_Report.docx");
-            //Could change the name of the file, right now it's just the request ID...
-            return File("../Templates/Export_Report.docx", "application/ms-word", "Request" + reqId + ".docx");
+            MemoryStream ms = ExportDoc(Server.MapPath(@"~/") + "/Templates/Export_Report.docx");
+            return File(ms.ToArray(), "application/ms-word", "Request" + reqId + ".docx");
         }
         // Need to put proper code in here for inputting the request info
         // Need a Template with markers to find where to put request info
-        public void ExportDoc(string docName)
+        public MemoryStream ExportDoc(string docName)
         {
-            using (WordprocessingDocument exportDoc = WordprocessingDocument.Open(docName, true))
+            byte[] byteArray = System.IO.File.ReadAllBytes(docName);
+            MemoryStream mem = new MemoryStream();
+            mem.Write(byteArray, 0, (int)byteArray.Length);
+            using (WordprocessingDocument wordDoc =
+                WordprocessingDocument.Open(mem, true))
             {
-                MainDocumentPart mainPart = exportDoc.MainDocumentPart;
-
-                exportDoc.MainDocumentPart.Document =
+                wordDoc.MainDocumentPart.Document =
                   new Document(
                     new Body(
                       new Paragraph(
                         new Run(
-                          new Text("Hello World!")))));
-
-                exportDoc.MainDocumentPart.Document.Save();
+                          new Text("Test Text1")))));
             }
+            return mem;
         }
 
         #region Helper Methods
