@@ -23,8 +23,17 @@
                     <nav>
                         <ul id="menu">
                             <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("Create Request", "Add", "Requests")</li>
-                            <li>@Html.ActionLink("Search", "Search", "Requests")</li>
+
+                            @if (User.IsInRole("DI Specialist"))
+                            {
+                                <li>@Html.ActionLink("Create Request", "Add", "Requests")</li>
+                            }
+
+                            @if (User.IsInRole("DI Specialist") || User.IsInRole("Viewer"))
+                            {
+                                <li>@Html.ActionLink("Search", "Search", "Requests")</li>
+                            }
+
                             @if (User.IsInRole("Admin"))
                             {
                                <li>@Html.ActionLink("Admin Panel", "Admin", "Home")</li>
