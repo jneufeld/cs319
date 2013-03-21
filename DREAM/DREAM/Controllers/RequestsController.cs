@@ -142,7 +142,8 @@ namespace DREAM.Controllers
                 return View();
             }
 
-            Log.View(request, Membership.GetUser());
+            db.Logs.Add(Log.View(request, Membership.GetUser()));
+            db.SaveChanges();
             return View(request);
         }
 

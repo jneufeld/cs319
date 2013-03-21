@@ -17,7 +17,7 @@ namespace DREAM.Models
     public class Log
     {
         public int ID { get; set; }
-        public LogAction Action { get; set; }
+        public int Action { get; set; }
         public Guid UserID { get; set; }
         public int RequestID { get; set; }
 
@@ -35,7 +35,7 @@ namespace DREAM.Models
         {
             Log log = new Log
             {
-                Action = LogAction.CREATE,
+                Action = (int)LogAction.CREATE,
                 UserID = (Guid)user.ProviderUserKey,
                 RequestID = request.ID,
             };
@@ -46,7 +46,7 @@ namespace DREAM.Models
         {
             Log log = new Log
             {
-                Action = LogAction.EDIT,
+                Action = (int)LogAction.EDIT,
                 UserID = (Guid)user.ProviderUserKey,
                 RequestID = request.ID,
             };
@@ -57,7 +57,7 @@ namespace DREAM.Models
         {
             Log log = new Log
             {
-                Action = LogAction.CLOSE,
+                Action = (int)LogAction.CLOSE,
                 UserID = (Guid)user.ProviderUserKey,
                 RequestID = request.ID,
             };
@@ -68,7 +68,7 @@ namespace DREAM.Models
         {
             Log log = new Log
             {
-                Action = LogAction.VIEW,
+                Action = (int)LogAction.VIEW,
                 UserID = (Guid)user.ProviderUserKey,
                 RequestID = request.ID,
             };

@@ -20,6 +20,11 @@ namespace DREAM
                 defaults: new { controller = "UsersAdmin", action = "Index", username = UrlParameter.Optional }
             );
             routes.MapRoute(
+                name: "LogsAdmin",
+                url: "Admin/Logs",
+                defaults: new { controller = "LogsAdmin", action = "Index" }
+            );
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
