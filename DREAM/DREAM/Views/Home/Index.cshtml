@@ -12,11 +12,7 @@
     </section>
 }
 
-@if (User.IsInRole("Admin"))
-{
-    Server.TransferRequest("~/Home/Admin");
-}
-else if (User.IsInRole("DI Specialist") || User.IsInRole("Viewer") || User.IsInRole("Reporter"))
+@if (User.IsInRole("Admin")|| User.IsInRole("DI Specialist") || User.IsInRole("Viewer") || User.IsInRole("Reporter"))
 {
     Server.TransferRequest("~/Home/OtherRolesHome");
 } 
