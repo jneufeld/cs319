@@ -13,6 +13,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace DREAM.Controllers
 {
@@ -324,12 +325,14 @@ namespace DREAM.Controllers
                 return View();
             }
 
-            MemoryStream ms = ExportDoc(Server.MapPath(@"~/") + "/Templates/Export_Report.docx");
+            MemoryStream ms = ExportDoc(Server.MapPath(@"~/") + "/Templates/Export_Report.docx", request);
             return File(ms.ToArray(), "application/ms-word", "Request" + reqId + ".docx");
         }
-        // Need to put proper code in here for inputting the request info
-        // Need a Template with markers to find where to put request info
-        public MemoryStream ExportDoc(string docName)
+        // Using dummy data since most request attributes are null for some reason.
+        // Need a better Template?
+        // Need a loop to create Questions for the number of questions in the request
+        // but can't do that yet really because of null attributes.
+        public MemoryStream ExportDoc(string docName, Request req)
         {
             byte[] byteArray = System.IO.File.ReadAllBytes(docName);
             MemoryStream mem = new MemoryStream();
@@ -337,12 +340,93 @@ namespace DREAM.Controllers
             using (WordprocessingDocument wordDoc =
                 WordprocessingDocument.Open(mem, true))
             {
-                wordDoc.MainDocumentPart.Document =
-                  new Document(
-                    new Body(
-                      new Paragraph(
+                string docText = null;
+                using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
+                {
+                    docText = sr.ReadToEnd();
+                }
+
+                Regex regexText1 = new Regex("REQUESTID GOES HERE");
+                docText = regexText1.Replace(docText, req.ID.ToString());
+
+                Regex regexText2 = new Regex("REQUEST TYPE GOES HERE");
+                docText = regexText2.Replace(docText, "Nurse");
+
+                Regex regexText3 = new Regex("CALLERFIRSTNAME GOES HERE");
+                docText = regexText3.Replace(docText, "Bob");
+
+                Regex regexText4 = new Regex("CALLERLASTNAME GOES HERE");
+                docText = regexText4.Replace(docText, "Marley");
+
+                Regex regexText5 = new Regex("CALLERPHONENUMBER GOES HERE");
+                docText = regexText5.Replace(docText, "555-555-5555");
+
+                Regex regexText6 = new Regex("CALLEREMAIL GOES HERE");
+                docText = regexText6.Replace(docText, "bobmarley@email.com");
+
+                Regex regexText7 = new Regex("CALLERREGION GOES HERE");
+                docText = regexText7.Replace(docText, "Yukon");
+
+                Regex regexText8 = new Regex("PATIENTFIRSTNAME GOES HERE");
+                docText = regexText8.Replace(docText, "Jim");
+
+                Regex regexText9 = new Regex("PATIENTLASTNAME GOES HERE");
+                docText = regexText9.Replace(docText, "Marley");
+
+                Regex regexText10 = new Regex("PATIENTAGENCYID GOES HERE");
+                docText = regexText10.Replace(docText, "4");
+
+                Regex regexText11 = new Regex("PATIENTGENDER GOES HERE");
+                docText = regexText11.Replace(docText, "Male");
+
+                Regex regexText12 = new Regex("PATIENTAGE GOES HERE");
+                docText = regexText12.Replace(docText, "45");
+
+                /*Regex regexText2 = new Regex("REQUEST TYPE GOES HERE");
+                docText = regexText2.Replace(docText, req.Type.FullName);
+
+                Regex regexText3 = new Regex("CALLERFIRSTNAME GOES HERE");
+                docText = regexText3.Replace(docText, req.Caller.FirstName);
+
+                Regex regexText4 = new Regex("CALLERLASTNAME GOES HERE");
+                docText = regexText4.Replace(docText, req.Caller.LastName);
+
+                Regex regexText5 = new Regex("CALLERPHONENUMBER GOES HERE");
+                docText = regexText5.Replace(docText, req.Caller.PhoneNumber);
+
+                Regex regexText6 = new Regex("CALLEREMAIL GOES HERE");
+                docText = regexText6.Replace(docText, req.Caller.Email);
+
+                Regex regexText7 = new Regex("CALLERREGION GOES HERE");
+                docText = regexText7.Replace(docText, req.Caller.Region.FullName);
+
+                Regex regexText8 = new Regex("PATIENTFIRSTNAME GOES HERE");
+                docText = regexText8.Replace(docText, req.Patient.FirstName);
+
+                Regex regexText9 = new Regex("PATIENTLASTNAME GOES HERE");
+                docText = regexText9.Replace(docText, req.Patient.FirstName);
+
+                Regex regexText10 = new Regex("PATIENTAGENCYID GOES HERE");
+                docText = regexText10.Replace(docText, req.Patient.AgencyID.ToString());
+
+                Regex regexText11 = new Regex("PATIENTGENDER GOES HERE");
+                if (req.Patient.Gender == 1)
+                docText = regexText11.Replace(docText, "Male");
+                else docText = regexText11.Replace(docText, "Female");
+
+                Regex regexText12 = new Regex("PATIENTAGE GOES HERE");
+                docText = regexText12.Replace(docText, req.Patient.Age.ToString());*/
+
+                using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
+                {
+                    sw.Write(docText);
+                }
+
+                wordDoc.MainDocumentPart.Document.Body.InsertAt(
+                    new Paragraph(
                         new Run(
-                          new Text("Test Text1")))));
+                            new Text("Question1"))), 16);
+
             }
             return mem;
         }
