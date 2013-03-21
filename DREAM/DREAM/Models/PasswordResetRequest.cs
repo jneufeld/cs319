@@ -62,7 +62,7 @@ namespace DREAM.Models
 				    resetReq.UserID = (Guid)user.ProviderUserKey;
 			    }
 			    db.SaveChanges();
-			   //SendEmail("","","","","","");
+			   SendEmail("souffle.dream@gmail.com",user.Email,"","","DREAM Password Reset","");
 		    return resetReq;
             }
          }
@@ -79,7 +79,7 @@ namespace DREAM.Models
             MailMessage mMailMessage = new MailMessage();
 
             mMailMessage.From = new MailAddress(from);
-            mMailMessage.To.Add(new MailAddress(to));
+            mMailMessage.To.Add(to);
 
             if ((bcc != null) && (bcc != string.Empty))
             {
@@ -92,31 +92,50 @@ namespace DREAM.Models
             mMailMessage.Subject = subject;
             mMailMessage.Body = body;
 
-            mMailMessage.IsBodyHtml = true;
-            mMailMessage.Priority = MailPriority.Normal;
+            //mMailMessage.IsBodyHtml = true;
+            //mMailMessage.Priority = MailPriority.Normal;
 
-            SmtpClient mSmtpClient = new SmtpClient();
+            SmtpClient mSmtpClient = new SmtpClient("smtp.gmail.com", 587);
+            mSmtpClient.EnableSsl = true;
+            mSmtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            mSmtpClient.UseDefaultCredentials = true;
 
-            mSmtpClient.Host = "Need to determine a smtpServer";
-            String SmtpUserName = "Need to determine this";
-            String SmtpPassword = "Need to determine this";
-            //SecureString SmtpPassword = new SecureString("Need to determine this");
-
-            if (SmtpUserName != null && SmtpPassword != null)
+            // need to take out
+            SecureString emailPassword = new SecureString();
+            
+            foreach(char c in "319_TeamOne".ToCharArray())
             {
-                mSmtpClient.UseDefaultCredentials = false;
+                emailPassword.AppendChar(c);
+            }
 
-                mSmtpClient.Credentials = new NetworkCredential(SmtpUserName, SmtpPassword);
-            }
-            else
-            {
-                mSmtpClient.UseDefaultCredentials = true;
-                //mSmtpClient.Credentials.GetCredential(mSmtpClient.Host, 25, "NTMP");
-                //mSmtpClient.Credentials = (System.Net.ICredentialsByHost)System.Net.CredentialCache.DefaultNetworkCredentials;
-                mSmtpClient.Credentials = (System.Net.ICredentialsByHost)System.Net.CredentialCache.DefaultCredentials;
-            }
+            mSmtpClient.Credentials = new System.Net.NetworkCredential(from, emailPassword);
 
             mSmtpClient.Send(mMailMessage);
+
+
+            // can add attachment to email through a similar line (taken from http://stackoverflow.com/questions/12786154/send-email-through-gmail-smtp)
+            // mMailMessage.Attachments.Add(new System.Net.Mail.Attachment(path)); 
+
+            //mSmtpClient.Host = "Need to determine a smtpServer";
+            //String SmtpUserName = "Need to determine this";
+            //String SmtpPassword = "Need to determine this";
+            //SecureString SmtpPassword = new SecureString("Need to determine this");
+
+            //if (SmtpUserName != null && SmtpPassword != null)
+            //{
+            //    mSmtpClient.UseDefaultCredentials = false;
+
+            //    mSmtpClient.Credentials = new NetworkCredential(SmtpUserName, SmtpPassword);
+            //}
+            //else
+            //{
+            //    mSmtpClient.UseDefaultCredentials = true;
+                //mSmtpClient.Credentials.GetCredential(mSmtpClient.Host, 25, "NTMP");
+                //mSmtpClient.Credentials = (System.Net.ICredentialsByHost)System.Net.CredentialCache.DefaultNetworkCredentials;
+                //mSmtpClient.Credentials = (System.Net.ICredentialsByHost)System.Net.CredentialCache.DefaultCredentials;
+            //}
+
+            //mSmtpClient.Send(mMailMessage);
         }
     }
 }

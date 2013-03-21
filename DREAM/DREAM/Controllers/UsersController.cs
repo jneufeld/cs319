@@ -129,6 +129,8 @@ namespace DREAM.Controllers
         [HttpPost]
         public ActionResult ResetPassword(PasswordResetRequestModel passwordResetRequestModel)
         {
+            RouteValueDictionary rVDictionary = new RouteValueDictionary();
+
             if (ModelState.IsValid)
             {
                 String username = Membership.GetUserNameByEmail(passwordResetRequestModel.Email);
@@ -140,7 +142,6 @@ namespace DREAM.Controllers
                     try
                     {
                         PasswordResetRequest.GenerateFor(user);
-                        RouteValueDictionary rVDictionary = new RouteValueDictionary();
                         rVDictionary.Add("email", passwordResetRequestModel.Email);
                         rVDictionary.Add("success", true);
                         rVDictionary.Add("statusMessage", "Password Reset Successfully");
@@ -149,17 +150,17 @@ namespace DREAM.Controllers
                     catch
                     {
                         ModelState.AddModelError(passwordResetRequestModel.Email, "Error in trying to reset password for user.");
+                        rVDictionary.Add("email", passwordResetRequestModel.Email);
+                        rVDictionary.Add("success", false);
+                        rVDictionary.Add("statusMessage", "Error in trying to reset password for user.");
                         return View(passwordResetRequestModel);
                     }
-
-                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
                     ModelState.AddModelError(passwordResetRequestModel.Email, "This user does not exist in the DREAM system.");
-                    RouteValueDictionary rVDictionary = new RouteValueDictionary();
                     rVDictionary.Add("email", "");
-                    rVDictionary.Add("success", true);
+                    rVDictionary.Add("success", false);
                     rVDictionary.Add("statusMessage", "There is no registered user in DREAM with that email.");
                     return RedirectToAction("ResetPassword", "Users", rVDictionary);
                 }
