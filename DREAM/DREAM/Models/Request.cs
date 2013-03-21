@@ -58,5 +58,13 @@ namespace DREAM.Models
             db.Locks.Remove(reqLock);
             db.SaveChanges();
         }
+
+        public int TimeSpent
+        {
+            get
+            {
+                return Questions.Sum(q => q.TimeTaken);
+            }
+        }
     }
 }
