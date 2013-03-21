@@ -81,14 +81,6 @@ namespace DREAM.Controllers
                 request.CreatedBy = (Guid) Membership.GetUser().ProviderUserKey;
                 request.ClosedBy = Guid.Empty;
 
-                // FIXME Remove debug code
-                Question q1 = new Question { QuestionText = "ldkflsdjgkls", Response = "skdlfksdjl" };
-                Question q2 = new Question { QuestionText = "dkjgdkh", Response = "jkldsgldjsk" };
-                db.Questions.Add(q1);
-                db.Questions.Add(q2);
-                request.Questions.Add(q1);
-                request.Questions.Add(q2);
-
                 // TODO Probably wrap this whole thing in a transaction
                 db.Requests.Add(request);
                 db.Callers.Add(request.Caller);

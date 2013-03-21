@@ -47,6 +47,7 @@
     <Reference Include="AutoMapper">
       <HintPath>..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="DotNetOpenAuth.AspNet">
       <HintPath>..\packages\DotNetOpenAuth.AspNet.4.2.1.13026\lib\net40-full\DotNetOpenAuth.AspNet.dll</HintPath>
     </Reference>
@@ -159,6 +160,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.2.0.20710.0\lib\net40\WebMatrix.WebData.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\AuthConfig.cs" />
@@ -177,18 +179,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
-    <Compile Include="Migrations\201303072119078_CurrentSchema.cs" />
-    <Compile Include="Migrations\201303072119078_CurrentSchema.Designer.cs">
-      <DependentUpon>201303072119078_CurrentSchema.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201303072149596_RenameCallerID.cs" />
-    <Compile Include="Migrations\201303072149596_RenameCallerID.Designer.cs">
-      <DependentUpon>201303072149596_RenameCallerID.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201303112347175_AddGender.cs" />
-    <Compile Include="Migrations\201303112347175_AddGender.Designer.cs">
-      <DependentUpon>201303112347175_AddGender.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Helpers\CollectionEditingHtmlExtensions.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AutoMapperConfiguration.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
@@ -204,6 +195,7 @@
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\PasswordResetRequest.cs" />
     <Compile Include="Models\PreviousPassword.cs" />
+    <Compile Include="Models\QuestionViewModel.cs" />
     <Compile Include="Models\Reference.cs" />
     <Compile Include="Models\Keyword.cs" />
     <Compile Include="Models\Question.cs" />
@@ -287,7 +279,6 @@
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Images\BC_Cancer_logo.png" />
-    <Content Include="Migrations\migration.sql" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -363,25 +354,15 @@
     <Content Include="Views\Home\OtherRolesHome.cshtml" />
     <Content Include="Views\Users\ChangePassword.cshtml" />
     <Content Include="Views\Requests\Search.cshtml" />
-    <Content Include="Views\Users\ResetPassword.cshtml" />
+    <Content Include="Views\Requests\QuestionEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
+    <Folder Include="Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201303072119078_CurrentSchema.resx">
-      <DependentUpon>201303072119078_CurrentSchema.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201303072149596_RenameCallerID.resx">
-      <DependentUpon>201303072149596_RenameCallerID.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201303112347175_AddGender.resx">
-      <DependentUpon>201303112347175_AddGender.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
