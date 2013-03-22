@@ -320,7 +320,7 @@ namespace DREAM.Controllers
         [HttpGet]
         public ActionResult Export(int reqId)
         {
-            Request request = db.Requests.Find(reqId);
+            Request request = FindRequest(reqId);
             if (isLocked(request))
             {
                 return View();
@@ -329,10 +329,10 @@ namespace DREAM.Controllers
             MemoryStream ms = ExportDoc(Server.MapPath(@"~/") + "/Templates/Export_Report.docx", request);
             return File(ms.ToArray(), "application/ms-word", "Request" + reqId + ".docx");
         }
-        // Using dummy data since most request attributes are null for some reason.
+
+        // Need to add null checks for all attributes (since many can be null)
         // Need a better Template?
-        // Need a loop to create Questions for the number of questions in the request
-        // but can't do that yet really because of null attributes.
+        // Need a loop to create Questions for the number of questions in the request.
         public MemoryStream ExportDoc(string docName, Request req)
         {
             byte[] byteArray = System.IO.File.ReadAllBytes(docName);
@@ -382,8 +382,8 @@ namespace DREAM.Controllers
 
                 Regex regexText12 = new Regex("PATIENTAGE GOES HERE");
                 docText = regexText12.Replace(docText, "45");
-
-                /*Regex regexText2 = new Regex("REQUEST TYPE GOES HERE");
+                /*
+                Regex regexText2 = new Regex("REQUEST TYPE GOES HERE");
                 docText = regexText2.Replace(docText, req.Type.FullName);
 
                 Regex regexText3 = new Regex("CALLERFIRSTNAME GOES HERE");
@@ -405,7 +405,7 @@ namespace DREAM.Controllers
                 docText = regexText8.Replace(docText, req.Patient.FirstName);
 
                 Regex regexText9 = new Regex("PATIENTLASTNAME GOES HERE");
-                docText = regexText9.Replace(docText, req.Patient.FirstName);
+                docText = regexText9.Replace(docText, req.Patient.LastName);
 
                 Regex regexText10 = new Regex("PATIENTAGENCYID GOES HERE");
                 docText = regexText10.Replace(docText, req.Patient.AgencyID.ToString());
@@ -416,8 +416,8 @@ namespace DREAM.Controllers
                 else docText = regexText11.Replace(docText, "Female");
 
                 Regex regexText12 = new Regex("PATIENTAGE GOES HERE");
-                docText = regexText12.Replace(docText, req.Patient.Age.ToString());*/
-
+                docText = regexText12.Replace(docText, req.Patient.Age.ToString());
+                */
                 using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
                 {
                     sw.Write(docText);
