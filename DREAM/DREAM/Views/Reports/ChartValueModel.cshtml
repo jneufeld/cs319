@@ -9,7 +9,7 @@
         @Html.ValidationMessageFor(model => model.Name)
 
         @Html.LabelFor(model => model.PropertyName)
-        @Html.EditorFor(model => model.PropertyName)
+        @Html.DropDownListFor(model => model.PropertyName, (IEnumerable<SelectListItem>)ViewData["RequestPropertiesList"])
         @Html.ValidationMessageFor(model => model.PropertyName)
 
         @Html.LabelFor(model => model.Function)

@@ -26,7 +26,7 @@
             @Html.ValidationMessageFor(model => model.ChartType)
 
             @Html.LabelFor(model => model.Comparison)
-            @Html.EditorFor(model => model.Comparison)
+            @Html.DropDownListFor(model => model.Comparison, (IEnumerable<SelectListItem>)ViewData["ComparisonList"])
             @Html.ValidationMessageFor(model => model.Comparison)
         </span>
 

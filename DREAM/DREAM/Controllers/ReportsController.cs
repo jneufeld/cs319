@@ -1,4 +1,6 @@
-﻿using DREAM.Models;
+﻿using DREAM.Attributes;
+using DREAM.Helpers;
+using DREAM.Models;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
@@ -30,9 +32,7 @@ namespace DREAM.Controllers
         [HttpGet]
         public ActionResult Generate()
         {
-            ViewBag.TimeRangeList = BuildTimeRangeDropdownList();
-            ViewBag.StatFunctionList = BuildStatFunctionDropdownList();
-            ViewBag.ChartTypeList = BuildChartTypeDropdownList();
+            populateDropdownLists();
 
             return View();
         }
@@ -174,9 +174,7 @@ namespace DREAM.Controllers
                 }
             }
 
-            ViewBag.TimeRangeList = BuildTimeRangeDropdownList();
-            ViewBag.StatFunctionList = BuildStatFunctionDropdownList();
-            ViewBag.ChartTypeList = BuildChartTypeDropdownList();
+            populateDropdownLists();
 
             return View();
         }
@@ -226,7 +224,7 @@ namespace DREAM.Controllers
 
             foreach (ChartModel chart in report.Charts)
             {
-                ExcelRange cells = addDataForTimeRange(stratifiedRequests, row, chart, requests);
+                ExcelRange cells = addData(stratifiedRequests, row, chart, requests);
                 ExcelWorksheet chartWorksheet = package.Workbook.Worksheets.Add(chart.Name);
                 addChart(chartWorksheet, stratifiedRequests, row, cells.End.Row, cells.End.Column, chart.Name, chart.ChartType);
 
@@ -234,19 +232,52 @@ namespace DREAM.Controllers
             }
         }
 
-        private ExcelRange addDataForTimeRange(ExcelWorksheet worksheet, int startingRow, ChartModel chart, List<Request> requests)
+        private ExcelRange addData(ExcelWorksheet worksheet, int startingRow, ChartModel chart, List<Request> requests)
         {
             int titleRow = startingRow;
             int headerRow = startingRow + 1;
             int firstDataRow = startingRow + 2;
-            string sectionTitle = getSectionTitle(chart.TimeRange, chart.StartDate);
+
+            ExcelRange cells;
+            string timeRangeName = getTimeRangeName(chart.TimeRange, chart.StartDate);
             List<string> sectionHeadings = getSectionHeadings(chart);
 
-            worksheet.Cells[startingRow, 1].Value = chart.Name;
+            worksheet.Cells[titleRow, 1].Value = chart.Name;
+            worksheet.Cells[headerRow, 1].Value = timeRangeName;
+            cells = addDataForTimeRange(worksheet, firstDataRow, chart, requests);
+            
+            if (chart.Comparison != TimeRange.NONE)
+            {
+                DateTime comparisonStartDate = TimeRangeStepper.DecrementByGranularity(chart.StartDate, chart.Comparison);
+                ChartModel comparisonChart = new ChartModel
+                {
+                    TimeRange = chart.TimeRange,
+                    StartDate = comparisonStartDate,
+                    Granularity = chart.Granularity,
+                    Values = (IList<ChartValueModel>)chart.Values.Select(v => new ChartValueModel
+                    {
+                        Name = v.Name + " (" + getTimeRangeName(chart.TimeRange, comparisonStartDate) + ")",
+                        Function = v.Function,
+                        PropertyName = v.PropertyName,
+                    }).ToList()
+                };
 
-            worksheet.Cells[headerRow, 1].Value = sectionTitle;
-            ExcelRangeBase headers = worksheet.Cells[headerRow, 2].LoadFromArrays(new object[][]{sectionHeadings.ToArray()});
+                List<string> comparisonHeadings = getSectionHeadings(comparisonChart);
 
+                if (comparisonHeadings.Count > sectionHeadings.Count)
+                {
+                    sectionHeadings = comparisonHeadings;
+                }
+                cells = addDataForTimeRange(worksheet, cells.End.Row + 1, comparisonChart, requests);
+            }
+
+            worksheet.Cells[headerRow, 2].LoadFromArrays(new object[][]{sectionHeadings.ToArray()});
+
+            return worksheet.Cells[startingRow, 1, cells.End.Row, cells.End.Column];
+        }
+
+        private ExcelRange addDataForTimeRange(ExcelWorksheet worksheet, int firstDataRow, ChartModel chart, List<Request> requests)
+        {
             worksheet.Cells[firstDataRow, 1].LoadFromCollection(chart.Values.Select(v => v.Name));
 
             object[][] data = new object[chart.Values.Count()][];
@@ -258,7 +289,7 @@ namespace DREAM.Controllers
 
             ExcelRangeBase dataCells = worksheet.Cells[firstDataRow, 2].LoadFromArrays(data);
 
-            return worksheet.Cells[startingRow, 1, dataCells.End.Row, dataCells.End.Column];
+            return worksheet.Cells[firstDataRow, 1, dataCells.End.Row, dataCells.End.Column];
         }
 
         private void addChart(ExcelWorksheet chartWorksheet, ExcelWorksheet dataWorksheet, int startRow, int numRows, int numColumns, string chartName, eChartType chartType)
@@ -280,46 +311,41 @@ namespace DREAM.Controllers
             chart.Title.Text = chartName;
         }
 
-        private string getSectionTitle(TimeRange timeRange, DateTime startTime)
+        private string getTimeRangeName(TimeRange timeRange, DateTime startDate)
         {
+            string dateFormat = "";
+
             switch (timeRange)
             {
                 case TimeRange.ALL_TIME:
                     return "All Time";
                 case TimeRange.DAY:
-                    return startTime.Date.ToString();
+                    dateFormat = "d";
+                    break;
                 case TimeRange.HOUR:
-                    return startTime.ToString();
+                    dateFormat = "H";
+                    break;
                 case TimeRange.MONTH:
-                    return startTime.Date.ToString();
+                    dateFormat = "MMMM";
+                    break;
                 case TimeRange.WEEK:
-                    return startTime.Date.ToString();
+                    return (startDate.Date.Day/7 + 1).ToString();
                 case TimeRange.YEAR:
-                    return startTime.Year.ToString();
+                    dateFormat = "yyyy";
+                    break;
             }
 
-            return "";
+            return startDate.ToString(dateFormat);
         }
 
         private List<string> getSectionHeadings(ChartModel chart)
         {
             List<string> headings = new List<string>();
 
-            string dateFormat = "";
-
-            switch (chart.Granularity)
-            {
-                case TimeRange.ALL_TIME:
-                    throw new NotImplementedException();
-                case TimeRange.MONTH:
-                    dateFormat = "MMMM";
-                    break;
-            }
-
             for (TimeRangeStepper stepper = new TimeRangeStepper(chart);
                 stepper.CurrentStartDate < stepper.EndDate; stepper.Step())
             {
-                headings.Add(stepper.CurrentStartDate.ToString(dateFormat));
+                headings.Add(getTimeRangeName(chart.Granularity, stepper.CurrentStartDate));
             }
 
             return headings;
@@ -363,7 +389,16 @@ namespace DREAM.Controllers
         }
 
         #region Helpers
-        private IEnumerable<SelectListItem> BuildTimeRangeDropdownList()
+        private void populateDropdownLists()
+        {
+            ViewBag.TimeRangeList = buildTimeRangeDropdownList();
+            ViewBag.StatFunctionList = buildStatFunctionDropdownList();
+            ViewBag.ChartTypeList = buildChartTypeDropdownList();
+            ViewBag.RequestPropertiesList = buildPropertiesDropdownList(typeof(Request));
+            ViewBag.ComparisonList = buildComparisonDropdownList();
+        }
+
+        private IEnumerable<SelectListItem> buildTimeRangeDropdownList()
         {
             List<SelectListItem> timeRanges = new List<SelectListItem>();
 
@@ -377,7 +412,13 @@ namespace DREAM.Controllers
             return timeRanges;
         }
 
-        private IEnumerable<SelectListItem> BuildStatFunctionDropdownList()
+        private IEnumerable<SelectListItem> buildComparisonDropdownList()
+        {
+            return buildTimeRangeDropdownList().Where(tr => tr.Value != TimeRange.ALL_TIME.ToString()).Select(
+                tr => new SelectListItem { Text = "Previous " + tr.Text, Value = tr.Value });
+        }
+
+        private IEnumerable<SelectListItem> buildStatFunctionDropdownList()
         {
             List<SelectListItem> statFunctions = new List<SelectListItem>();
 
@@ -390,7 +431,7 @@ namespace DREAM.Controllers
             return statFunctions;
         }
 
-        private IEnumerable<SelectListItem> BuildChartTypeDropdownList()
+        private IEnumerable<SelectListItem> buildChartTypeDropdownList()
         {
             List<SelectListItem> chartTypes = new List<SelectListItem>();
 
@@ -399,63 +440,33 @@ namespace DREAM.Controllers
 
             return chartTypes;
         }
-        #endregion
 
-        public class TimeRangeStepper
+        private IEnumerable<SelectListItem> buildPropertiesDropdownList(Type type)
         {
-            public TimeRange TimeRange;
-            public DateTime StartDate;
-            public DateTime EndDate;
-            public TimeRange Granularity;
-            public DateTime CurrentStartDate;
-            public DateTime CurrentEndDate;
+            List<SelectListItem> properties = new List<SelectListItem>();
+            string propertyDisplayName;
+            string propertyName;
+            Attribute[] attributes;
+            ReportableAttribute reportableAttribute;
 
-            public TimeRangeStepper(ChartModel chart)
+            foreach(MemberInfo member in type.GetProperties())
             {
-                TimeRange = chart.TimeRange;
-                StartDate = chart.StartDate;
-                EndDate = incrementByGranularity(StartDate, TimeRange);
-                Granularity = chart.Granularity;
-                CurrentStartDate = StartDate;
-                CurrentEndDate = incrementByGranularity(StartDate);
-            }
-
-            private DateTime incrementByGranularity(DateTime dateTime)
-            {
-                return incrementByGranularity(dateTime, Granularity);
-            }
-
-            private DateTime incrementByGranularity(DateTime dateTime, TimeRange granularity)
-            {
-                switch (granularity)
+                if (!Attribute.IsDefined(member, typeof(ReportableAttribute)))
                 {
-                    case TimeRange.DAY:
-                        return dateTime.AddDays(1);
-                    case TimeRange.HOUR:
-                        return dateTime.AddHours(1);
-                    case TimeRange.MONTH:
-                        return dateTime.AddMonths(1);
-                    case TimeRange.WEEK:
-                        return dateTime.AddDays(7);
-                    case TimeRange.YEAR:
-                         return dateTime.AddYears(1);
+                    continue;
                 }
-                return dateTime;
+
+                attributes = Attribute.GetCustomAttributes(member);
+                reportableAttribute = (ReportableAttribute)attributes.Where(a => a is ReportableAttribute).First();
+                propertyName = member.Name;
+                propertyDisplayName = reportableAttribute.Name ?? propertyName;
+
+                properties.Add(new SelectListItem { Text = propertyDisplayName, Value = propertyName });
             }
 
-            public DateTime Step()
-            {
-                CurrentStartDate = incrementByGranularity(CurrentStartDate);
-                CurrentEndDate = incrementByGranularity(CurrentStartDate);
-                return CurrentStartDate;
-            }
-
-            public void Reset()
-            {
-                CurrentStartDate = StartDate;
-                CurrentEndDate = incrementByGranularity(CurrentStartDate);
-            }
+            return properties;
         }
+        #endregion
 
         public class RequestRow
         {

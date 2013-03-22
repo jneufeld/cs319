@@ -177,6 +177,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\ReportableAttribute.cs" />
     <Compile Include="Controllers\DropDownAdminController.cs" />
     <Compile Include="Controllers\KeywordsAdminController.cs" />
     <Compile Include="Controllers\LogsAdminController.cs" />
@@ -191,6 +192,7 @@
     </Compile>
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
     <Compile Include="Helpers\CollectionEditingHtmlExtensions.cs" />
+    <Compile Include="Helpers\TimeRangeStepper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AutoMapperConfiguration.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
