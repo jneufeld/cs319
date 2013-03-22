@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DREAM.Models.Log>
+﻿@model DREAM.Models.LogFilterModel
 @using PagedList.Mvc;
 @using PagedList;
 
@@ -8,13 +8,34 @@
 
 <h2>Index</h2>
 
+@using (@Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.RequestID)
+            </td>
+            <td>
+                @Html.EditorFor(model => model.RequestID)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>
+                    <input type="submit" name="button" value="Filter" />
+                </p>
+            </td>
+        </tr>
+    </table>
+}
+
 <table>
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.UserID)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Request.ID)
+            @Html.DisplayNameFor(model => model.RequestID)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Action)
@@ -22,7 +43,7 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.PagedLogs) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.User.UserName)
@@ -43,4 +64,4 @@
 
 </table>
 
-@Html.PagedListPager((IPagedList)ViewBag.logsPage, page => Url.Action("Index", new { page }))
+@Html.PagedListPager(Model.PagedLogs, page => Url.Action("Index", new { request = @Html.Raw(Json.Encode(Model.RequestID)), page = page }))

@@ -205,6 +205,7 @@
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\LocalPasswordModel.cs" />
     <Compile Include="Models\Lock.cs" />
+    <Compile Include="Models\LogFilterModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\PasswordResetRequest.cs" />
     <Compile Include="Models\PreviousPassword.cs" />
