@@ -10,6 +10,7 @@ using System.Web.Security;
 using System.Net.Mail;
 using System.Net;
 using System.Security;
+using System.Security.Cryptography;
 
 namespace DREAM.Models
 {
@@ -51,6 +52,24 @@ namespace DREAM.Models
 		return id;
         }
 
+        // adapted from http://stackoverflow.com/questions/3132878/asp-net-membership-provider-reset-password-features-email-confirmation-and-p
+        public static String CreateResetPasswordHash(int lengthOfHash)
+        {
+            var random = new Random();
+            var chars = new char[lengthOfHash];
+            const string AllowableCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/^()";
+            
+            var charsToUse = string.Format("{0}{1}", AllowableCharacters, "");
+            var allowableLength = charsToUse.Length;
+            
+            for (var i = 0; i < lengthOfHash; i++)
+            {
+                chars[i] = charsToUse[random.Next(allowableLength)];
+            }
+     
+            return new String(chars);
+        }
+
         //Return the passwordResetRequest object for the given user
         //Sends an email to the user with a link to the PasswordResetRequest's page
 	    public static PasswordResetRequest GenerateFor(MembershipUser user){
@@ -62,7 +81,10 @@ namespace DREAM.Models
 				    resetReq.UserID = (Guid)user.ProviderUserKey;
 			    }
 			    db.SaveChanges();
-			   SendEmail("souffle.dream@gmail.com",user.Email,"","","DREAM Password Reset","");
+
+                String passwordLinkHashValue = CreateResetPasswordHash(24);
+
+			   SendEmail("souffle.dream@gmail.com",user.Email,"","","DREAM Password Reset",passwordLinkHashValue);
 		    return resetReq;
             }
          }
