@@ -226,8 +226,7 @@ namespace DREAM.Controllers
 
             foreach (ChartModel chart in report.Charts)
             {
-                ExcelRange cells = addDataForTimeRange(stratifiedRequests.Cells[row, 1], chart.TimeRange, chart.StartDate,
-                    chart.Granularity, chart.Values, requests);
+                ExcelRange cells = addDataForTimeRange(stratifiedRequests, row, chart, requests);
                 ExcelWorksheet chartWorksheet = package.Workbook.Worksheets.Add(chart.Name);
                 addChart(chartWorksheet, stratifiedRequests, row, cells.End.Row, cells.End.Column, chart.Name, chart.ChartType);
 
@@ -235,26 +234,31 @@ namespace DREAM.Controllers
             }
         }
 
-        private ExcelRange addDataForTimeRange(ExcelRange startCell, TimeRange timeRange, DateTime startTime, TimeRange granularity, IList<ChartValueModel> values, List<Request> requests)
+        private ExcelRange addDataForTimeRange(ExcelWorksheet worksheet, int startingRow, ChartModel chart, List<Request> requests)
         {
-            string sectionTitle = getSectionTitle(timeRange, startTime);
-            startCell[1, 1].Value = sectionTitle;
-            List<string> sectionHeadings = getSectionHeadings(timeRange, startTime, granularity);
-            ExcelRangeBase headers = startCell[1, 2].LoadFromArrays(new object[][]{sectionHeadings.ToArray()});
+            int titleRow = startingRow;
+            int headerRow = startingRow + 1;
+            int firstDataRow = startingRow + 2;
+            string sectionTitle = getSectionTitle(chart.TimeRange, chart.StartDate);
+            List<string> sectionHeadings = getSectionHeadings(chart);
 
-            startCell[2, 1].LoadFromCollection(values.Select(v => v.Name));
+            worksheet.Cells[startingRow, 1].Value = chart.Name;
 
-            object[][] data = new object[values.Count()][];
+            worksheet.Cells[headerRow, 1].Value = sectionTitle;
+            ExcelRangeBase headers = worksheet.Cells[headerRow, 2].LoadFromArrays(new object[][]{sectionHeadings.ToArray()});
 
-            for(int i=0; i<values.Count(); i++)
+            worksheet.Cells[firstDataRow, 1].LoadFromCollection(chart.Values.Select(v => v.Name));
+
+            object[][] data = new object[chart.Values.Count()][];
+
+            for(int i=0; i<chart.Values.Count(); i++)
             {
-                data[i] = getRowData(timeRange, startTime, granularity, requests,
-                    values[i].GetMemberFor(typeof(Request)), values[i].Function);
+                data[i] = getRowData(chart, requests, chart.Values[i].GetMemberFor(typeof(Request)), chart.Values[i].Function);
             }
 
-            ExcelRangeBase dataCells = startCell[2, 2].LoadFromArrays(data);
+            ExcelRangeBase dataCells = worksheet.Cells[firstDataRow, 2].LoadFromArrays(data);
 
-            return startCell[1, 1, dataCells.End.Row, dataCells.End.Column];
+            return worksheet.Cells[startingRow, 1, dataCells.End.Row, dataCells.End.Column];
         }
 
         private void addChart(ExcelWorksheet chartWorksheet, ExcelWorksheet dataWorksheet, int startRow, int numRows, int numColumns, string chartName, eChartType chartType)
@@ -263,10 +267,13 @@ namespace DREAM.Controllers
             chart.SetPosition(1, 0, 1, 0);
             chart.SetSize(100);
 
-            for (int row = 2; row <= numRows; row++)
+            int headerRow = startRow + 1;
+            int firstDataRow = startRow + 2;
+
+            for (int row = firstDataRow; row <= numRows; row++)
             {
                 ExcelChartSerie serie = chart.Series.Add(dataWorksheet.Cells[row, 2, row, numColumns],
-                    dataWorksheet.Cells[1, 2, 1, numColumns]);
+                    dataWorksheet.Cells[headerRow, 2, headerRow, numColumns]);
                 serie.HeaderAddress = dataWorksheet.Cells[row, 1];
             }
 
@@ -294,30 +301,35 @@ namespace DREAM.Controllers
             return "";
         }
 
-        private List<string> getSectionHeadings(TimeRange timeRange, DateTime startDate, TimeRange granularity)
+        private List<string> getSectionHeadings(ChartModel chart)
         {
             List<string> headings = new List<string>();
 
-            for (TimeRangeStepper stepper = new TimeRangeStepper(timeRange, startDate, granularity);
+            string dateFormat = "";
+
+            switch (chart.Granularity)
+            {
+                case TimeRange.ALL_TIME:
+                    throw new NotImplementedException();
+                case TimeRange.MONTH:
+                    dateFormat = "MMMM";
+                    break;
+            }
+
+            for (TimeRangeStepper stepper = new TimeRangeStepper(chart);
                 stepper.CurrentStartDate < stepper.EndDate; stepper.Step())
             {
-                switch (granularity)
-                {
-                    case TimeRange.ALL_TIME:
-                        throw new NotImplementedException();
-                    case TimeRange.MONTH:
-                        headings.Add(stepper.CurrentStartDate.ToString("MMMM"));
-                        break;
-                }
+                headings.Add(stepper.CurrentStartDate.ToString(dateFormat));
             }
+
             return headings;
         }
 
-        private object[] getRowData(TimeRange timeRange, DateTime startTime, TimeRange granularity, List<Request> requests, MemberInfo member, StatFunction function)
+        private object[] getRowData(ChartModel chart, List<Request> requests, MemberInfo member, StatFunction function)
         {
             List<object> rowData = new List<object>();
 
-            for (TimeRangeStepper stepper = new TimeRangeStepper(timeRange, startTime, granularity); 
+            for (TimeRangeStepper stepper = new TimeRangeStepper(chart); 
                 stepper.CurrentStartDate < stepper.EndDate; stepper.Step())
             {
                 IEnumerable<Request> currentRequests = requests.Where(
@@ -398,12 +410,12 @@ namespace DREAM.Controllers
             public DateTime CurrentStartDate;
             public DateTime CurrentEndDate;
 
-            public TimeRangeStepper(TimeRange timeRange, DateTime startDate, TimeRange granularity)
+            public TimeRangeStepper(ChartModel chart)
             {
-                TimeRange = timeRange;
-                StartDate = startDate;
-                EndDate = incrementByGranularity(startDate, timeRange);
-                Granularity = granularity;
+                TimeRange = chart.TimeRange;
+                StartDate = chart.StartDate;
+                EndDate = incrementByGranularity(StartDate, TimeRange);
+                Granularity = chart.Granularity;
                 CurrentStartDate = StartDate;
                 CurrentEndDate = incrementByGranularity(StartDate);
             }
