@@ -1,5 +1,4 @@
-﻿using DREAM.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using DREAM.Models;
 
 namespace DREAM
 {
@@ -32,8 +32,10 @@ namespace DREAM
             var initializeDomain = new CreateDatabaseIfNotExists<DREAMContext>();
             var initializeMigrations = new MigrateDatabaseToLatestVersion<DREAMContext, DREAM.Migrations.Configuration>();
 
-            initializeDomain.InitializeDatabase(context);
-            initializeMigrations.InitializeDatabase(context);
+            //initializeDomain.InitializeDatabase(context);
+            //initializeMigrations.InitializeDatabase(context);
+
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DREAMContext, DREAM.Migrations.Configuration>());
 
 #if DEBUG && FALSE
             Database.SetInitializer(new DREAM.Models.DREAMContextInitializer());

@@ -1,20 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
-using DREAM.Models;
 using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
-using System.Reflection;
-using System.Text.RegularExpressions;
-
+using DocumentFormat.OpenXml.Wordprocessing;
+using DREAM.Models;
 namespace DREAM.Controllers
 {
     [Authorize]
@@ -235,6 +234,8 @@ namespace DREAM.Controllers
                 rv.MapToRequest(request);
                 rv.MapToRequestPatient(request);
 
+                if (rv.Questions == null)
+                    rv.Questions = new List<QuestionViewModel>();
                 foreach (var qv in rv.Questions)
                 {
                     Question question = null;
@@ -249,6 +250,7 @@ namespace DREAM.Controllers
                     else if (qv.QuestionID == 0 && qv.Delete == false)
                     {
                         question = db.Questions.Create();
+                        request.Questions.Add(question);
                     }
 
                     if (question != null)
@@ -583,3 +585,4 @@ namespace DREAM.Controllers
         #endregion
     }
 }
+﻿
