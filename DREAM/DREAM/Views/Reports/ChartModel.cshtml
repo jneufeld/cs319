@@ -14,24 +14,24 @@
             @Html.ValidationMessageFor(model => model.StartDate)
 
             @Html.LabelFor(model => model.TimeRange)
-            @Html.EditorFor(model => model.TimeRange)
+            @Html.DropDownListFor(model => model.TimeRange, (IEnumerable<SelectListItem>)ViewData["TimeRangeList"])
             @Html.ValidationMessageFor(model => model.TimeRange)
 
             @Html.LabelFor(model => model.Granularity)
-            @Html.EditorFor(model => model.Granularity)
+            @Html.DropDownListFor(model => model.Granularity, (IEnumerable<SelectListItem>)ViewData["TimeRangeList"])
             @Html.ValidationMessageFor(model => model.Granularity)
 
             @Html.LabelFor(model => model.ChartType)
-            @Html.EditorFor(model => model.ChartType)
+            @Html.DropDownListFor(model => model.ChartType, (IEnumerable<SelectListItem>)ViewData["ChartTypeList"])
             @Html.ValidationMessageFor(model => model.ChartType)
 
             @Html.LabelFor(model => model.Comparison)
-            @Html.EditorFor(model => model.Comparison)
+            @Html.DropDownListFor(model => model.Comparison, (IEnumerable<SelectListItem>)ViewData["ComparisonList"])
             @Html.ValidationMessageFor(model => model.Comparison)
         </span>
 
         <h3>Values</h3>
-        <a href="#" class="addNewValue">Add another</a>
+        <a href="javascript:void(0);" class="addNewValue">Add another</a>
 
         <ul class="chartValues" style="list-style-type: none">
             @if(Model == null || Model.Values == null || Model.Values.Count == 0)

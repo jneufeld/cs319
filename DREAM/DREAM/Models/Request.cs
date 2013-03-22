@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Security;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DREAM.Attributes;
 
 namespace DREAM.Models
 {
@@ -12,6 +13,7 @@ namespace DREAM.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ReportableAttribute("Total Requests", StatFunctions = new StatFunction[] {StatFunction.COUNT})]
         public int ID { get; set; }
 
         public DateTime CreationTime { get; set; }
@@ -59,6 +61,7 @@ namespace DREAM.Models
             db.SaveChanges();
         }
 
+        [ReportableAttribute("Time Spent")]
         public int TimeSpent
         {
             get
