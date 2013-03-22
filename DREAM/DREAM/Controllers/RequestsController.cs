@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -351,7 +351,7 @@ namespace DREAM.Controllers
 
                 Regex regexText1 = new Regex("REQUESTID GOES HERE");
                 docText = regexText1.Replace(docText, req.ID.ToString());
-
+                /*
                 Regex regexText2 = new Regex("REQUEST TYPE GOES HERE");
                 docText = regexText2.Replace(docText, "Nurse");
 
@@ -384,42 +384,66 @@ namespace DREAM.Controllers
 
                 Regex regexText12 = new Regex("PATIENTAGE GOES HERE");
                 docText = regexText12.Replace(docText, "45");
-                /*
+                */
                 Regex regexText2 = new Regex("REQUEST TYPE GOES HERE");
-                docText = regexText2.Replace(docText, req.Type.FullName);
+                if (req.Type != null)
+                    docText = regexText2.Replace(docText, req.Type.FullName);
+                else docText = regexText2.Replace(docText, "none");
 
                 Regex regexText3 = new Regex("CALLERFIRSTNAME GOES HERE");
-                docText = regexText3.Replace(docText, req.Caller.FirstName);
+                if (req.Caller != null && req.Caller.FirstName != null)
+                    docText = regexText3.Replace(docText, req.Caller.FirstName);
+                else docText = regexText3.Replace(docText, "");
 
                 Regex regexText4 = new Regex("CALLERLASTNAME GOES HERE");
-                docText = regexText4.Replace(docText, req.Caller.LastName);
+                if (req.Caller != null && req.Caller.LastName != null)
+                    docText = regexText4.Replace(docText, req.Caller.LastName);
+                else docText = regexText4.Replace(docText, "");
 
                 Regex regexText5 = new Regex("CALLERPHONENUMBER GOES HERE");
-                docText = regexText5.Replace(docText, req.Caller.PhoneNumber);
+                if (req.Caller != null && req.Caller.PhoneNumber != null)
+                    docText = regexText5.Replace(docText, req.Caller.PhoneNumber);
+                else docText = regexText5.Replace(docText, "");
 
                 Regex regexText6 = new Regex("CALLEREMAIL GOES HERE");
-                docText = regexText6.Replace(docText, req.Caller.Email);
+                if (req.Caller != null && req.Caller.Email != null)
+                    docText = regexText6.Replace(docText, req.Caller.Email);
+                else docText = regexText6.Replace(docText, "");
 
                 Regex regexText7 = new Regex("CALLERREGION GOES HERE");
-                docText = regexText7.Replace(docText, req.Caller.Region.FullName);
+                if (req.Caller != null && req.Caller.Region != null)
+                    docText = regexText7.Replace(docText, req.Caller.Region.FullName);
+                else docText = regexText7.Replace(docText, "");
 
                 Regex regexText8 = new Regex("PATIENTFIRSTNAME GOES HERE");
-                docText = regexText8.Replace(docText, req.Patient.FirstName);
+                if (req.Patient != null && req.Patient.FirstName != null)
+                    docText = regexText8.Replace(docText, req.Patient.FirstName);
+                else docText = regexText8.Replace(docText, "");
 
                 Regex regexText9 = new Regex("PATIENTLASTNAME GOES HERE");
-                docText = regexText9.Replace(docText, req.Patient.LastName);
+                if (req.Patient != null && req.Patient.LastName != null)
+                    docText = regexText9.Replace(docText, req.Patient.LastName);
+                else docText = regexText9.Replace(docText, "");
 
                 Regex regexText10 = new Regex("PATIENTAGENCYID GOES HERE");
-                docText = regexText10.Replace(docText, req.Patient.AgencyID.ToString());
+                if (req.Patient != null)
+                    docText = regexText10.Replace(docText, req.Patient.AgencyID.ToString());
+                else docText = regexText10.Replace(docText, "");
 
                 Regex regexText11 = new Regex("PATIENTGENDER GOES HERE");
-                if (req.Patient.Gender == 1)
-                docText = regexText11.Replace(docText, "Male");
-                else docText = regexText11.Replace(docText, "Female");
+                if (req.Patient != null && (req.Patient.Gender == 1 || req.Patient.Gender == 2))
+                {
+                    if (req.Patient.Gender == 1)
+                        docText = regexText11.Replace(docText, "Male");
+                    else docText = regexText11.Replace(docText, "Female");
+                }
+                else docText = regexText11.Replace(docText, "");
 
                 Regex regexText12 = new Regex("PATIENTAGE GOES HERE");
-                docText = regexText12.Replace(docText, req.Patient.Age.ToString());
-                */
+                if (req.Patient != null && req.Patient.Age > 0)
+                    docText = regexText12.Replace(docText, req.Patient.Age.ToString());
+                else docText = regexText12.Replace(docText, "");
+                
                 using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
                 {
                     sw.Write(docText);
