@@ -17,17 +17,10 @@ namespace DREAM.Controllers
         //
         // GET: /LogsAdmin/
 
-        public ActionResult Index(String request = "null", int page = 1)
+        public ActionResult Index(int? request = null, int? act = null, String user = null, DateTime? before = null, DateTime? after = null, int page = 1)
         {
-            LogFilterModel lfm = new LogFilterModel();
-
-            ContentResult req = new ContentResult { Content = request, ContentType = "application/json" };
-            if (!req.Content.Equals("null"))
-            {
-                lfm.RequestID = Convert.ToInt32(req.Content);
-                lfm.Logs = lfm.Logs.Where(log => log.RequestID == lfm.RequestID);
-            }
-            lfm.PagedLogs = lfm.Logs.OrderByDescending(m => m.ID).ToPagedList(page, 2);
+            LogFilterModel lfm = new LogFilterModel(request, user, act, before, after, page);
+            lfm.filter();
             return View(lfm);
         }
 
@@ -37,13 +30,16 @@ namespace DREAM.Controllers
             if (button.Equals("Filter"))
             {
                 LogFilterModel filter = lfm;
+                filter.page = 1;
+                filter.filter();
+                return View(filter);
+            }
 
-                if (!filter.RequestID.Equals(null))
-                    filter.Logs = filter.Logs.Where(log => log.RequestID == filter.RequestID);
-
+            else if (button.Equals("Clear"))
+            {
+                ModelState.Clear();
+                LogFilterModel filter = new LogFilterModel();
                 filter.PagedLogs = filter.Logs.OrderByDescending(m => m.ID).ToPagedList(1, 2);
-                ViewBag.logsPage = filter.PagedLogs;
-                ViewBag.request = filter.RequestID;
                 return View(filter);
             }
             else

@@ -21,8 +21,41 @@
         </tr>
         <tr>
             <td>
+                @Html.LabelFor(model => model.Action)
+            </td>
+            <td>
+                @Html.EditorFor(model => model.Action)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.UserName)
+            </td>
+            <td>
+                @Html.EditorFor(model => model.UserName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Before)
+            </td>
+            <td>
+                @Html.EditorFor(model => model.Before)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.After)
+            </td>
+            <td>
+                @Html.EditorFor(model => model.After)
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <p>
                     <input type="submit" name="button" value="Filter" />
+                    <input type="submit" name="button" value="Clear" />
                 </p>
             </td>
         </tr>
@@ -32,7 +65,7 @@
 <table>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.UserID)
+            @Html.DisplayNameFor(model => model.UserName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.RequestID)
@@ -64,4 +97,9 @@
 
 </table>
 
-@Html.PagedListPager(Model.PagedLogs, page => Url.Action("Index", new { request = @Html.Raw(Json.Encode(Model.RequestID)), page = page }))
+@Html.PagedListPager(Model.PagedLogs, page => Url.Action("Index", new { request = Model.RequestID, 
+                                                                        act = Model.Action, 
+                                                                        user = Model.UserName,
+                                                                        before = Model.Before, 
+                                                                        after = Model.After,
+                                                                        page = page }))
