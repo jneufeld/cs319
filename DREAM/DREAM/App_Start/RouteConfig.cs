@@ -13,6 +13,7 @@ namespace DREAM
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("UsersAdmin/{*pathInfo}");
+            routes.IgnoreRoute("LogsAdmin/{*pathInfo}");
 
             routes.MapRoute(
                 name: "UsersAdmin",
@@ -28,6 +29,13 @@ namespace DREAM
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            );
+
+            // Must be last
+            routes.MapRoute(
+                name: "PageNotFound",
+                url: "{*catchall}",
+                defaults: new { controller = "Home", action = "PageNotFound" }
             );
         }
     }

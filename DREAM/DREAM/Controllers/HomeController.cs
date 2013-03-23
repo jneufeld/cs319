@@ -42,5 +42,12 @@ namespace DREAM.Controllers
 
             return View();
         }
+
+        public ActionResult PageNotFound(String errorPath)
+        {
+            ViewBag.Message = "Sorry, the page you requested does not exist.";
+
+            return View();
+        }
     }
 }
