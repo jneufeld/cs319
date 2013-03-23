@@ -14,8 +14,28 @@
         <legend>View Request</legend>
         <ol>
             <li>
+                @Html.LabelFor(m => m.ID)
+                @Html.DisplayTextFor(m => m.ID)
+            </li>
+            <li>
                 @Html.LabelFor(m => m.Type)
                 @Html.DisplayTextFor(m => m.Type.FullName)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.CreationTime)
+                @Html.DisplayTextFor(m => m.CreationTime)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.CreatedBy)
+                @ViewBag.CreatedBy
+            </li>
+            <li>
+                @Html.LabelFor(m => m.CompletionTime)
+                @Html.DisplayTextFor(m => m.CompletionTime)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.ClosedBy)
+                @ViewBag.ClosedBy
             </li>
 
             <li>
@@ -129,15 +149,12 @@
                         </table>
                     </fieldset>
                 </div>
+                @Html.ActionLink("Audit Request", "Index", "LogsAdmin", new { request = Model.ID }, "")
             </li>
 
         </ol>
 
         @Html.ValidationSummary()
-
-        <p>
-            <input type="submit" value="Add" />
-        </p>
     </fieldset>
 }
 

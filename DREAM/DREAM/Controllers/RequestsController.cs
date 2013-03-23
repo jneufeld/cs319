@@ -131,6 +131,13 @@ namespace DREAM.Controllers
         public ActionResult ViewRequest(int id = 0)
         {
             Request request = FindRequest(id);
+
+            if (request.CreatedBy != null)
+                ViewBag.CreatedBy = Membership.GetUser(request.CreatedBy).UserName;
+
+            if (request.ClosedBy != Guid.Empty)
+                ViewBag.ClosedBy = Membership.GetUser(request.ClosedBy).UserName;
+
             if (request == null)
             {
                 return HttpNotFound();
@@ -153,6 +160,7 @@ namespace DREAM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ViewRequest(Request request)
         {
+
             if (isLocked(request, true))
             {
                 return View();
