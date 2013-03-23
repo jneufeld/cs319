@@ -24,20 +24,29 @@
                         <ul id="menu">
                             <li>@Html.ActionLink("Home", "Index", "Home")</li>
 
-                            @if (User.IsInRole("DI Specialist"))
-                            {
-                                <li>@Html.ActionLink("Create Request", "Add", "Requests")</li>
-                            }
+                            @{
+                                bool isAdmin = User.IsInRole("Admin");
+                                bool isDISpecialist = User.IsInRole("DI Specialist");
+                                bool isViewer = User.IsInRole("Viewer");
+                                bool isReporter = User.IsInRole("Reporter");
+                                
+                                if(isDISpecialist) 
+                                {
+                                    <li>@Html.ActionLink("Create Request", "Add", "Requests")</li>
+                                }
 
-                            @if (User.IsInRole("DI Specialist") || User.IsInRole("Viewer"))
-                            {
-                                <li>@Html.ActionLink("Search", "Search", "Requests")</li>
+                                if (isDISpecialist || isViewer)
+                                {
+                                    <li>@Html.ActionLink("Search", "Search", "Requests")</li>
                             }
-
-                            @if (User.IsInRole("Admin"))
-                            {
-                               <li>@Html.ActionLink("Admin Panel", "Admin", "Home")</li>
+                                
+                                if(isAdmin) 
+                                {
+                                    <li>@Html.ActionLink("Admin Panel", "Admin", "Home")</li>
+                                }
+                               
                             }
+                       
                             <li>@Html.ActionLink("About", "About", "Home")</li>
                             <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                         </ul>
