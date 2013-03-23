@@ -86,7 +86,11 @@ namespace DREAM.Helpers
                                                                                           string partialViewName,
                                                                                           TCollectionItem modelDefaultValues)
         {
-            ViewDataDictionary<TCollectionItem> viewData = new ViewDataDictionary<TCollectionItem>(html.ViewData);
+            ViewDataDictionary<TCollectionItem> viewData = new ViewDataDictionary<TCollectionItem>(modelDefaultValues);
+            foreach (var kv in html.ViewData)
+            {
+                viewData.Add(kv);
+            }
             viewData.Add(JQueryTemplatingEnabledKey, true);
             return html.Partial(partialViewName, modelDefaultValues, viewData);
         }

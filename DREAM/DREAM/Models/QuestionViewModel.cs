@@ -11,7 +11,7 @@ namespace DREAM.Models
     public class QuestionViewModel
     {
         public int QuestionID { get; set; }
-        public int Index { get; set; }
+        public string Index { get; set; }
 
         public bool Delete { get; set; }
 
@@ -55,16 +55,16 @@ namespace DREAM.Models
             set { TumourGroupStringID = value.ToString(); }
         }
 
-        public IList<String> Keywords { get; set; }
+        public IList<KeywordViewModel> Keywords { get; set; }
 
-        //public IList<Reference> Reference { get; set; }
+        public IList<ReferenceViewModel> References { get; set; }
 
         public static QuestionViewModel CreateFromQuestion(Question q, int idx)
         {
             QuestionViewModel questionViewModel = new QuestionViewModel
             {
                 QuestionID = q.ID,
-                Index = idx,
+                Index = idx.ToString(),
                 Delete = false,
                 QuestionText = q.QuestionText,
                 TimeTaken = q.TimeTaken,
@@ -74,7 +74,8 @@ namespace DREAM.Models
                 SpecialNotes = q.SpecialNotes,
                 QuestionTypeID = q.QuestionType != null ? q.QuestionType.ID : 0,
                 TumourGroupID = q.TumourGroup != null ? q.TumourGroup.ID : 0,
-                Keywords = new List<string>(q.Keywords.Select(k => k.KeywordText)),
+                Keywords = new List<KeywordViewModel>(q.Keywords.Select(k => KeywordViewModel.CreateFromKeyword(k))),
+                References = new List<ReferenceViewModel>(q.References.Select(r => ReferenceViewModel.CreateFromReference(r))),
             };
             return questionViewModel;
         }
@@ -87,6 +88,56 @@ namespace DREAM.Models
             q.Probability = Probability;
             q.Severity = Severity;
             q.SpecialNotes = SpecialNotes;
+        }
+    }
+
+    public class KeywordViewModel
+    {
+        public string Keyword { get; set; }
+
+        public bool Delete { get; set; }
+
+        public static KeywordViewModel CreateFromKeyword(Keyword k)
+        {
+            KeywordViewModel keywordViewModel = new KeywordViewModel
+            {
+                Keyword = k.KeywordText,
+            };
+            return keywordViewModel;
+        }
+    }
+
+    public class ReferenceViewModel
+    {
+        public int ReferenceID { get; set; }
+
+        public bool Delete { get; set; }
+
+        [Display(Name = "Text")]
+        public string Text { get; set; }
+
+        [Display(Name = "Reference Type")]
+        public string ReferenceType { get; set; }
+
+        public static ReferenceViewModel CreateFromReference(Reference r)
+        {
+            ReferenceViewModel referenceViewModel = new ReferenceViewModel
+            {
+                ReferenceID = r.ID,
+                Text = r.Value,
+                ReferenceType = ((ReferenceType)r.ReferenceType).ToString(),
+            };
+            return referenceViewModel;
+        }
+
+        public void MapToReference(Reference r)
+        {
+            r.ID = ReferenceID;
+            r.Value = Text;
+            ReferenceType type;
+            bool parse = Enum.TryParse(ReferenceType, true, out type);
+            if (parse)
+                r.ReferenceType = (int)type;
         }
     }
 }

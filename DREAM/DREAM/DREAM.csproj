@@ -388,6 +388,8 @@
     <Content Include="Views\Users\ResetPassword.cshtml" />
     <Content Include="Views\LogsAdmin\Index.cshtml" />
     <Content Include="Views\Home\PageNotFound.cshtml" />
+    <Content Include="Views\Requests\KeywordEntry.cshtml" />
+    <Content Include="Views\Requests\ReferenceEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

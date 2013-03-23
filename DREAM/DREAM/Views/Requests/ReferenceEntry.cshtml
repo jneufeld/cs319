@@ -1,0 +1,15 @@
+﻿@model DREAM.Models.ReferenceViewModel
+@using DREAM.Helpers
+
+<li>
+    @using (Html.BeginCollectionItem("References"))
+    {
+        @Html.HiddenFor(m => m.ReferenceID)
+        @Html.HiddenFor(m => m.Delete)
+        <span>
+            @Html.DropDownListFor(m => m.ReferenceType, (IEnumerable<SelectListItem>)ViewData["ReferenceTypeList"])
+            @Html.TextBoxFor(m => m.Text)
+            @Html.ValidationMessageFor(m => m.Text)
+        </span>
+    }
+</li>

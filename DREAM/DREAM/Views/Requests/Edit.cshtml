@@ -1,5 +1,6 @@
 ﻿@model DREAM.Models.RequestViewModel
 @using DREAM.Models
+@using DREAM.Helpers
 
 @{
     ViewBag.Title = "Edit Request";
@@ -13,8 +14,6 @@
         This request is currently locked and cannot be edited.
     </div>
 }
-
-@Scripts.Render("~/bundles/jquery")
 
 @if (!ViewBag.IsLocked)
 {
@@ -221,7 +220,7 @@
             <p>None.</p>
         }
         <div style="border: solid; border-width: 1px; margin: 5px">
-            <ul id="questionEditor" style="list-style-type: none">
+            <ul id="questionList" style="list-style-type: none">
                 @if (Model.Questions != null)
                 {
                     foreach (QuestionViewModel qv in Model.Questions)
@@ -230,11 +229,11 @@
                     }
                 }
             </ul>
-            <a id="addQuestion" href="#">Add another question</a>
+            <a href="javascript:void(0);" onclick="viewModel.addNewQuestion();">Add new question</a>
         </div>
         @Html.HiddenFor(m => m.QuestionCount)
 
-        <script type="text/javascript">
+        @*<script type="text/javascript">
             $(function () {
                 $("#addQuestion").click(function () {
                     var count = $("input[name=QuestionCount]:hidden");
@@ -246,7 +245,7 @@
                     });
                 });
             });
-        </script>
+        </script>*@
 
         @*<script>
            $(function () {
@@ -280,6 +279,70 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
+
+
 @section Scripts {
+    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="@Url.Content("~/Scripts/jQuery.tmpl.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" rel="stylesheet" type="text/css"></link>
+
+    <script type="text/x-jquery-tmpl" id="questionTemplate">
+        @(Html.CollectionItemJQueryTemplate<RequestViewModel, QuestionViewModel>("QuestionEntry", new QuestionViewModel { Index = "${QIndex}"}))
+    </script>
+    <script type="text/x-jquery-tmpl" id="keywordTemplate">
+        @(Html.CollectionItemJQueryTemplate<RequestViewModel, KeywordViewModel>("KeywordEntry", new KeywordViewModel { }))
+    </script>
+    <script type="text/x-jquery-tmpl" id="referenceTemplate">
+        @(Html.CollectionItemJQueryTemplate<RequestViewModel, ReferenceViewModel>("ReferenceEntry", new ReferenceViewModel { }))
+    </script>
+
+    <script type="text/javascript">
+        var viewModel = {
+            addNewQuestion: function () {
+                var count = $("input[name=QuestionCount]:hidden");
+                var idx = count.val();
+                $("#questionList").append($("#questionTemplate").tmpl({ Questions_index: viewModel._generateGuid(), Keywords_index: viewModel._generateGuid(), References_index: viewModel._generateGuid(), QIndex: idx }));
+                var next = +idx + 1;
+                count.val(next);
+            },
+
+            addNewKeyword: function ($keywordsList, prefix) {
+                $keywordsList.append($("#keywordTemplate").tmpl({ prefix: prefix, Keywords_index: viewModel._generateGuid() }));
+            },
+
+            addNewReference: function ($referenceList, prefix) {
+                $referenceList.append($("#referenceTemplate").tmpl({ prefix: prefix, References_index: viewModel._generateGuid() }));
+            },
+
+            _generateGuid: function () {
+                // Source: http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/105074#105074
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+        };
+
+        $.datepicker.setDefaults({
+            dateFormat: "M dd yy"
+        });
+
+        $("body").on("click", ".addNewKeyword", function () {
+            var $keywordList = $(this).siblings(".keywordValues");
+            var keywordIndex = $(this).siblings("input['hidden']").val();
+            var prefix = "Questions[" + keywordIndex + "].";
+            viewModel.addNewKeyword($keywordList, prefix);
+            return false;
+        });
+
+        $("body").on("click", ".addNewReference", function () {
+            var $referenceList = $(this).siblings(".referenceValues");
+            var referenceIndex = $(this).siblings("input['hidden']").val();
+            var prefix = "Questions[" + referenceIndex + "].";
+            viewModel.addNewReference($referenceList, prefix);
+            return false;
+        });
+    </script>
 }

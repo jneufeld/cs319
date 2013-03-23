@@ -14,6 +14,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DREAM.Models;
+
 namespace DREAM.Controllers
 {
     [Authorize]
@@ -109,7 +110,7 @@ namespace DREAM.Controllers
         [HttpGet]
         public ActionResult Search()
         {
-            SearchModel sm = new SearchModel();
+            SearchViewModel sm = new SearchViewModel();
             return View(sm);
         }
 
@@ -117,10 +118,20 @@ namespace DREAM.Controllers
         // POST: /Requests/Search
 
         [HttpPost]
-        public ActionResult Search(SearchModel search)
+        public ActionResult Search(SearchViewModel search)
         {
-            search.results = db.Requests.Where(request => request.Patient.FirstName.Equals(search.query));
-            search.executed = true;
+            ISet<Request> requests = new HashSet<Request>();
+            // Split based on whitespace
+            string[] keywords = search.Query.Split(null);
+            IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Contains(k.KeywordText))
+                .Include(k => k.AssociatedQuestions.Select(c => c.Request));
+            foreach (var k in matched)
+            {
+                requests.UnionWith(k.AssociatedQuestions.Select(q => q.Request));
+            }
+            //IEnumerable<Request> requests = db.Requests.Where(request => request.Patient.FirstName.Equals(search.Query));
+            search.Results = new List<RequestViewModel>(requests.Select(r => RequestViewModel.CreateFromRequest(r)));
+            search.Executed = true;
             return View(search);
         }
 
@@ -212,6 +223,7 @@ namespace DREAM.Controllers
             ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
             ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
+            ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
 
             return View(rv);
         }
@@ -261,11 +273,53 @@ namespace DREAM.Controllers
                         request.Questions.Add(question);
                     }
 
-                    if (question != null)
+                    if (question == null)
+                        continue;
+
+                    qv.MapToQuestion(question);
+                    question.QuestionType = db.QuestionTypes.SingleOrDefault(qt => qt.ID == qv.QuestionTypeID);
+                    question.TumourGroup = db.TumourGroups.SingleOrDefault(tg => tg.ID == qv.TumourGroupID);
+
+                    question.Keywords.Clear();
+                    ISet<string> newKeywords = new HashSet<string>(qv.Keywords.Select(k => k.Keyword).ToArray());
+                    string[] keywordArray = newKeywords.ToArray();
+                    IEnumerable<Keyword> keywords = db.Keywords.Where(k => keywordArray.Contains(k.KeywordText));
+                    foreach (Keyword k in keywords)
                     {
-                        qv.MapToQuestion(question);
-                        question.QuestionType = db.QuestionTypes.SingleOrDefault(qt => qt.ID == qv.QuestionTypeID);
-                        question.TumourGroup = db.TumourGroups.SingleOrDefault(tg => tg.ID == qv.TumourGroupID);
+                        newKeywords.Remove(k.KeywordText);
+                        question.Keywords.Add(k);
+                    }
+                    foreach (string s in newKeywords)
+                    {
+                        Keyword k = db.Keywords.Create();
+                        k.KeywordText = s;
+                        k.Enabled = true;
+                        question.Keywords.Add(k);
+                    }
+
+                    foreach (var refv in qv.References)
+                    {
+                        Reference reference = null;
+                        if (refv.ReferenceID != 0 && refv.Delete == false)
+                        {
+                            reference = question.References.SingleOrDefault(r => r.ID == refv.ReferenceID);
+                        }
+                        else if (refv.ReferenceID != 0 && refv.Delete == true)
+                        {
+                            reference = question.References.SingleOrDefault(r => r.ID == refv.ReferenceID);
+                            question.References.Remove(reference);
+                            db.References.Remove(reference);
+                        }
+                        else if (refv.ReferenceID == 0 && refv.Delete == false)
+                        {
+                            reference = db.References.Create();
+                            question.References.Add(reference);
+                        }
+
+                        if (reference != null)
+                        {
+                            refv.MapToReference(reference);
+                        }
                     }
                 }
 
@@ -280,18 +334,6 @@ namespace DREAM.Controllers
 
             //request.Unlock();
             return View(rv);
-        }
-
-        [HttpGet]
-        public ActionResult QuestionEntryItem(int id)
-        {
-            ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
-            ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
-            QuestionViewModel qv = new QuestionViewModel
-            {
-                Index = id,
-            };
-            return PartialView("QuestionEntry", qv);
         }
 
         //
@@ -532,7 +574,7 @@ namespace DREAM.Controllers
                               .Include(r => r.Caller.Type)
                               .Include(r => r.Caller.Region)
                               .Include(p => p.Questions.Select(c => c.Keywords))
-                              .Include(p => p.Questions.Select(c => c.Reference))
+                              .Include(p => p.Questions.Select(c => c.References))
                               .Include(p => p.Questions.Select(c => c.QuestionType))
                               .Include(p => p.Questions.Select(c => c.TumourGroup))
                               .Single(r => r.ID == id);
@@ -548,6 +590,18 @@ namespace DREAM.Controllers
             genders.Add(new SelectListItem { Text = "Female", Value = Gender.FEMALE.ToString() });
 
             return genders;
+        }
+
+        private IEnumerable<SelectListItem> BuildReferenceTypeDropdownList()
+        {
+            List<SelectListItem> refTypes = new List<SelectListItem>();
+
+            refTypes.Add(new SelectListItem { Text = "Text", Value = ReferenceType.TEXT.ToString() });
+            refTypes.Add(new SelectListItem { Text = "URL", Value = ReferenceType.URL.ToString() });
+            refTypes.Add(new SelectListItem { Text = "Request", Value = ReferenceType.REQUEST.ToString() });
+            refTypes.Add(new SelectListItem { Text = "File", Value = ReferenceType.FILE.ToString() });
+
+            return refTypes;
         }
 
         private IEnumerable<SelectListItem> BuildRequesterTypeDropdownList()

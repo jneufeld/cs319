@@ -6,20 +6,21 @@ using System.Web;
 
 namespace DREAM.Models
 {
-    public class SearchModel
+    public class SearchViewModel
     {
         [Required]
         [Display (Name = "Search Query")]
-        public String query { get; set; }
+        public String Query { get; set; }
 
-        public IEnumerable<Request> results { get; set; }
+        public IList<RequestViewModel> Results { get; set; }
 
-        public bool executed { get; set; }
+        public bool Executed { get; set; }
 
-        public SearchModel()
+        public SearchViewModel()
         {
-            executed = false;
-            query = "Search exact patient first name";
+            Query = "";
+            Executed = false;
+            Results = new List<RequestViewModel>();
         }
     }
 }

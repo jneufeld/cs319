@@ -24,6 +24,12 @@ namespace DREAM.Models
 
         [Display(Name = "Closed By")]
         public string ClosedBy { get; set; }
+        
+        [Display(Name = "Status")]
+        public string Status
+        {
+            get { return ClosedBy != null ? "Closed" : "Open"; }
+        }
 
         [Display(Name = "Requester Type")]
         public string RequesterTypeStringID { get; set; }

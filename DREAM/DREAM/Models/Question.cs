@@ -30,7 +30,7 @@ namespace DREAM.Models
         public TumourGroup TumourGroup { get; set; }
         public Request Request { get; set; }
         public List<Keyword> Keywords { get; set; }
-        public List<Reference> Reference { get; set; }
+        public List<Reference> References { get; set; }
 
         [Reportable("Request's Received Date")]
         public DateTime CreationTime

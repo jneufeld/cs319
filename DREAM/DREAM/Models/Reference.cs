@@ -21,8 +21,8 @@ namespace DREAM.Models
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        public ReferenceType ReferenceType { get; set; }
+        public int ReferenceType { get; set; }
         public string Value { get; set; }
-        public int QuestionID { get; set; }
+        //public int QuestionID { get; set; }
     }
 }
