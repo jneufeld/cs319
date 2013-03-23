@@ -1,6 +1,7 @@
 ﻿using DREAM.Attributes;
 using DREAM.Helpers;
 using DREAM.Models;
+using DREAM.Reports;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
@@ -11,6 +12,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
@@ -278,21 +280,35 @@ namespace DREAM.Controllers
 
         private ExcelRange addDataForTimeRange(ExcelWorksheet worksheet, int firstDataRow, ChartModel chart, List<Request> requests)
         {
-            worksheet.Cells[firstDataRow, 1].LoadFromCollection(chart.Values.Select(v => v.Name));
+            List<object[]> data = new List<object[]>();
+            List<string> valueNames = new List<string>();
 
-            object[][] data = new object[chart.Values.Count()][];
-
-            for(int i=0; i<chart.Values.Count(); i++)
+            foreach(ChartValueModel value in chart.Values)
             {
-                data[i] = getRowData(chart, requests, chart.Values[i].GetMemberFor(typeof(Request)), chart.Values[i].Function);
+                foreach (KeyValuePair<string, List<object>> row in DataExtractor.GetDataRows(chart, requests, value.GetMemberFor(typeof(Request)),
+                    value.Function, chart.GetStratificationMemberFor(typeof(Request))))
+                {
+                    string stratification = row.Key;
+                    if (stratification == "")
+                    {
+                        valueNames.Add(value.Name);
+                    }
+                    else
+                    {
+                        valueNames.Add(value.Name + " (" + stratification + ")");
+                    }
+                    data.Add(row.Value.ToArray());
+                }
             }
 
-            ExcelRangeBase dataCells = worksheet.Cells[firstDataRow, 2].LoadFromArrays(data);
+            worksheet.Cells[firstDataRow, 1].LoadFromCollection(valueNames);
+            ExcelRangeBase dataCells = worksheet.Cells[firstDataRow, 2].LoadFromArrays(data.ToArray());
 
             return worksheet.Cells[firstDataRow, 1, dataCells.End.Row, dataCells.End.Column];
         }
 
-        private void addChart(ExcelWorksheet chartWorksheet, ExcelWorksheet dataWorksheet, int startRow, int numRows, int numColumns, string chartName, eChartType chartType)
+        private void addChart(ExcelWorksheet chartWorksheet, ExcelWorksheet dataWorksheet, int startRow, int numRows, int numColumns,
+            string chartName, eChartType chartType)
         {
             ExcelChart chart = chartWorksheet.Drawings.AddChart(chartName, chartType);
             chart.SetPosition(1, 0, 1, 0);
@@ -351,51 +367,15 @@ namespace DREAM.Controllers
             return headings;
         }
 
-        private object[] getRowData(ChartModel chart, List<Request> requests, MemberInfo member, StatFunction function)
-        {
-            List<object> rowData = new List<object>();
-
-            for (TimeRangeStepper stepper = new TimeRangeStepper(chart); 
-                stepper.CurrentStartDate < stepper.EndDate; stepper.Step())
-            {
-                IEnumerable<Request> currentRequests = requests.Where(
-                    r => r.CreationTime >= stepper.CurrentStartDate && r.CreationTime < stepper.CurrentEndDate);
-                IEnumerable<object> requestPropertyValues = currentRequests;
-
-                if (member is PropertyInfo)
-                {
-                    requestPropertyValues = currentRequests.Select(r => ((PropertyInfo)member).GetValue(r, null));
-                }
-                else if (member is FieldInfo)
-                {
-                    requestPropertyValues = currentRequests.Select(r => ((FieldInfo)member).GetValue(r));
-                }
-
-                switch (function)
-                {
-                    case StatFunction.AVG:
-                        rowData.Add(requestPropertyValues.Average(prop => (int)prop));
-                        break;
-                    case StatFunction.COUNT:
-                        rowData.Add(requestPropertyValues.Count());
-                        break;
-                    case StatFunction.SUM:
-                        rowData.Add(requestPropertyValues.Sum(prop => (int)prop));
-                        break;
-                }
-            }
-
-            return rowData.ToArray();
-        }
-
         #region Helpers
         private void populateDropdownLists()
         {
             ViewBag.TimeRangeList = buildTimeRangeDropdownList();
             ViewBag.StatFunctionList = buildStatFunctionDropdownList();
             ViewBag.ChartTypeList = buildChartTypeDropdownList();
-            ViewBag.RequestPropertiesList = buildPropertiesDropdownList(typeof(Request));
             ViewBag.ComparisonList = buildComparisonDropdownList();
+            ViewBag.RequestPropertiesList = buildPropertiesDropdownList(typeof(Request));
+            ViewBag.RequestStratificationList = buildStratificationDropdownList(typeof(Request));
         }
 
         private IEnumerable<SelectListItem> buildTimeRangeDropdownList()
@@ -465,6 +445,32 @@ namespace DREAM.Controllers
             }
 
             return properties;
+        }
+
+        private List<SelectListItem> buildStratificationDropdownList(Type type)
+        {
+            List<SelectListItem> stratifications = new List<SelectListItem>();
+            string propertyDisplayName;
+            string propertyName;
+            Attribute[] attributes;
+            StratifiableAttribute stratifiableAttribute;
+
+            foreach(MemberInfo member in type.GetProperties())
+            {
+                if (!Attribute.IsDefined(member, typeof(StratifiableAttribute)))
+                {
+                    continue;
+                }
+
+                attributes = Attribute.GetCustomAttributes(member);
+                stratifiableAttribute = (StratifiableAttribute)attributes.Where(a => a is StratifiableAttribute).First();
+                propertyName = member.Name;
+                propertyDisplayName = stratifiableAttribute.Name ?? propertyName;
+
+                stratifications.Add(new SelectListItem { Text = propertyDisplayName, Value = propertyName });
+            }
+
+            return stratifications;
         }
         #endregion
 

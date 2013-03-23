@@ -13,7 +13,7 @@ namespace DREAM.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ReportableAttribute("Total Requests", StatFunctions = new StatFunction[] {StatFunction.COUNT})]
+        [Reportable("Total Requests", StatFunctions = new StatFunction[] {StatFunction.COUNT})]
         public int ID { get; set; }
 
         public DateTime CreationTime { get; set; }
@@ -61,12 +61,48 @@ namespace DREAM.Models
             db.SaveChanges();
         }
 
-        [ReportableAttribute("Time Spent")]
+        [Reportable("Time Spent")]
         public int TimeSpent
         {
             get
             {
                 return Questions.Sum(q => q.TimeTaken);
+            }
+        }
+
+        [Stratifiable]
+        public Region Region
+        {
+            get
+            {
+                return Caller.Region;
+            }
+        }
+
+        [Stratifiable]
+        public MembershipUser Creator
+        {
+            get
+            {
+                return Membership.GetUser(CreatedBy);
+            }
+        }
+
+        [Stratifiable]
+        public MembershipUser Closer
+        {
+            get
+            {
+                return Membership.GetUser((Guid)ClosedBy);
+            }
+        }
+
+        [Stratifiable("Requester Type")]
+        public RequestType RequesterType
+        {
+            get
+            {
+                return Type;
             }
         }
     }

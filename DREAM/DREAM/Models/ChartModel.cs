@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace DREAM.Models
@@ -27,6 +28,18 @@ namespace DREAM.Models
         [Required]
         public eChartType ChartType { get; set; }
 
+        [Required]
+        public string Stratification { get; set; }
+
         public IList<ChartValueModel> Values { get; set; }
+
+        public MemberInfo GetStratificationMemberFor(Type type)
+        {
+            if (Stratification != null)
+            {
+                return type.GetProperty(Stratification);
+            }
+            return null;
+        }
     }
 }

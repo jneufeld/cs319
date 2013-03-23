@@ -14,6 +14,7 @@ namespace DREAM.Helpers
         public TimeRange Granularity;
         public DateTime CurrentStartDate;
         public DateTime CurrentEndDate;
+        public int StepCount;
 
         public TimeRangeStepper(ChartModel chart)
         {
@@ -23,6 +24,7 @@ namespace DREAM.Helpers
             Granularity = chart.Granularity;
             CurrentStartDate = StartDate;
             CurrentEndDate = incrementByGranularity(StartDate);
+            StepCount = 1;
         }
 
         public static DateTime IncrementByGranularity(DateTime dateTime, TimeRange granularity)
@@ -70,6 +72,7 @@ namespace DREAM.Helpers
         {
             CurrentStartDate = incrementByGranularity(CurrentStartDate);
             CurrentEndDate = incrementByGranularity(CurrentStartDate);
+            StepCount++;
             return CurrentStartDate;
         }
 
@@ -77,6 +80,7 @@ namespace DREAM.Helpers
         {
             CurrentStartDate = StartDate;
             CurrentEndDate = incrementByGranularity(CurrentStartDate);
+            StepCount = 1;
         }
     }
 }

@@ -18,9 +18,6 @@ namespace DREAM.Models
         [Required]
         public StatFunction Function { get; set; }
 
-        // [Required]
-        // public Stratification Stratification
-
         public MemberInfo GetMemberFor(Type t)
         {
             if (PropertyName!=null)
