@@ -17,7 +17,7 @@ namespace DREAM.Models
         public String UserName { get; set; }
 
         [Display(Name = "Action", Prompt = "Leave blank to search all actions")]
-        public int? Action { get; set; }
+        public String Action { get; set; }
 
         [Display(Name = "Before This Date (dd/mm/yyyy)", Prompt = "Leave blank to unbound bottom of date filter")]
         [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
@@ -39,7 +39,7 @@ namespace DREAM.Models
             this.page = 1;
         }
 
-        public LogFilterModel(int? request, String username, int? actn, DateTime? before, DateTime? after, int page)
+        public LogFilterModel(int? request, String username, String actn, DateTime? before, DateTime? after, int page)
         {
             DREAMContext db = new DREAMContext();
 
@@ -67,7 +67,7 @@ namespace DREAM.Models
 
             if (this.Action != null)
             {
-                this.Logs = this.Logs.Where(log => log.Action == this.Action);
+                this.Logs = this.Logs.Where(log => log.Action == Convert.ToInt32(this.Action));
             }
 
             if (this.Before != null)
@@ -80,7 +80,7 @@ namespace DREAM.Models
 
             }
 
-            this.PagedLogs = this.Logs.OrderByDescending(m => m.ID).ToPagedList(page, 2);
+            this.PagedLogs = this.Logs.OrderByDescending(m => m.ID).ToPagedList(page, 10);
         }
     }
 }
