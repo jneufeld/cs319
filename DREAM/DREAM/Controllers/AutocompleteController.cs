@@ -20,7 +20,7 @@ namespace DREAM.Controllers
         public JsonResult Keyword(string prefix)
         {
             IEnumerable<string> response = db.Keywords
-                .Where(k => k.KeywordText.StartsWith(prefix))
+                .Where(k => k.KeywordText.StartsWith(prefix) && k.Enabled == true)
                 .Select(k => k.KeywordText);
             return Json(response, JsonRequestBehavior.AllowGet);
         }

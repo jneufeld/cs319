@@ -16,6 +16,8 @@ namespace DREAM.Models
         [Chartable("Total Requests", StatFunctions = new StatFunction[] {StatFunction.COUNT}, Reportable=false)]
         public int ID { get; set; }
 
+        public bool Enabled { get; set; }
+
         [Reportable("Received Date")]
         public DateTime CreationTime { get; set; }
 

@@ -25,6 +25,8 @@
     <fieldset>
         <legend>Request</legend>
 
+        <a href="javascript:void(0);" class="viewModel.closeRequest();">Close Request</a>
+
         <table>
             <tr>
                 <td>
@@ -51,6 +53,7 @@
                 </td>
                 <td>
                     @Html.DisplayTextFor(model => model.Status)
+                    @Html.HiddenFor(model => model.Close)
                 </td>
             </tr>
 
@@ -280,6 +283,7 @@
                 var count = $("input[name=QuestionCount]:hidden");
                 var idx = count.val();
                 var $obj = $("#questionTemplate").tmpl({ Questions_index: viewModel._generateGuid(), Keywords_index: viewModel._generateGuid(), References_index: viewModel._generateGuid(), QIndex: idx });
+                viewModel.addImpactUpdateHandler($obj);
                 $("#questionList").append($obj);
                 var next = +idx + 1;
                 count.val(next);
@@ -342,6 +346,42 @@
                     deleted.val('True');
                     par.hide(0.5);
                 });
+            },
+
+            computeImpact: function (severity, probability) {
+                var probableLookup = { "Major": 1, "Moderate": 2, "Minor": 3 };
+                var possibleLookup = { "Major": 4, "Moderate": 4, "Minor": 5 };
+                var unlikelyLookup = { "Major": 5, "Moderate": 5, "Minor": 5 };
+                var problookup = {};
+                problookup["Probable"] = probableLookup;
+                problookup["Possible"] = probableLookup;
+                problookup["Unlikely"] = probableLookup;
+                var l = problookup[probability];
+                if (l) {
+                    return l[severity];
+                }
+                else
+                    return 0;
+            },
+
+            addImpactUpdateHandler: function (questionItem) {
+                var handler = function (obj) {
+                    var $prob = questionItem.find("input[name$=Probability]");
+                    var $severity = questionItem.find("input[name$=Severity]");
+                    var prob = $prob.val();
+                    var severity = $severity.val();
+                    var $impact = questionItem.find("input[name$=Impact]");
+                    var impact = viewModel.computeImpact(severity, prob);
+                    $impact.val(impact);
+                }
+                var $prob = questionItem.find("input[name$=Probability]");
+                var $severity = questionItem.find("input[name$=Severity]");
+                $prob.change(handler);
+            },
+
+            closeRequest: function () {
+                $("input[name=Close]:hidden").val('True');
+                $("input[name=Status]:hidden").val('Closed');
             }
 
         };
@@ -407,6 +447,12 @@
             $referenceDeleters = $(".deleteReference");
             $.each($referenceDeleters, function (i, val) {
                 viewModel.addDeleteHandler(val);
+            });
+
+            $questionItems = $(".questionItem");
+            $.each($questionItems, function (i, val) {
+                viewModel.addImpactUpdateHandler(val);
+                val.find("input[name$=Probability]").change();
             });
         });
     </script>

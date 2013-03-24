@@ -1,7 +1,7 @@
 ﻿@model DREAM.Models.QuestionViewModel
 @using DREAM.Helpers
 
-<li>
+<li class="questionItem">
     @using (Html.BeginCollectionItem("Questions"))
     {
         <h4>Question @Html.ValueFor(m => m.Index)</h4>
@@ -56,15 +56,19 @@
                     @Html.LabelFor(m => m.Severity)
                 </td>
                 <td>
-                    @Html.EditorFor(m => m.Severity)
+                    @Html.DropDownListFor(m => m.Severity, (IEnumerable<SelectListItem>)ViewData["SeverityList"])
                     @Html.ValidationMessageFor(m => m.Severity)
                 </td>
                 <td>
                     @Html.LabelFor(m => m.Probability)
                 </td>
                 <td>
-                    @Html.EditorFor(m => m.Probability)
+                    @Html.DropDownListFor(m => m.Probability, (IEnumerable<SelectListItem>)ViewData["ProbabilityList"])
                     @Html.ValidationMessageFor(m => m.Probability)
+                </td>
+                <td>
+                    @Html.LabelFor(m => m.Impact)
+                    @Html.DisplayFor(m => m.Impact)
                 </td>
             </tr>
             <tr>

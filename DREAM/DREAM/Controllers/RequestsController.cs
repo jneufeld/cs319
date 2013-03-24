@@ -58,6 +58,7 @@ namespace DREAM.Controllers
                 Request request = db.Requests.Create();
                 request.Caller = db.Callers.Create();
                 request.Patient = db.Patients.Create();
+                request.Enabled = true;
 
                 rv.MapToRequest(request);
 
@@ -226,6 +227,8 @@ namespace DREAM.Controllers
             ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
             ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
+            ViewBag.ProbablityList = BuildProbabilityDropdownList();
+            ViewBag.SeverityList = BuildSeverityDropdownList();
 
             return View(rv);
         }
@@ -257,6 +260,12 @@ namespace DREAM.Controllers
             {
                 rv.MapToRequest(request);
                 rv.MapToRequestPatient(request);
+
+                if (rv.Close == true)
+                {
+                    request.CompletionTime = DateTime.UtcNow;
+                    request.ClosedBy = (Guid)Membership.GetUser().ProviderUserKey;
+                }
 
                 if (rv.Questions == null)
                     rv.Questions = new List<QuestionViewModel>();
@@ -582,7 +591,7 @@ namespace DREAM.Controllers
                               .Include(p => p.Questions.Select(c => c.References))
                               .Include(p => p.Questions.Select(c => c.QuestionType))
                               .Include(p => p.Questions.Select(c => c.TumourGroup))
-                              .Single(r => r.ID == id);
+                              .Single(r => r.ID == id && r.Enabled == true);
         }
 
         #region DropDown Lists
@@ -607,6 +616,28 @@ namespace DREAM.Controllers
             refTypes.Add(new SelectListItem { Text = "File", Value = ReferenceType.FILE.ToString() });
 
             return refTypes;
+        }
+
+        private IEnumerable<SelectListItem> BuildProbabilityDropdownList()
+        {
+            List<SelectListItem> selectItems = new List<SelectListItem>();
+
+            selectItems.Add(new SelectListItem { Text = "Possible", Value = Probability.Possible.ToString() });
+            selectItems.Add(new SelectListItem { Text = "Probable", Value = Probability.Probable.ToString() });
+            selectItems.Add(new SelectListItem { Text = "Unlikely", Value = Probability.Unlikely.ToString() });
+
+            return selectItems;
+        }
+
+        private IEnumerable<SelectListItem> BuildSeverityDropdownList()
+        {
+            List<SelectListItem> selectItems = new List<SelectListItem>();
+
+            selectItems.Add(new SelectListItem { Text = "Major", Value = Severity.Major.ToString() });
+            selectItems.Add(new SelectListItem { Text = "Moderate", Value = Severity.Moderate.ToString() });
+            selectItems.Add(new SelectListItem { Text = "Minor", Value = Severity.Minor.ToString() });
+
+            return selectItems;
         }
 
         private IEnumerable<SelectListItem> BuildRequesterTypeDropdownList()

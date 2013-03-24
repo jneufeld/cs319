@@ -25,6 +25,8 @@ namespace DREAM.Models
 
         [Display(Name = "Closed By")]
         public string ClosedBy { get; set; }
+
+        public bool Close { get; set; }
         
         [Display(Name = "Status")]
         public string Status
