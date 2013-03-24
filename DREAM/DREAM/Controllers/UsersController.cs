@@ -36,6 +36,28 @@ namespace DREAM.Controllers
         {
             if (ModelState.IsValid && Membership.ValidateUser(model.UserName, model.Password))
             {
+                using (DREAMContext db = new DREAMContext())
+                {
+                    MembershipUser user = Membership.GetUser(model.UserName);
+
+                    DateTime dt = DateTime.MinValue;
+                    foreach (PreviousPassword prevPass in db.PreviousPasswords)
+                    {
+                        if (prevPass.User.UserName == model.UserName)
+                        {
+                            if (prevPass.Timestamp > dt)
+                                dt = prevPass.Timestamp;
+                        }
+                    }
+                    if (user.LastPasswordChangedDate < DateTime.Now.AddDays(-42))
+                    {
+                        RouteValueDictionary routes = new RouteValueDictionary();
+                        routes.Add("userName", model.UserName);
+                        routes.Add("success", true);
+                        return RedirectToAction("ChangePassword", "Users", routes);
+                    }
+
+                }
                 FormsAuthentication.RedirectFromLoginPage(model.UserName, model.RememberMe);
                 return RedirectToLocal(returnUrl);
             }
@@ -58,7 +80,9 @@ namespace DREAM.Controllers
         }
 
         [HttpGet]
-        public ActionResult ChangePassword(String userName, bool success=false){
+        [AllowAnonymous]
+        public ActionResult ChangePassword(String userName, bool success = false)
+        {
             ChangePasswordModel pm = new ChangePasswordModel();
             pm.UserName = userName;
             ViewBag.success = success;
@@ -66,9 +90,12 @@ namespace DREAM.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ChangePassword(ChangePasswordModel model){
-            if(ModelState.IsValid) {
+        public ActionResult ChangePassword(ChangePasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
                 MembershipUser user = Membership.GetUser(model.UserName);
                 if (user != null)
                 {
@@ -83,7 +110,14 @@ namespace DREAM.Controllers
                     {
                         routes.Add("statusMessage", "Your Password was not changed");
                     }
-                    return RedirectToAction("Manage", "Users", routes);
+                    if (Request.IsAuthenticated)
+                        return RedirectToAction("Manage", "Users", routes);
+                    else
+                    {
+                        RouteValueDictionary routs = new RouteValueDictionary();
+                        routes.Add("returnUrl", null);
+                        return RedirectToAction("Login", "Users", routs);
+                    }
                 }
                 else return RedirectToAction("Index", "Home");
             }
