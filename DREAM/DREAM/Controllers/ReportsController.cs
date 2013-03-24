@@ -2,11 +2,10 @@
 using DREAM.Helpers;
 using DREAM.Models;
 using DREAM.Reports;
-using OfficeOpenXml;
-using OfficeOpenXml.Drawing.Chart;
-using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Globalization;
@@ -18,6 +17,9 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.Security;
+using OfficeOpenXml;
+using OfficeOpenXml.Drawing.Chart;
+using OfficeOpenXml.Style;
 
 namespace DREAM.Controllers
 {
@@ -39,21 +41,29 @@ namespace DREAM.Controllers
             if (ModelState.IsValid)
             {
                 TestData.Initialize();
-                List<Request> testRequests = TestData.Requests;
-                List<Question> testQuestions = TestData.Questions;
 
                 using (ExcelPackage package = new ExcelPackage())
                 {
-                    dumpRawData(package, testRequests);
-                    dumpRawData(package, testQuestions);
+                    dumpRawData(package, db.Requests.Include(r => r.Caller)
+                                                    .Include(r => r.Patient)
+                                                    .Include(r => r.Caller.Type)
+                                                    .Include(r => r.Caller.Region)
+                                                    .Include(r => r.Questions.Select(q => q.QuestionType))
+                                                    .Include(r => r.Questions.Select(q => q.TumourGroup))
+                                                    .OrderBy(r => r.CreationTime));
+                    //OrderBy(request => request.CreationTime).AsEnumerable());
+                    dumpRawData(package, db.Questions.Include(q => q.Request)
+                                                     .Include(q => q.QuestionType)
+                                                     .Include(q => q.TumourGroup)
+                                                     .OrderBy(question => question.Request.CreationTime));
 
                     if (report.Charts.Any(chart => chart.ObjectType == typeof(Request)))
                     {
-                        dumpChartData(package, report, testRequests);
+                        dumpChartData(package, report, db.Requests);
                     }
                     if (report.Charts.Any(chart => chart.ObjectType == typeof(Question)))
                     {
-                        dumpChartData(package, report, testQuestions);
+                        dumpChartData(package, report, db.Questions);
                     }
 
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", report.Name + ".xlsx");
@@ -65,7 +75,7 @@ namespace DREAM.Controllers
             return View();
         }
 
-        private void dumpRawData<ObjectType>(ExcelPackage package, List<ObjectType> objects)
+        private void dumpRawData<ObjectType>(ExcelPackage package, IEnumerable<ObjectType> objects)
         {
             Type objectType = typeof(ObjectType);
             ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Raw " + objectType.Name + " Data");
@@ -111,7 +121,7 @@ namespace DREAM.Controllers
             }
         }
 
-        private void dumpChartData<ObjectType>(ExcelPackage package, ReportModel report, List<ObjectType> objects) where ObjectType : IReportable
+        private void dumpChartData<ObjectType>(ExcelPackage package, ReportModel report, IEnumerable<ObjectType> objects) where ObjectType : IReportable
         {
             ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Chart Data (" + typeof(ObjectType).Name + ")");
             int row = 1;
@@ -131,7 +141,7 @@ namespace DREAM.Controllers
             }
         }
 
-        private ExcelRange addData<ObjectType>(ExcelWorksheet worksheet, int startingRow, ChartModel chart, List<ObjectType> objects) where ObjectType : IReportable
+        private ExcelRange addData<ObjectType>(ExcelWorksheet worksheet, int startingRow, ChartModel chart, IEnumerable<ObjectType> objects) where ObjectType : IReportable
         {
             int titleRow = startingRow;
             int headerRow = startingRow + 1;
@@ -175,7 +185,7 @@ namespace DREAM.Controllers
             return worksheet.Cells[startingRow, 1, cells.End.Row, cells.End.Column];
         }
 
-        private ExcelRange addDataForTimeRange<ObjectType>(ExcelWorksheet worksheet, int firstDataRow, ChartModel chart, List<ObjectType> objects) where ObjectType : IReportable
+        private ExcelRange addDataForTimeRange<ObjectType>(ExcelWorksheet worksheet, int firstDataRow, ChartModel chart, IEnumerable<ObjectType> objects) where ObjectType : IReportable
         {
             List<object[]> data = new List<object[]>();
             List<string> valueNames = new List<string>();
