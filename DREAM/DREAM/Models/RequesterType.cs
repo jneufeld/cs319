@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace DREAM.Models
 {
-    public class RequestType : DropDown
+    public class RequesterType : DropDown
     {
     }
 }

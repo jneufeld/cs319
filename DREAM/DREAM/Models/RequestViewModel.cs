@@ -25,15 +25,15 @@ namespace DREAM.Models
         [Display(Name = "Closed By")]
         public string ClosedBy { get; set; }
 
-        [Display(Name = "Request Type")]
-        public string RequestTypeStringID { get; set; }
-        public int RequestTypeID
+        [Display(Name = "Requester Type")]
+        public string RequesterTypeStringID { get; set; }
+        public int RequesterTypeID
         {
             get
             { 
-                int tmp = 0; Int32.TryParse(RequestTypeStringID, out tmp); return tmp;
+                int tmp = 0; Int32.TryParse(RequesterTypeStringID, out tmp); return tmp;
             }
-            set { RequestTypeStringID = value.ToString(); }
+            set { RequesterTypeStringID = value.ToString(); }
         }
 
         public int CallerID { get; set; }
@@ -82,7 +82,7 @@ namespace DREAM.Models
         public IList<QuestionViewModel> Questions { get; set; }
 
         // Not used at the moment
-        public IEnumerable<SelectListItem> RequestTypeDropDownList { get; set; }
+        public IEnumerable<SelectListItem> RequesterTypeDropDownList { get; set; }
         public IEnumerable<SelectListItem> RegionDropDownList { get; set; }
         public IEnumerable<SelectListItem> GenderDropDownList { get; set; }
 
@@ -94,7 +94,7 @@ namespace DREAM.Models
                 RequestID = r.ID,
                 CreationTime = r.CreationTime.ToLocalTime().ToString(),
                 CompletionTime = r.CompletionTime != null ? r.CompletionTime.Value.ToLocalTime().ToString() : "",
-                RequestTypeID = r.Type != null ? r.Type.ID : 0,
+                RequesterTypeID = r.Caller.Type != null ? r.Caller.Type.ID : 0,
                 CallerID = r.Caller.ID,
                 CallerFirstName = r.Caller.FirstName,
                 CallerLastName = r.Caller.LastName,

@@ -39,7 +39,7 @@ namespace DREAM.Controllers
             request.Caller = new Caller();
             request.Patient = new Patient();
             RequestViewModel rv = RequestViewModel.CreateFromRequest(request);
-            ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
+            ViewBag.RequesterTypeList = BuildRequesterTypeDropdownList();
             ViewBag.RegionList = BuildRegionDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
             return View(rv);
@@ -73,7 +73,7 @@ namespace DREAM.Controllers
                     rv.MapToRequestPatient(request);
                 }
 
-                request.Type = db.RequestTypes.SingleOrDefault(rt => rt.ID == rv.RequestTypeID);
+                request.Caller.Type = db.RequesterTypes.SingleOrDefault(rt => rt.ID == rv.RequesterTypeID);
                 request.Caller.Region = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID);
 
                 request.CreationTime = DateTime.UtcNow;
@@ -96,7 +96,7 @@ namespace DREAM.Controllers
                 ModelState.AddModelError(ModelState.ToString(), "The add request failed!");
             }
 
-            ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
+            ViewBag.RequesterTypeList = BuildRequesterTypeDropdownList();
             ViewBag.RegionList = BuildRegionDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
 
@@ -207,7 +207,7 @@ namespace DREAM.Controllers
             rv.CreatedBy = FindUsernameFromID(request.CreatedBy);
             rv.ClosedBy = FindUsernameFromID(request.ClosedBy);
 
-            ViewBag.RequestTypeList = BuildRequestTypeDropdownList();
+            ViewBag.RequesterTypeList = BuildRequesterTypeDropdownList();
             ViewBag.RegionList = BuildRegionDropdownList();
             ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
             ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
@@ -269,7 +269,7 @@ namespace DREAM.Controllers
                     }
                 }
 
-                request.Type = db.RequestTypes.SingleOrDefault(rt => rt.ID == rv.RequestTypeID);
+                request.Caller.Type = db.RequesterTypes.SingleOrDefault(rt => rt.ID == rv.RequesterTypeID);
                 request.Caller.Region = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID);
                 db.Logs.Add(Log.Edit(request, Membership.GetUser()));
 
@@ -359,8 +359,8 @@ namespace DREAM.Controllers
                 docText = regexText1.Replace(docText, req.ID.ToString());
                 
                 Regex regexText2 = new Regex("REQUEST TYPE GOES HERE");
-                if (req.Type != null)
-                    docText = regexText2.Replace(docText, req.Type.FullName);
+                if (req.Caller.Type != null)
+                    docText = regexText2.Replace(docText, req.Caller.Type.FullName);
                 else docText = regexText2.Replace(docText, "none");
 
                 Regex regexText3 = new Regex("CALLERFIRSTNAME GOES HERE");
@@ -529,7 +529,7 @@ namespace DREAM.Controllers
         {
             return db.Requests.Include(r => r.Caller)
                               .Include(r => r.Patient)
-                              .Include(r => r.Type)
+                              .Include(r => r.Caller.Type)
                               .Include(r => r.Caller.Region)
                               .Include(p => p.Questions.Select(c => c.Keywords))
                               .Include(p => p.Questions.Select(c => c.Reference))
@@ -550,9 +550,9 @@ namespace DREAM.Controllers
             return genders;
         }
 
-        private IEnumerable<SelectListItem> BuildRequestTypeDropdownList()
+        private IEnumerable<SelectListItem> BuildRequesterTypeDropdownList()
         {
-            return BuildTypedDropdownList<RequestType>(db.RequestTypes);
+            return BuildTypedDropdownList<RequesterType>(db.RequesterTypes);
         }
 
         private IEnumerable<SelectListItem> BuildRegionDropdownList()

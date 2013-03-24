@@ -22,8 +22,6 @@ namespace DREAM.Models
         [Reportable("Closed Date")]
         public DateTime? CompletionTime { get; set; }
 
-        public RequestType Type { get; set; }
-
         public Caller Caller { get; set; }
         public Patient Patient { get; set; }
 
@@ -100,11 +98,20 @@ namespace DREAM.Models
         }
 
         [Stratifiable("Requester Type")]
-        public RequestType RequesterType
+        public RequesterType RequesterType
         {
             get
             {
-                return Type;
+                return Caller.Type;
+            }
+        }
+
+        [Chartable("Number of Questions")]
+        public int NumberOfQuestions
+        {
+            get
+            {
+                return Questions.Count();
             }
         }
     }

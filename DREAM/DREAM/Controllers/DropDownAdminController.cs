@@ -40,8 +40,8 @@ namespace DREAM.Controllers
             DropDown m = null;
             switch (dropDownClass)
             {
-                case "RequestType":
-                    m = new RequestType();
+                case "RequesterType":
+                    m = new RequesterType();
                     break;
                 case "QuestionType":
                     m = new QuestionType();
@@ -69,8 +69,8 @@ namespace DREAM.Controllers
             DropDown m = null;
             switch (dropDownClass)
             {
-                case "RequestType":
-                    m = new RequestType();
+                case "RequesterType":
+                    m = new RequesterType();
                     break;
                 case "QuestionType":
                     m = new QuestionType();
@@ -115,8 +115,8 @@ namespace DREAM.Controllers
             DropDown m = null;
             switch (dropDownClass)
             {
-                case "RequestType":
-                    m = new RequestType();
+                case "RequesterType":
+                    m = new RequesterType();
                     break;
                 case "QuestionType":
                     m = new QuestionType();
@@ -178,8 +178,8 @@ namespace DREAM.Controllers
             DropDown m = null;
             switch (dropDownClass)
             {
-                case "RequestType":
-                    m = new RequestType();
+                case "RequesterType":
+                    m = new RequesterType();
                     break;
                 case "QuestionType":
                     m = new QuestionType();
@@ -227,8 +227,8 @@ namespace DREAM.Controllers
         {
             switch (dropDownClass)
             {
-                case "RequestType":
-                    return db.RequestTypes;
+                case "RequesterType":
+                    return db.RequesterTypes;
                 case "QuestionType":
                     return db.QuestionTypes;
                 case "TumourGroup":

@@ -20,30 +20,30 @@ namespace DREAM.Migrations
             //  This method will be called after migrating to the latest version.
 
             int id = 1;
-            List<RequestType> requestTypes = new List<RequestType>
+            List<RequesterType> requesterTypes = new List<RequesterType>
             {
-                new RequestType { ID = id++, FullName = "Unknown", Code = "OTHER" },
-                new RequestType { ID = id++, FullName = "Administrator", Code = "ADMIN" },
-                new RequestType { ID = id++, FullName = "Dietician", Code = "RDN" },
-                new RequestType { ID = id++, FullName = "Drug Company", Code = "DRUG CO" },
-                new RequestType { ID = id++, FullName = "Family Member", Code = "FAMILY" },
-                new RequestType { ID = id++, FullName = "Family Physician", Code = "GP" },
-                new RequestType { ID = id++, FullName = "General Public", Code = "PUB" },
-                new RequestType { ID = id++, FullName = "Librarian", Code = "LIB" },
-                new RequestType { ID = id++, FullName = "Naturopath", Code = "ND" },
-                new RequestType { ID = id++, FullName = "News Media", Code = "MEDIA" },
-                new RequestType { ID = id++, FullName = "Nurse", Code = "RN" },
-                new RequestType { ID = id++, FullName = "Oncologist", Code = "ONC" },
-                new RequestType { ID = id++, FullName = "Other Health Care Professional", Code = "HCP" },
-                new RequestType { ID = id++, FullName = "Patient", Code = "PATIENT" },
-                new RequestType { ID = id++, FullName = "Pharmacist", Code = "RX" },
-                new RequestType { ID = id++, FullName = "Public Relations", Code = "PR" },
-                new RequestType { ID = id++, FullName = "Radiation therapist", Code = "RT" },
-                new RequestType { ID = id++, FullName = "Researcher", Code = "RESEARCH" },
-                new RequestType { ID = id++, FullName = "Social worker", Code = "SW" },
-                new RequestType { ID = id++, FullName = "Student", Code = "STUDENT" },
+                new RequesterType { ID = id++, FullName = "Unknown", Code = "OTHER" },
+                new RequesterType { ID = id++, FullName = "Administrator", Code = "ADMIN" },
+                new RequesterType { ID = id++, FullName = "Dietician", Code = "RDN" },
+                new RequesterType { ID = id++, FullName = "Drug Company", Code = "DRUG CO" },
+                new RequesterType { ID = id++, FullName = "Family Member", Code = "FAMILY" },
+                new RequesterType { ID = id++, FullName = "Family Physician", Code = "GP" },
+                new RequesterType { ID = id++, FullName = "General Public", Code = "PUB" },
+                new RequesterType { ID = id++, FullName = "Librarian", Code = "LIB" },
+                new RequesterType { ID = id++, FullName = "Naturopath", Code = "ND" },
+                new RequesterType { ID = id++, FullName = "News Media", Code = "MEDIA" },
+                new RequesterType { ID = id++, FullName = "Nurse", Code = "RN" },
+                new RequesterType { ID = id++, FullName = "Oncologist", Code = "ONC" },
+                new RequesterType { ID = id++, FullName = "Other Health Care Professional", Code = "HCP" },
+                new RequesterType { ID = id++, FullName = "Patient", Code = "PATIENT" },
+                new RequesterType { ID = id++, FullName = "Pharmacist", Code = "RX" },
+                new RequesterType { ID = id++, FullName = "Public Relations", Code = "PR" },
+                new RequesterType { ID = id++, FullName = "Radiation therapist", Code = "RT" },
+                new RequesterType { ID = id++, FullName = "Researcher", Code = "RESEARCH" },
+                new RequesterType { ID = id++, FullName = "Social worker", Code = "SW" },
+                new RequesterType { ID = id++, FullName = "Student", Code = "STUDENT" },
             };
-            requestTypes.ForEach(r => context.RequestTypes.AddOrUpdate(r));
+            requesterTypes.ForEach(r => context.RequesterTypes.AddOrUpdate(r));
 
             id = 1;
             List<Region> regions = new List<Region>

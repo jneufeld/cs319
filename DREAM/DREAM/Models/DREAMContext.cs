@@ -17,7 +17,7 @@ namespace DREAM.Models
         public DbSet<Question> Questions { get; set; }
         public DbSet<Caller> Callers { get; set; }
         public DbSet<Patient> Patients { get; set; }
-        public DbSet<RequestType> RequestTypes { get; set; }
+        public DbSet<RequesterType> RequesterTypes { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<TumourGroup> TumourGroups { get; set; }
         public DbSet<QuestionType> QuestionTypes { get; set; }

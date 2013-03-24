@@ -23,6 +23,8 @@ namespace DREAM.Models
 
         public Region Region { get; set; }
 
+        public RequesterType Type { get; set; }
+
         public int RequestID { get; set; }
     }
 }

@@ -229,7 +229,7 @@
     <Compile Include="Models\RegisterUserModel.cs" />
     <Compile Include="Models\ReportModel.cs" />
     <Compile Include="Models\Request.cs" />
-    <Compile Include="Models\RequestType.cs" />
+    <Compile Include="Models\RequesterType.cs" />
     <Compile Include="Models\PasswordResetRequestModel.cs" />
     <Compile Include="Models\RequestViewModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />

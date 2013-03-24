@@ -39,10 +39,10 @@
 
             <tr>
                 <td>
-                    @Html.LabelFor(model => model.RequestTypeStringID)
+                    @Html.LabelFor(model => model.RequesterTypeStringID)
                 </td>
                 <td>
-                    @Html.DropDownListFor(m => m.RequestTypeStringID, (IEnumerable<SelectListItem>)ViewData["RequestTypeList"])
+                    @Html.DropDownListFor(m => m.RequesterTypeStringID, (IEnumerable<SelectListItem>)ViewData["RequesterTypeList"])
                 </td>
             </tr>
 

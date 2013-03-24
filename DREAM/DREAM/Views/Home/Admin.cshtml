@@ -12,7 +12,7 @@
             <script type="text/javascript">
                 function adminListBoxClicked(listBox) {
                     document.getElementById("UsersPanel").setAttribute("style", "display: none;");
-                    document.getElementById("RequestTypesPanel").setAttribute("style", "display: none;");
+                    document.getElementById("RequesterTypesPanel").setAttribute("style", "display: none;");
                     document.getElementById("RegionsPanel").setAttribute("style", "display: none;");
                     document.getElementById("TumourGroupsPanel").setAttribute("style", "display: none;");
                     document.getElementById("QuestionTypesPanel").setAttribute("style", "display: none;");
@@ -23,7 +23,7 @@
                     if (selectedItemValue == 'Users') {
                         document.getElementById("UsersPanel").setAttribute("style", "display: inline;");
                     } else if (selectedItemValue == 'Request Types') {
-                        document.getElementById("RequestTypesPanel").setAttribute("style", "display: inline;");
+                        document.getElementById("RequesterTypesPanel").setAttribute("style", "display: inline;");
                     } else if (selectedItemValue == 'Regions') {
                         document.getElementById("RegionsPanel").setAttribute("style", "display: inline;");
                     } else if (selectedItemValue == 'Tumour Groups') {
@@ -56,9 +56,9 @@
                  @Html.ActionLink("UserAdmin", "Index", "UsersAdmin", "","")
             </div>
 
-            <div id="RequestTypesPanel" style="display: none">
+            <div id="RequesterTypesPanel" style="display: none">
                 <h2>Request Types</h2>
-                 @Html.ActionLink("RequestTypesDropDownAdmin", "Index", "DropDownAdmin", new { dropDownClass = "RequestType"}, "")
+                 @Html.ActionLink("RequesterTypesDropDownAdmin", "Index", "DropDownAdmin", new { dropDownClass = "RequesterType"}, "")
             </div>
 
             <div id="RegionsPanel" style="display: none">

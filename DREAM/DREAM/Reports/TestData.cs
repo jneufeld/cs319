@@ -117,6 +117,7 @@ namespace DREAM.Reports
                         Region = pickRandom(db.Regions),
                         RequestID = i,
                         PhoneNumber = "(555) 555-5555",
+                        Type = pickRandom(db.RequesterTypes),
                     },
                     Patient = new Patient
                     {
@@ -127,7 +128,6 @@ namespace DREAM.Reports
                         ID = i,
                         LastName = generateRandomString(20),
                     },
-                    Type = pickRandom(db.RequestTypes),
                 });
             }
 
