@@ -10,31 +10,30 @@ namespace DREAM.Reports
 {
     public class DataExtractor
     {
-        public static List<KeyValuePair<string, List<object>>> GetDataRows(ChartModel chart, List<Request> requests, MemberInfo member,
-            StatFunction function, MemberInfo stratificationMember = null)
+        public static List<KeyValuePair<string, List<object>>> GetDataRows<ObjectType>(ChartModel chart, List<ObjectType> objects,
+            MemberInfo member, StatFunction function, MemberInfo stratificationMember = null) where ObjectType:IReportable
         {
             Dictionary<string, List<object>> dataRows = new Dictionary<string, List<object>>();
-
-            Func<IEnumerable<Request>, object> performStatFunction = getPerformStatFunctionFunc(function, member);
 
             for (TimeRangeStepper stepper = new TimeRangeStepper(chart);
                 stepper.CurrentStartDate < stepper.EndDate; stepper.Step())
             {
-                IEnumerable<Request> currentRequests = requests.Where(
-                    r => r.CreationTime >= stepper.CurrentStartDate && r.CreationTime < stepper.CurrentEndDate);
-                IEnumerable<IGrouping<object, Request>> groupedRequests = getStratifiedData(currentRequests, stratificationMember);
+                IEnumerable<ObjectType> currentObjects = objects.Where(
+                    obj => obj.CreationTime >= stepper.CurrentStartDate && obj.CreationTime < stepper.CurrentEndDate);
+                IEnumerable<IGrouping<object, ObjectType>> groupedRequests = getStratifiedData(currentObjects, stratificationMember);
 
                 IEnumerable<Tuple<string, int>> stratifiedValues;
 
                 if (chart.Stratification == null)
                 {
                     stratifiedValues = new List<Tuple<string, int>>{
-                        new Tuple<string, int>("", (int)performStatFunction(currentRequests))
+                        new Tuple<string, int>("", (int)performStatFunction(function, currentObjects, member))
                     };
                 }
                 else
                 {
-                    stratifiedValues = groupedRequests.Select(group => new Tuple<string, int>(group.Key.ToString(), (int)performStatFunction(group)));
+                    stratifiedValues = groupedRequests.Select(group => new Tuple<string, int>(group.Key.ToString(),
+                        (int)performStatFunction(function, group, member)));
                 }
 
                 foreach(Tuple<string, int> stratifiedValue in stratifiedValues)
@@ -50,7 +49,7 @@ namespace DREAM.Reports
 
                 foreach (List<object> row in dataRows.Values)
                 {
-                    while (row.Count < stepper.StepCount)
+                    while (row.Count <= stepper.StepCount)
                     {
                         row.Add(0);
                     }
@@ -60,14 +59,18 @@ namespace DREAM.Reports
             return dataRows.ToList();
         }
 
-        private static List<object> getUnstratifiedData()
+        public static object[][] GetRawData<ObjectType>(List<ObjectType> objects, List<MemberInfo> members)
         {
-            List<object> data = new List<object>();
-            return data;
+            return objects.Select(obj => getValues(obj, members)).ToArray();
         }
 
-        private static IEnumerable<IGrouping<object, Request>> getStratifiedData(IEnumerable<Request> currentRequests,
-            MemberInfo stratificationMember)
+        private static object[] getValues<ObjectType>(ObjectType obj, List<MemberInfo> members)
+        {
+            return members.Select(member => getValue(obj, member)).ToArray();
+        }
+
+        private static IEnumerable<IGrouping<object, ObjectType>> getStratifiedData<ObjectType>(
+            IEnumerable<ObjectType> currentObjects, MemberInfo stratificationMember)
         {
             if (stratificationMember == null)
             {
@@ -76,11 +79,11 @@ namespace DREAM.Reports
 
             if (stratificationMember is PropertyInfo)
             {
-                return currentRequests.GroupBy(r => ((PropertyInfo)stratificationMember).GetValue(r, null));
+                return currentObjects.GroupBy(obj => ((PropertyInfo)stratificationMember).GetValue(obj, null));
             }
             else if (stratificationMember is FieldInfo)
             {
-                return currentRequests.GroupBy(r => ((FieldInfo)stratificationMember).GetValue(r));
+                return currentObjects.GroupBy(obj => ((FieldInfo)stratificationMember).GetValue(obj));
             }
             else
             {
@@ -88,47 +91,35 @@ namespace DREAM.Reports
             }
         }
 
-        private static Func<Request, object> getValueFunc(MemberInfo member)
+        private static object getValue<ObjectType>(ObjectType obj, MemberInfo member)
         {
             if (member is PropertyInfo)
             {
-                return delegate(Request r) { return ((PropertyInfo)member).GetValue(r, null); };
+                return ((PropertyInfo)member).GetValue(obj, null);
             }
             else if (member is FieldInfo)
             {
-                return delegate(Request r) { return ((FieldInfo)member).GetValue(r); };
+                return ((FieldInfo)member).GetValue(obj);
             }
             else
             {
-                return delegate(Request r) { return r; };
+                return obj;
             }
         }
 
-        private static Func<IEnumerable<Request>, object> getPerformStatFunctionFunc(StatFunction function, MemberInfo member)
+        private static object performStatFunction<ObjectType>(StatFunction function, IEnumerable<ObjectType> objects,
+            MemberInfo member)
         {
-            Func<Request, object> getValue = getValueFunc(member);
             switch (function)
             {
                 case StatFunction.AVG:
-                    return delegate(IEnumerable<Request> requests)
-                    {
-                        return requests.Average(r => (int)getValue(r));
-                    };
-                case StatFunction.COUNT:
-                    return delegate(IEnumerable<Request> requests)
-                    {
-                        return requests.Count();
-                    };
+                    return objects.Average(obj => (int)getValue(obj, member));
                 case StatFunction.SUM:
-                    return delegate(IEnumerable<Request> requests)
-                    {
-                        return requests.Sum(r => (int)getValue(r));
-                    };
+                    return objects.Sum(obj => (int)getValue(obj, member));
+                case StatFunction.COUNT:
+                    return objects.Count();
                 default:
-                    return delegate(IEnumerable<Request> requests)
-                    {
-                        return requests.Count();
-                    };
+                    throw new Exception("Unknown stat function '" + function.ToString() + "'.");
             }
         }
     }

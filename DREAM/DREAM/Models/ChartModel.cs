@@ -11,6 +11,10 @@ namespace DREAM.Models
     public class ChartModel
     {
         [Required]
+        [RegularExpression("(Request|Question)")]
+        public string ObjectTypeName { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
         [Required]
@@ -40,6 +44,22 @@ namespace DREAM.Models
                 return type.GetProperty(Stratification);
             }
             return null;
+        }
+
+        public Type ObjectType
+        {
+            get
+            {
+                switch (ObjectTypeName)
+                {
+                    case "Request":
+                        return typeof(Request);
+                    case "Question":
+                        return typeof(Question);
+                    default:
+                        return null;
+                }
+            }
         }
     }
 }

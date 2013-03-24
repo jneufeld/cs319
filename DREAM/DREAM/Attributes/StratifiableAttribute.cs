@@ -5,15 +5,10 @@ using System.Web;
 
 namespace DREAM.Attributes
 {
-    public class StratifiableAttribute : Attribute
+    public class StratifiableAttribute : ReportableAttribute
     {
-        public string Name = null;
+        public StratifiableAttribute() : base() { }
 
-        public StratifiableAttribute() { }
-
-        public StratifiableAttribute(string name)
-        {
-            Name = name;
-        }
+        public StratifiableAttribute(string name) : base(name) { }
     }
 }

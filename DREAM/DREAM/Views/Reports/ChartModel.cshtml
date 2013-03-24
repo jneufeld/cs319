@@ -9,6 +9,10 @@
             @Html.EditorFor(model => model.Name)
             @Html.ValidationMessageFor(model => model.Name)
 
+            @Html.LabelFor(model => model.ObjectTypeName)
+            @Html.DropDownListFor(model => model.ObjectTypeName, (IEnumerable<SelectListItem>)ViewData["ObjectTypeList"], new Dictionary<string, object> { {"class", "objectTypeSelector" } })
+            @Html.ValidationMessageFor(model => model.ObjectTypeName)
+
             @Html.LabelFor(model => model.StartDate)
             @Html.EditorFor(model => model.StartDate)
             @Html.ValidationMessageFor(model => model.StartDate)
@@ -30,7 +34,7 @@
             @Html.ValidationMessageFor(model => model.Comparison)
 
             @Html.LabelFor(model => model.Stratification)
-            @Html.DropDownListFor(model => model.Stratification, (IEnumerable<SelectListItem>)ViewData["RequestStratificationList"])
+            @Html.DropDownListFor(model => model.Stratification, new List<SelectListItem>(), new Dictionary<string, object> { {"class", "stratificationSelector" } }) @*//(IEnumerable<SelectListItem>)ViewData["RequestStratificationList"])*@
             @Html.ValidationMessageFor(model => model.Stratification)
         </span>
 
@@ -38,15 +42,15 @@
         <a href="javascript:void(0);" class="addNewValue">Add another</a>
 
         <ul class="chartValues" style="list-style-type: none">
-            @if(Model == null || Model.Values == null || Model.Values.Count == 0)
+            @if (Model == null || Model.Values == null || Model.Values.Count == 0)
             {
                 @Html.Partial("ChartValueModel", null);
             }
             else
             {
-                foreach(DREAM.Models.ChartValueModel value in Model.Values)
+                foreach (DREAM.Models.ChartValueModel value in Model.Values)
                 {
-                    @Html.Partial("ChartValueModel", value);
+                @Html.Partial("ChartValueModel", value);
                 }
             }
         </ul>

@@ -9,15 +9,17 @@ using DREAM.Attributes;
 
 namespace DREAM.Models
 {
-    public class Request
+    public class Request : IReportable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Reportable("Total Requests", StatFunctions = new StatFunction[] {StatFunction.COUNT})]
+        [Chartable("Total Requests", StatFunctions = new StatFunction[] {StatFunction.COUNT}, Reportable=false)]
         public int ID { get; set; }
 
+        [Reportable("Received Date")]
         public DateTime CreationTime { get; set; }
 
+        [Reportable("Closed Date")]
         public DateTime? CompletionTime { get; set; }
 
         public RequestType Type { get; set; }
@@ -61,7 +63,7 @@ namespace DREAM.Models
             db.SaveChanges();
         }
 
-        [Reportable("Time Spent")]
+        [Chartable("Time Spent")]
         public int TimeSpent
         {
             get
@@ -79,7 +81,7 @@ namespace DREAM.Models
             }
         }
 
-        [Stratifiable]
+        [Stratifiable("Pharmacist")]
         public MembershipUser Creator
         {
             get
@@ -88,7 +90,7 @@ namespace DREAM.Models
             }
         }
 
-        [Stratifiable]
+        [Stratifiable(Reportable=false)]
         public MembershipUser Closer
         {
             get

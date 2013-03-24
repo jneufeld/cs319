@@ -24,7 +24,7 @@ namespace DREAM.Helpers
             Granularity = chart.Granularity;
             CurrentStartDate = StartDate;
             CurrentEndDate = incrementByGranularity(StartDate);
-            StepCount = 1;
+            StepCount = 0;
         }
 
         public static DateTime IncrementByGranularity(DateTime dateTime, TimeRange granularity)
@@ -80,7 +80,7 @@ namespace DREAM.Helpers
         {
             CurrentStartDate = StartDate;
             CurrentEndDate = incrementByGranularity(CurrentStartDate);
-            StepCount = 1;
+            StepCount = 0;
         }
     }
 }

@@ -16,6 +16,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using System.Web.Security;
 
 namespace DREAM.Controllers
@@ -23,13 +24,6 @@ namespace DREAM.Controllers
     public class ReportsController : Controller
     {
         private DREAMContext db = new DREAMContext();
-
-        private const char REQUEST_RECEIVED_DATE_COLUMN = 'A';
-        private const char REQUEST_REQUESTOR_TYPE_COLUMN = 'B';
-        private const char REQUEST_REGION_COLUMN = 'C';
-        private const char REQUEST_TIME_SPENT_COLUMN = 'D';
-        private const char REQUEST_CLOSED_DATE_COLUMN = 'E';
-        private const char REQUEST_PHARMACIST_COLUMN = 'F';
 
         [HttpGet]
         public ActionResult Generate()
@@ -44,133 +38,23 @@ namespace DREAM.Controllers
         {
             if (ModelState.IsValid)
             {
-                ReportModel testReport = new ReportModel
-                {
-                    Name = "Test Report",
-                    Charts = new List<ChartModel>
-                    {
-                        new ChartModel
-                        {
-                            Name = "Requests and total time",
-                            StartDate = new DateTime(2013, 1, 1),
-                            TimeRange = TimeRange.YEAR,
-                            Granularity = TimeRange.MONTH,
-                            Comparison = TimeRange.NONE,
-                            ChartType = eChartType.Line,
-                            Values = new List<ChartValueModel>
-                            {
-                                new ChartValueModel
-                                {
-                                    Name = "Total requests",
-                                    Function = StatFunction.COUNT,
-                                    PropertyName = null,
-                                },
-                                new ChartValueModel
-                                {
-                                    Name = "Total time (mins)",
-                                    Function = StatFunction.SUM,
-                                    PropertyName = "TimeSpent",
-                                }
-                            }
-                        },
-                        new ChartModel
-                        {
-                            Name = "Request and total time (bar)",
-                            StartDate = new DateTime(2013, 1, 1),
-                            TimeRange = TimeRange.YEAR,
-                            Granularity = TimeRange.MONTH,
-                            Comparison = TimeRange.NONE,
-                            ChartType = eChartType.ColumnClustered,
-                            Values = new List<ChartValueModel>
-                            {
-                                new ChartValueModel
-                                {
-                                    Name = "Total requests",
-                                    Function = StatFunction.COUNT,
-                                    PropertyName = null,
-                                },
-                                new ChartValueModel
-                                {
-                                    Name = "Total time (mins)",
-                                    Function = StatFunction.SUM,
-                                    PropertyName = "TimeSpent",
-                                }
-                            }
-                        },
-                    }
-                };
-
-                Caller testCaller = new Caller
-                {
-                    Email = "test@example.com",
-                    FirstName = "First",
-                    LastName = "Last",
-                    PhoneNumber = "555 555-5555",
-                    Region = db.Regions.Find(1),
-                };
-
-                MembershipUser testUser = Membership.GetUser("user1");
-                List<Request> testRequests = new List<Request>{
-                    new Request{ID=0, CreationTime=DateTime.Now, CompletionTime=DateTime.Now,
-                        Type=db.RequestTypes.Find(1), CreatedBy=(Guid)testUser.ProviderUserKey,
-                        Caller=testCaller,
-                        Questions=new List<Question>{
-                            new Question{TimeTaken=20},
-                            new Question{TimeTaken=50},
-                        }},
-                    new Request{ID=2, CreationTime=new DateTime(2013, 1, 1), CompletionTime=DateTime.Now,
-                        Type=db.RequestTypes.Find(2), CreatedBy=(Guid)testUser.ProviderUserKey,
-                        Caller=testCaller,
-                        Questions=new List<Question>{
-                            new Question{TimeTaken=60},
-                            new Question{TimeTaken=50},
-                        }},
-                    new Request{ID=3, CreationTime=new DateTime(2013, 1, 21), CompletionTime=DateTime.Now,
-                        Type=db.RequestTypes.Find(2), CreatedBy=(Guid)testUser.ProviderUserKey,
-                        Caller=testCaller},
-                    new Request{ID=4, CreationTime=new DateTime(2013, 2, 28), CompletionTime=DateTime.Now,
-                        Type=db.RequestTypes.Find(1), CreatedBy=(Guid)testUser.ProviderUserKey,
-                        Caller=testCaller,
-                        Questions=new List<Question>{
-                            new Question{TimeTaken=20},
-                            new Question{TimeTaken=50},
-                        }},
-                    new Request{ID=5, CreationTime=new DateTime(2013, 3, 4), CompletionTime=DateTime.Now,
-                        Type=db.RequestTypes.Find(2), CreatedBy=(Guid)testUser.ProviderUserKey,
-                        Caller=testCaller,
-                        Questions=new List<Question>{
-                            new Question{TimeTaken=60},
-                            new Question{TimeTaken=50},
-                        }},
-                    new Request{ID=6, CreationTime=new DateTime(2013, 12, 25), CompletionTime=DateTime.Now,
-                        Type=db.RequestTypes.Find(2), CreatedBy=(Guid)testUser.ProviderUserKey,
-                        Caller=testCaller},
-                    new Request{ID=7, CreationTime=new DateTime(2013, 10, 1), CompletionTime=DateTime.Now,
-                        Type=db.RequestTypes.Find(1), CreatedBy=(Guid)testUser.ProviderUserKey,
-                        Caller=testCaller,
-                        Questions=new List<Question>{
-                            new Question{TimeTaken=20},
-                            new Question{TimeTaken=50},
-                        }},
-                    new Request{ID=8, CreationTime=new DateTime(2013, 5, 16), CompletionTime=DateTime.Now,
-                        Type=db.RequestTypes.Find(2), CreatedBy=(Guid)testUser.ProviderUserKey,
-                        Caller=testCaller,
-                        Questions=new List<Question>{
-                            new Question{TimeTaken=60},
-                            new Question{TimeTaken=50},
-                        }},
-                    new Request{ID=9, CreationTime=new DateTime(2013, 3, 9), CompletionTime=DateTime.Now,
-                        Type=db.RequestTypes.Find(2), CreatedBy=(Guid)testUser.ProviderUserKey,
-                        Caller=testCaller},
-                };
+                TestData.Initialize();
+                List<Request> testRequests = TestData.Requests;
+                List<Question> testQuestions = TestData.Questions;
 
                 using (ExcelPackage package = new ExcelPackage())
                 {
-                    ExcelWorksheet requests = package.Workbook.Worksheets.Add("Raw Request Data");
-                    ExcelWorksheet questions = package.Workbook.Worksheets.Add("Raw Question Data");
+                    dumpRawData(package, testRequests);
+                    dumpRawData(package, testQuestions);
 
-                    dumpRawRequestData(requests, testRequests);
-                    dumpStratifiedRequestData(package, report, testRequests);
+                    if (report.Charts.Any(chart => chart.ObjectType == typeof(Request)))
+                    {
+                        dumpChartData(package, report, testRequests);
+                    }
+                    if (report.Charts.Any(chart => chart.ObjectType == typeof(Question)))
+                    {
+                        dumpChartData(package, report, testQuestions);
+                    }
 
                     return File(package.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", report.Name + ".xlsx");
                 }
@@ -181,60 +65,73 @@ namespace DREAM.Controllers
             return View();
         }
 
-        private void dumpRawRequestData(ExcelWorksheet requests, List<Request> testRequests)
+        private void dumpRawData<ObjectType>(ExcelPackage package, List<ObjectType> objects)
         {
-            List<RequestRow> requestData = new List<RequestRow>();
-            foreach (Request request in testRequests)
+            Type objectType = typeof(ObjectType);
+            ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Raw " + objectType.Name + " Data");
+
+            List<string> headers = new List<string>();
+            List<MemberInfo> members = new List<MemberInfo>();
+
+            foreach (MemberInfo member in objectType.GetProperties())
             {
-                int timeSpent = 0;
-                foreach (Question question in request.Questions)
+                ReportableAttribute attribute = (ReportableAttribute)Attribute.GetCustomAttribute(member, typeof(ReportableAttribute));
+                if (attribute != null && attribute.Reportable)
                 {
-                    timeSpent += question.TimeTaken;
+                    headers.Add(attribute.Name ?? member.Name);
+                    members.Add(member);
                 }
-
-                requestData.Add(new RequestRow
-                {
-                    Closed_Date = request.CompletionTime,
-                    Received_Date = request.CreationTime,
-                    Region = request.Caller.Region.FullName,
-                    Time_Spent = timeSpent,
-                    Requester_Type = request.Type.FullName,
-                    Pharmacist = Membership.GetUser(request.CreatedBy).UserName,
-                });
-            };
-
-
-            ExcelRangeBase requestCells = requests.Cells["A1"].LoadFromCollection(requestData, true);
-
-            using (ExcelRange requestsHeader = requests.Cells[requestCells.Start.Row, requestCells.Start.Column, 
-                requestCells.Start.Row, requestCells.End.Column])
-            {
-                requestsHeader.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                requestsHeader.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
             }
 
-            requests.Cells[
-                REQUEST_RECEIVED_DATE_COLUMN + ":" + REQUEST_RECEIVED_DATE_COLUMN + "," +
-                REQUEST_CLOSED_DATE_COLUMN + ":" + REQUEST_CLOSED_DATE_COLUMN
-                ].Style.Numberformat.Format = "DD-MMM-YY";
+            ExcelRangeBase headerCells = worksheet.Cells["A1"].LoadFromArrays(new object[][] { headers.ToArray() });
+            object[][] data = DataExtractor.GetRawData(objects, members);
+            worksheet.Cells["A2"].LoadFromArrays(data.ToArray());
+
+            headerCells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            headerCells.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+
+            for (int i = 1; i <= members.Count; i++)
+            {
+                MemberInfo member = members[i - 1];
+                Type memberType = null;
+
+                if(member is PropertyInfo)
+                {
+                    memberType = ((PropertyInfo)member).PropertyType;
+                }
+                else if(member is FieldInfo)
+                {
+                    memberType = ((FieldInfo)member).FieldType;
+                }
+
+                if(memberType == typeof(DateTime) || memberType == typeof(DateTime?))
+                {
+                    worksheet.Column(i).Style.Numberformat.Format = "DD-MMM-YY";
+                }
+            }
         }
 
-        private void dumpStratifiedRequestData(ExcelPackage package, ReportModel report, List<Request> requests)
+        private void dumpChartData<ObjectType>(ExcelPackage package, ReportModel report, List<ObjectType> objects) where ObjectType : IReportable
         {
-            ExcelWorksheet stratifiedRequests = package.Workbook.Worksheets.Add("Stratified Request Data");
+            ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Chart Data (" + typeof(ObjectType).Name + ")");
             int row = 1;
 
             foreach (ChartModel chart in report.Charts)
             {
-                ExcelRange cells = addData(stratifiedRequests, row, chart, requests);
+                if (chart.ObjectType != typeof(ObjectType))
+                {
+                    continue;
+                }
+
+                ExcelRange cells = addData(worksheet, row, chart, objects);
                 ExcelWorksheet chartWorksheet = package.Workbook.Worksheets.Add(chart.Name);
-                addChart(chartWorksheet, stratifiedRequests, row, cells.End.Row, cells.End.Column, chart.Name, chart.ChartType);
+                addChart(chartWorksheet, worksheet, row, cells.End.Row, cells.End.Column, chart.Name, chart.ChartType);
 
                 row += cells.End.Row + 1;
             }
         }
 
-        private ExcelRange addData(ExcelWorksheet worksheet, int startingRow, ChartModel chart, List<Request> requests)
+        private ExcelRange addData<ObjectType>(ExcelWorksheet worksheet, int startingRow, ChartModel chart, List<ObjectType> objects) where ObjectType : IReportable
         {
             int titleRow = startingRow;
             int headerRow = startingRow + 1;
@@ -246,8 +143,8 @@ namespace DREAM.Controllers
 
             worksheet.Cells[titleRow, 1].Value = chart.Name;
             worksheet.Cells[headerRow, 1].Value = timeRangeName;
-            cells = addDataForTimeRange(worksheet, firstDataRow, chart, requests);
-            
+            cells = addDataForTimeRange(worksheet, firstDataRow, chart, objects);
+
             if (chart.Comparison != TimeRange.NONE)
             {
                 DateTime comparisonStartDate = TimeRangeStepper.DecrementByGranularity(chart.StartDate, chart.Comparison);
@@ -270,23 +167,23 @@ namespace DREAM.Controllers
                 {
                     sectionHeadings = comparisonHeadings;
                 }
-                cells = addDataForTimeRange(worksheet, cells.End.Row + 1, comparisonChart, requests);
+                cells = addDataForTimeRange(worksheet, cells.End.Row + 1, comparisonChart, objects);
             }
 
-            worksheet.Cells[headerRow, 2].LoadFromArrays(new object[][]{sectionHeadings.ToArray()});
+            worksheet.Cells[headerRow, 2].LoadFromArrays(new object[][] { sectionHeadings.ToArray() });
 
             return worksheet.Cells[startingRow, 1, cells.End.Row, cells.End.Column];
         }
 
-        private ExcelRange addDataForTimeRange(ExcelWorksheet worksheet, int firstDataRow, ChartModel chart, List<Request> requests)
+        private ExcelRange addDataForTimeRange<ObjectType>(ExcelWorksheet worksheet, int firstDataRow, ChartModel chart, List<ObjectType> objects) where ObjectType : IReportable
         {
             List<object[]> data = new List<object[]>();
             List<string> valueNames = new List<string>();
 
-            foreach(ChartValueModel value in chart.Values)
+            foreach (ChartValueModel value in chart.Values)
             {
-                foreach (KeyValuePair<string, List<object>> row in DataExtractor.GetDataRows(chart, requests, value.GetMemberFor(typeof(Request)),
-                    value.Function, chart.GetStratificationMemberFor(typeof(Request))))
+                foreach (KeyValuePair<string, List<object>> row in DataExtractor.GetDataRows(chart, objects,
+                    value.GetMemberFor(typeof(ObjectType)), value.Function, chart.GetStratificationMemberFor(typeof(ObjectType))))
                 {
                     string stratification = row.Key;
                     if (stratification == "")
@@ -345,7 +242,7 @@ namespace DREAM.Controllers
                     dateFormat = "MMMM";
                     break;
                 case TimeRange.WEEK:
-                    return (startDate.Date.Day/7 + 1).ToString();
+                    return (startDate.Date.Day / 7 + 1).ToString();
                 case TimeRange.YEAR:
                     dateFormat = "yyyy";
                     break;
@@ -376,6 +273,14 @@ namespace DREAM.Controllers
             ViewBag.ComparisonList = buildComparisonDropdownList();
             ViewBag.RequestPropertiesList = buildPropertiesDropdownList(typeof(Request));
             ViewBag.RequestStratificationList = buildStratificationDropdownList(typeof(Request));
+            ViewBag.ObjectTypeList = buildObjectTypeDropdownList();
+            ViewBag.QuestionPropertiesList = buildPropertiesDropdownList(typeof(Question));
+            ViewBag.QuestionStratificationList = buildStratificationDropdownList(typeof(Question));
+
+            ViewBag.RequestPropertyOptions = (new JavaScriptSerializer()).Serialize(ViewBag.RequestPropertiesList);
+            ViewBag.RequestStratificationOptions = (new JavaScriptSerializer()).Serialize(ViewBag.RequestStratificationList);
+            ViewBag.QuestionPropertyOptions = (new JavaScriptSerializer()).Serialize(ViewBag.QuestionPropertiesList);
+            ViewBag.QuestionStratificationOptions = (new JavaScriptSerializer()).Serialize(ViewBag.QuestionStratificationList);
         }
 
         private IEnumerable<SelectListItem> buildTimeRangeDropdownList()
@@ -394,8 +299,15 @@ namespace DREAM.Controllers
 
         private IEnumerable<SelectListItem> buildComparisonDropdownList()
         {
-            return buildTimeRangeDropdownList().Where(tr => tr.Value != TimeRange.ALL_TIME.ToString()).Select(
-                tr => new SelectListItem { Text = "Previous " + tr.Text, Value = tr.Value });
+            List<SelectListItem> comparisons = new List<SelectListItem>
+            {
+                new SelectListItem { Text="None", Value=null }
+            };
+
+            comparisons.AddRange(buildTimeRangeDropdownList().Where(tr => tr.Value != TimeRange.ALL_TIME.ToString()).Select(
+                tr => new SelectListItem { Text = "Previous " + tr.Text, Value = tr.Value }));
+
+            return comparisons;
         }
 
         private IEnumerable<SelectListItem> buildStatFunctionDropdownList()
@@ -423,21 +335,24 @@ namespace DREAM.Controllers
 
         private IEnumerable<SelectListItem> buildPropertiesDropdownList(Type type)
         {
-            List<SelectListItem> properties = new List<SelectListItem>();
+            List<SelectListItem> properties = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "-----", Value = "" }
+            };
             string propertyDisplayName;
             string propertyName;
             Attribute[] attributes;
-            ReportableAttribute reportableAttribute;
+            ChartableAttribute reportableAttribute;
 
-            foreach(MemberInfo member in type.GetProperties())
+            foreach (MemberInfo member in type.GetProperties())
             {
-                if (!Attribute.IsDefined(member, typeof(ReportableAttribute)))
+                if (!Attribute.IsDefined(member, typeof(ChartableAttribute)))
                 {
                     continue;
                 }
 
                 attributes = Attribute.GetCustomAttributes(member);
-                reportableAttribute = (ReportableAttribute)attributes.Where(a => a is ReportableAttribute).First();
+                reportableAttribute = (ChartableAttribute)attributes.Where(a => a is ChartableAttribute).First();
                 propertyName = member.Name;
                 propertyDisplayName = reportableAttribute.Name ?? propertyName;
 
@@ -447,15 +362,49 @@ namespace DREAM.Controllers
             return properties;
         }
 
+        private Dictionary<string, string> buildPropertiesOptionsList(Type type)
+        {
+            Dictionary<string, string> propertyOptions = new Dictionary<string, string>
+            {
+                {"-----", "" },
+            };
+
+            string propertyDisplayName;
+            string propertyName;
+            Attribute[] attributes;
+            ChartableAttribute reportableAttribute;
+
+            foreach (MemberInfo member in type.GetProperties())
+            {
+                if (!Attribute.IsDefined(member, typeof(ChartableAttribute)))
+                {
+                    continue;
+                }
+
+                attributes = Attribute.GetCustomAttributes(member);
+                reportableAttribute = (ChartableAttribute)attributes.Where(a => a is ChartableAttribute).First();
+                propertyName = member.Name;
+                propertyDisplayName = reportableAttribute.Name ?? propertyName;
+
+                propertyOptions[propertyDisplayName] = propertyName;
+            }
+
+            return propertyOptions;
+        }
+
         private List<SelectListItem> buildStratificationDropdownList(Type type)
         {
-            List<SelectListItem> stratifications = new List<SelectListItem>();
+            List<SelectListItem> stratifications = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "-----", Value = "" }
+            };
+
             string propertyDisplayName;
             string propertyName;
             Attribute[] attributes;
             StratifiableAttribute stratifiableAttribute;
 
-            foreach(MemberInfo member in type.GetProperties())
+            foreach (MemberInfo member in type.GetProperties())
             {
                 if (!Attribute.IsDefined(member, typeof(StratifiableAttribute)))
                 {
@@ -472,25 +421,19 @@ namespace DREAM.Controllers
 
             return stratifications;
         }
-        #endregion
 
-        public class RequestRow
+        private IEnumerable<SelectListItem> buildObjectTypeDropdownList()
         {
-            public DateTime Received_Date { get; set; }
+            List<SelectListItem> objectTypes = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "-----", Value = "" }
+            };
 
-            public string Requester_Type { get; set; }
+            objectTypes.Add(new SelectListItem { Text = "Request", Value = "Request" });
+            objectTypes.Add(new SelectListItem { Text = "Question", Value = "Question" });
 
-            public string Region { get; set; }
-
-            // public string Tumour_Group { get; set; }
-            public int Time_Spent { get; set; }
-
-            public DateTime? Closed_Date { get; set; }
-
-            public string Pharmacist { get; set; }
-
-            // public int Counter { get; set; }
-            // public string Code { get; set; }
+            return objectTypes;
         }
+        #endregion
     }
 }
