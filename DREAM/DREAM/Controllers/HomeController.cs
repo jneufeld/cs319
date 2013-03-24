@@ -1,30 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
+using DREAM.Models;
 
 namespace DREAM.Controllers
 {
     public class HomeController : Controller
     {
+        private DREAMContext db = new DREAMContext();
+
         public ActionResult Index()
         {
-            ViewBag.Message = "Please login to start using the system.";
+            if (!IsCurrentUserAuthorized())
+            {
+                ViewBag.Message = "Please login to start using the system.";
+                return View("GuestIndex");
+            }
 
-            return View();
+            HomeViewModel hv = new HomeViewModel();
+
+            hv.OpenRequests = db.Requests
+                .Where(r => r.CompletionTime == null)
+                .OrderByDescending(r => r.CreationTime)
+                .Take(10)
+                .Include(r => r.Caller)
+                .Include(r => r.Patient)
+                .Include(r => r.Type)
+                .Include(r => r.Caller.Region)
+                .ToList()
+                .Select(r => CreateCustomRequestViewModel(r))
+                .ToList();
+
+            hv.RecentRequests = db.Requests
+                .OrderByDescending(r => r.CreationTime)
+                .Take(10)
+                .Include(r => r.Caller)
+                .Include(r => r.Patient)
+                .Include(r => r.Type)
+                .Include(r => r.Caller.Region)
+                .ToList()
+                .Select(r => CreateCustomRequestViewModel(r))
+                .ToList();
+
+            ViewBag.Message = "Home Page";
+            return View(hv);
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your app description page.";
+            ViewBag.Message = "DREAM";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Contact page";
 
             return View();
         }
@@ -36,11 +71,21 @@ namespace DREAM.Controllers
             return View();
         }
 
-        public ActionResult OtherRolesHome()
+        private bool IsCurrentUserAuthorized()
         {
-            ViewBag.Message = "Home Page";
+            return User.IsInRole(Role.ADMIN) ||
+                   User.IsInRole(Role.REPORTER) ||
+                   User.IsInRole(Role.DI_SPECIALIST) ||
+                   User.IsInRole(Role.VIEWER);
+        }
 
-            return View();
+        private RequestViewModel CreateCustomRequestViewModel(Request r)
+        {
+            RequestViewModel rv = RequestViewModel.CreateFromRequest(r);
+            // Slightly hacky, but it'll do for now
+            rv.RequestTypeStringID = db.RequestTypes.SingleOrDefault(rt => rt.ID == rv.RequestTypeID).FullName;
+            rv.CallerRegionStringID = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID).FullName;
+            return rv;
         }
 
         public ActionResult PageNotFound(String errorPath)

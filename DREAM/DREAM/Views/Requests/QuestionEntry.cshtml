@@ -5,7 +5,6 @@
     @using (Html.BeginCollectionItem("Questions"))
     {
         <h4>Question @Html.ValueFor(m => m.Index)</h4>
-        @*<a class="deleteQuestion" href="#">Delete</a>*@
         
         @Html.HiddenFor(m => m.QuestionID)
         @Html.HiddenFor(m => m.Delete)

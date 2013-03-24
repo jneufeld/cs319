@@ -90,11 +90,6 @@ namespace DREAM.Models
         public int QuestionCount { get; set; }
         public IList<QuestionViewModel> Questions { get; set; }
 
-        // Not used at the moment
-        public IEnumerable<SelectListItem> RequesterTypeDropDownList { get; set; }
-        public IEnumerable<SelectListItem> RegionDropDownList { get; set; }
-        public IEnumerable<SelectListItem> GenderDropDownList { get; set; }
-
         #region Constructor Methods
         public static RequestViewModel CreateFromRequest(Request r)
         {

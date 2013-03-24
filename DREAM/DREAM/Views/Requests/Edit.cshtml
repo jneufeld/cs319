@@ -217,12 +217,6 @@
         </div>
 
         <h3>Questions</h3>
-
-        <!--
-        <div style="border: solid; border-width: 1px; margin: 5px">
-            @*Html.EditorFor(m => m.Questions) *@
-        </div>
-        -->
         
         @if (Model.Questions == null || Model.Questions.Count == 0)
         {
@@ -241,19 +235,6 @@
             <a href="javascript:void(0);" onclick="viewModel.addNewQuestion();">Add new question</a>
         </div>
         @Html.HiddenFor(m => m.QuestionCount)
-
-        @*<script>
-           $(function () {
-               $(".deleteQuestion").click(function () {
-                   var par = $(this).parent();
-                   var deleted = par.find("input[name$=Delete]:hidden");
-                   console.log(par);
-                   console.log(deleted);
-                   deleted.val('True');
-                   par.hide(0.5);
-               });
-           });
-        </script>*@
 
         @Html.ValidationSummary(true)
 

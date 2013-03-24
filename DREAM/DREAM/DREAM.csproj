@@ -219,6 +219,7 @@
     <Compile Include="Models\ExternalLogin.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\IReportable.cs" />
+    <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\LocalPasswordModel.cs" />
     <Compile Include="Models\Lock.cs" />
     <Compile Include="Models\LogFilterModel.cs" />
@@ -389,7 +390,6 @@
     <Content Include="Views\UsersAdmin\Edit.cshtml" />
     <Content Include="Views\KeywordsAdmin\Index.cshtml" />
     <Content Include="Views\Home\Admin.cshtml" />
-    <Content Include="Views\Home\OtherRolesHome.cshtml" />
     <Content Include="Views\Users\ChangePassword.cshtml" />
     <Content Include="Views\Requests\Search.cshtml" />
     <Content Include="Views\Requests\QuestionEntry.cshtml" />
@@ -401,6 +401,7 @@
     <Content Include="Views\Home\PageNotFound.cshtml" />
     <Content Include="Views\Requests\KeywordEntry.cshtml" />
     <Content Include="Views\Requests\ReferenceEntry.cshtml" />
+    <Content Include="Views\Home\GuestIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,38 +1,78 @@
-﻿@{
+﻿@model DREAM.Models.HomeViewModel
+@using DREAM.Models
+
+@{
     ViewBag.Title = "DREAM";
 }
-@section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>@ViewBag.Title.</h1>
-                <br><h2>@ViewBag.Message</h2></br>
-            </hgroup>
-        </div>
-    </section>
-}
 
-@if (User.IsInRole("Admin")|| User.IsInRole("DI Specialist") || User.IsInRole("Viewer") || User.IsInRole("Reporter"))
-{
-    Server.TransferRequest("~/Home/OtherRolesHome");
-} 
-else 
-{
-    <h3>Problems logging in? We suggest the following:</h3>
-    <ol class="round">
-        <li class="one">
-            <h5>Double check your password</h5>
-            Sometimes a password might just be entered incorrectly.  Try entering your password again.
-        </li>
+<!DOCTYPE html>
 
-        <li class="two">
-            <h5>Resetting your password</h5>
-           Try resetting your password and logging in again.
-        </li>
+<h2>Home</h2>
 
-        <li class="three">
-            <h5>Contact your local DREAM administrator</h5>
-            Your local DREAM administrator has extra rights and priviledges in the DREAM system that may be of assistance.
-        </li>
-    </ol>
-}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <h4>Open requests </h4>
+        <table>
+            <tr>
+                <th>ID </th>
+                <th>Type </th>
+                <th>Status </th>
+            </tr>
+            @if (Model == null || Model.OpenRequests.Count == 0)
+            {
+                <tr>
+                    <td>No open requests </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+            else
+            {
+                for (int i = 0; i < Model.OpenRequests.Count; i++)
+                {
+                <tr>
+                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequestID)</td>
+                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequestTypeStringID)</td>
+                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].Status)</td>
+                </tr>
+                 
+                }
+            }
+        </table>
+
+        <h4>Recently created requests </h4>
+        <table>
+            <tr>
+                <th>ID </th>
+                <th>Type </th>
+                <th>Status </th>
+            </tr>
+            @if (Model == null || Model.RecentRequests.Count == 0)
+            {
+                <tr>
+                    <td>No recent requests </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+            else
+            {
+                for (int i = 0; i < Model.RecentRequests.Count; i++)
+                {
+                <tr>
+                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].RequestID)</td>
+                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].RequestTypeStringID)</td>
+                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].Status)</td>
+                </tr>
+                 
+                }
+            }
+        </table>
+    </div>
+</body>
+</html>

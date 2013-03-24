@@ -37,14 +37,13 @@
 
                                 if (isDISpecialist || isViewer)
                                 {
-                                    <li>@Html.ActionLink("Search", "Search", "Requests")</li>
-                            }
+                                    <li>@Html.RouteLink("Search", "Search")</li>
+                                }
                                 
                                 if(isAdmin) 
                                 {
                                     <li>@Html.ActionLink("Admin Panel", "Admin", "Home")</li>
                                 }
-                               
                             }
                        
                             <li>@Html.ActionLink("About", "About", "Home")</li>
