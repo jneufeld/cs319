@@ -47,6 +47,15 @@
 
             <tr>
                 <td>
+                    @Html.LabelFor(model => model.Status)
+                </td>
+                <td>
+                    @Html.DisplayTextFor(model => model.Status)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
                     @Html.LabelFor(model => model.CreationTime)
                 </td>
                 <td>
@@ -289,19 +298,23 @@
             addNewQuestion: function () {
                 var count = $("input[name=QuestionCount]:hidden");
                 var idx = count.val();
-                $("#questionList").append($("#questionTemplate").tmpl({ Questions_index: viewModel._generateGuid(), Keywords_index: viewModel._generateGuid(), References_index: viewModel._generateGuid(), QIndex: idx }));
+                var $obj = $("#questionTemplate").tmpl({ Questions_index: viewModel._generateGuid(), Keywords_index: viewModel._generateGuid(), References_index: viewModel._generateGuid(), QIndex: idx });
+                $("#questionList").append($obj);
                 var next = +idx + 1;
                 count.val(next);
             },
 
             addNewKeyword: function ($keywordsList, prefix) {
-                var obj = $("#keywordTemplate").tmpl({ prefix: prefix, Keywords_index: viewModel._generateGuid() });
-                viewModel.applyKeywordAutocomplete(obj.find(".keywordAutocomplete"));
-                $keywordsList.append(obj);
+                var $obj = $("#keywordTemplate").tmpl({ prefix: prefix, Keywords_index: viewModel._generateGuid() });
+                viewModel.applyKeywordAutocomplete($obj.find(".keywordAutocomplete"));
+                viewModel.addDeleteHandler($obj.find(".deleteKeyword"));
+                $keywordsList.append($obj);
             },
 
             addNewReference: function ($referenceList, prefix) {
-                $referenceList.append($("#referenceTemplate").tmpl({ prefix: prefix, References_index: viewModel._generateGuid() }));
+                var $obj = $("#referenceTemplate").tmpl({ prefix: prefix, References_index: viewModel._generateGuid() });
+                viewModel.addDeleteHandler($obj.find(".deleteReference"));
+                $referenceList.append($obj);
             },
 
             _generateGuid: function () {
@@ -312,8 +325,8 @@
                 });
             },
 
-            applyKeywordAutocomplete: function (val) {
-                $(val).autocomplete({
+            applyKeywordAutocomplete: function (node) {
+                $(node).autocomplete({
                     source: function (request, response) {
                         $.ajax({
                             url: "/Autocomplete/Keyword", type: "POST", dataType: "json",
@@ -334,8 +347,19 @@
                     minLength: 2,
                     select: function (event, ui) {
                         console.log(ui.item);
-                        $(val).find("input[name$=Keyword]").val(ui.item.value);
+                        $(node).find("input[name$=Keyword]").val(ui.item.value);
                     },
+                });
+            },
+
+            addDeleteHandler: function (node) {
+                $(node).click(function () {
+                    var par = $(this).closest("li");
+                    var deleted = par.find("input[name$=Delete]:hidden");
+                    console.log(par);
+                    console.log(deleted);
+                    deleted.val('True');
+                    par.hide(0.5);
                 });
             }
 
@@ -392,6 +416,16 @@
             $keywordInputs = $(".keywordAutocomplete");
             $.each($keywordInputs, function(i, val) {
                 viewModel.applyKeywordAutocomplete(val);
+            });
+
+            $keywordDeleters = $(".deleteKeyword");
+            $.each($keywordDeleters, function (i, val) {
+                viewModel.addDeleteHandler(val);
+            });
+
+            $referenceDeleters = $(".deleteReference");
+            $.each($referenceDeleters, function (i, val) {
+                viewModel.addDeleteHandler(val);
             });
         });
     </script>
