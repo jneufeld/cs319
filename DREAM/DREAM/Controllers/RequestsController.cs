@@ -551,10 +551,10 @@ namespace DREAM.Controllers
                                     new Run(
                                         new Text(q.SpecialNotes))));
                         }
-                        if (q.Reference != null)
+                        if (q.References != null)
                         {
                             String refer = "";
-                            foreach (Reference r in q.Reference)
+                            foreach (Reference r in q.References)
                             {
                                 refer = refer + ", " + r.Value;
                                 wordDoc.MainDocumentPart.Document.Body.AppendChild(

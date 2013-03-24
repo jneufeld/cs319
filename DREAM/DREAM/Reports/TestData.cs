@@ -61,8 +61,8 @@ namespace DREAM.Reports
                 {
                     references.Add(new Reference
                     {
-                        QuestionID = i,
-                        ReferenceType = ReferenceType.TEXT,
+                        //QuestionID = i,
+                        ReferenceType = (int)ReferenceType.TEXT,
                         Value = generateRandomString(20),
                     });
                 }
@@ -78,7 +78,7 @@ namespace DREAM.Reports
                     Severity = rand.Next(5),
                     Response = "",
                     Request = request,
-                    Reference = references,
+                    References = references,
                     QuestionType = pickRandom(db.QuestionTypes),
                     QuestionText = "",
                     Probability = rand.Next(5),
@@ -122,7 +122,7 @@ namespace DREAM.Reports
                     Patient = new Patient
                     {
                         Age = rand.Next(100),
-                        AgencyID = rand.Next(100000),
+                        AgencyID = rand.Next(100000).ToString(),
                         FirstName = generateRandomString(20),
                         Gender = (int)Gender.UNKNOWN,
                         ID = i,

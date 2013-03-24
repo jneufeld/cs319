@@ -29,7 +29,7 @@ namespace DREAM.Controllers
                 .Take(10)
                 .Include(r => r.Caller)
                 .Include(r => r.Patient)
-                .Include(r => r.Type)
+                .Include(r => r.RequesterType)
                 .Include(r => r.Caller.Region)
                 .ToList()
                 .Select(r => CreateCustomRequestViewModel(r))
@@ -40,7 +40,7 @@ namespace DREAM.Controllers
                 .Take(10)
                 .Include(r => r.Caller)
                 .Include(r => r.Patient)
-                .Include(r => r.Type)
+                .Include(r => r.RequesterType)
                 .Include(r => r.Caller.Region)
                 .ToList()
                 .Select(r => CreateCustomRequestViewModel(r))
@@ -83,7 +83,7 @@ namespace DREAM.Controllers
         {
             RequestViewModel rv = RequestViewModel.CreateFromRequest(r);
             // Slightly hacky, but it'll do for now
-            rv.RequestTypeStringID = db.RequestTypes.SingleOrDefault(rt => rt.ID == rv.RequestTypeID).FullName;
+            rv.RequesterTypeStringID = db.RequesterTypes.SingleOrDefault(rt => rt.ID == rv.RequesterTypeID).FullName;
             rv.CallerRegionStringID = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID).FullName;
             return rv;
         }
