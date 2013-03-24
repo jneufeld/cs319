@@ -341,9 +341,6 @@ namespace DREAM.Controllers
             return File(ms.ToArray(), "application/ms-word", "Request" + reqId + ".docx");
         }
 
-        // Need to add null checks for all attributes (since many can be null)
-        // Need a better Template?
-        // Need a loop to create Questions for the number of questions in the request.
         public MemoryStream ExportDoc(string docName, Request req)
         {
             byte[] byteArray = System.IO.File.ReadAllBytes(docName);
@@ -360,40 +357,7 @@ namespace DREAM.Controllers
 
                 Regex regexText1 = new Regex("REQUESTID GOES HERE");
                 docText = regexText1.Replace(docText, req.ID.ToString());
-                /*
-                Regex regexText2 = new Regex("REQUEST TYPE GOES HERE");
-                docText = regexText2.Replace(docText, "Nurse");
-
-                Regex regexText3 = new Regex("CALLERFIRSTNAME GOES HERE");
-                docText = regexText3.Replace(docText, "Bob");
-
-                Regex regexText4 = new Regex("CALLERLASTNAME GOES HERE");
-                docText = regexText4.Replace(docText, "Marley");
-
-                Regex regexText5 = new Regex("CALLERPHONENUMBER GOES HERE");
-                docText = regexText5.Replace(docText, "555-555-5555");
-
-                Regex regexText6 = new Regex("CALLEREMAIL GOES HERE");
-                docText = regexText6.Replace(docText, "bobmarley@email.com");
-
-                Regex regexText7 = new Regex("CALLERREGION GOES HERE");
-                docText = regexText7.Replace(docText, "Yukon");
-
-                Regex regexText8 = new Regex("PATIENTFIRSTNAME GOES HERE");
-                docText = regexText8.Replace(docText, "Jim");
-
-                Regex regexText9 = new Regex("PATIENTLASTNAME GOES HERE");
-                docText = regexText9.Replace(docText, "Marley");
-
-                Regex regexText10 = new Regex("PATIENTAGENCYID GOES HERE");
-                docText = regexText10.Replace(docText, "4");
-
-                Regex regexText11 = new Regex("PATIENTGENDER GOES HERE");
-                docText = regexText11.Replace(docText, "Male");
-
-                Regex regexText12 = new Regex("PATIENTAGE GOES HERE");
-                docText = regexText12.Replace(docText, "45");
-                */
+                
                 Regex regexText2 = new Regex("REQUEST TYPE GOES HERE");
                 if (req.Type != null)
                     docText = regexText2.Replace(docText, req.Type.FullName);
@@ -402,6 +366,8 @@ namespace DREAM.Controllers
                 Regex regexText3 = new Regex("CALLERFIRSTNAME GOES HERE");
                 if (req.Caller != null && req.Caller.FirstName != null)
                     docText = regexText3.Replace(docText, req.Caller.FirstName);
+                else if (req.Caller == null) 
+                    docText = regexText3.Replace(docText, "No caller data.");
                 else docText = regexText3.Replace(docText, "");
 
                 Regex regexText4 = new Regex("CALLERLASTNAME GOES HERE");
@@ -426,8 +392,10 @@ namespace DREAM.Controllers
 
                 Regex regexText8 = new Regex("PATIENTFIRSTNAME GOES HERE");
                 if (req.Patient != null && req.Patient.FirstName != null)
-                    docText = regexText8.Replace(docText, req.Patient.FirstName);
-                else docText = regexText8.Replace(docText, "");
+                    docText = regexText8.Replace(docText, "Patient " + req.Patient.FirstName);
+                else if (req.Patient == null)
+                    docText = regexText3.Replace(docText, "No patient data.");
+                else docText = regexText3.Replace(docText, "");
 
                 Regex regexText9 = new Regex("PATIENTLASTNAME GOES HERE");
                 if (req.Patient != null && req.Patient.LastName != null)
@@ -457,11 +425,99 @@ namespace DREAM.Controllers
                 {
                     sw.Write(docText);
                 }
-
-                wordDoc.MainDocumentPart.Document.Body.InsertAt(
-                    new Paragraph(
-                        new Run(
-                            new Text("Question1"))), 16);
+                if (req.Questions != null) 
+                {
+                    foreach (Question q in req.Questions)
+                    {
+                        wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                new Paragraph(
+                                    new Run(
+                                        new Text(""))));
+                        wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                            new Paragraph(
+                                new Run(
+                                    new Text("Question" + q.ID.ToString() + " - Probability " + q.Probability.ToString() + ", Severity " + q.Severity.ToString()))));
+                        if (q.QuestionType != null || q.TumourGroup != null)
+                        {
+                            String qTypeAndGroup = "";
+                            if (q.QuestionType != null || q.TumourGroup != null) qTypeAndGroup = "Type: " + q.QuestionType.FullName + ", Tumour Group: " + q.TumourGroup.FullName;
+                            else
+                            {
+                                if (q.QuestionType != null) qTypeAndGroup = "Type: " + q.QuestionType.FullName;
+                                if (q.TumourGroup != null) qTypeAndGroup = "Tumour Group: " + q.TumourGroup.FullName;
+                            }
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                new Paragraph(
+                                    new Run(
+                                        new Text(qTypeAndGroup))));
+                        }
+                        if (q.Keywords != null)
+                        {
+                            String kWords = "";
+                            foreach (Keyword k in q.Keywords)
+                            {
+                                kWords = kWords + ", " + k.KeywordText;
+                                wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                    new Paragraph(
+                                        new Run(
+                                            new Text(kWords))));
+                            }
+                        }
+                        if (q.QuestionText != null)
+                        {
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                new Paragraph(
+                                    new Run(
+                                        new Text(""))));
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                new Paragraph(
+                                    new Run(
+                                        new Text(q.QuestionText))));
+                        }
+                        if (q.Response != null)
+                        {
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                   new Paragraph(
+                                       new Run(
+                                           new Text(""))));
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                new Paragraph(
+                                    new Run(
+                                        new Text("Response" + q.ID.ToString()))));
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                new Paragraph(
+                                    new Run(
+                                        new Text(q.Response))));
+                        }
+                        if (q.SpecialNotes != null)
+                        {
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                   new Paragraph(
+                                       new Run(
+                                           new Text(""))));
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                new Paragraph(
+                                    new Run(
+                                        new Text("Special Notes" + q.ID.ToString()))));
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                new Paragraph(
+                                    new Run(
+                                        new Text(q.SpecialNotes))));
+                        }
+                        if (q.Reference != null)
+                        {
+                            String refer = "";
+                            foreach (Reference r in q.Reference)
+                            {
+                                refer = refer + ", " + r.Value;
+                                wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                    new Paragraph(
+                                        new Run(
+                                            new Text(refer))));
+                            }
+                        }
+                    }
+                }
 
             }
             return mem;
