@@ -271,6 +271,7 @@ namespace DREAM.Controllers
 
                 request.Type = db.RequestTypes.SingleOrDefault(rt => rt.ID == rv.RequestTypeID);
                 request.Caller.Region = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID);
+                db.Logs.Add(Log.Edit(request, Membership.GetUser()));
 
                 db.SaveChanges();
 

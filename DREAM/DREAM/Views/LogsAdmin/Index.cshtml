@@ -17,6 +17,7 @@
             </td>
             <td>
                 @Html.EditorFor(model => model.RequestID)
+                @Html.ValidationMessageFor(model => model.RequestID)
             </td>
         </tr>
         <tr>
@@ -25,6 +26,7 @@
             </td>
             <td>
                 @Html.DropDownListFor(model => model.Action, (IEnumerable<SelectListItem>)ViewData["ActionList"])
+                @Html.ValidationMessageFor(model => model.Action)
             </td>
         </tr>
         <tr>
@@ -33,6 +35,7 @@
             </td>
             <td>
                 @Html.EditorFor(model => model.UserName)
+                @Html.ValidationMessageFor(model => model.UserName)
             </td>
         </tr>
         <tr>
@@ -41,6 +44,7 @@
             </td>
             <td>
                 @Html.EditorFor(model => model.Before)
+                @Html.ValidationMessageFor(model => model.Before)
             </td>
         </tr>
         <tr>
@@ -49,6 +53,7 @@
             </td>
             <td>
                 @Html.EditorFor(model => model.After)
+                @Html.ValidationMessageFor(model => model.After)
             </td>
         </tr>
         <tr>
@@ -60,6 +65,7 @@
             </td>
         </tr>
     </table>
+    @Html.ValidationSummary()
 }
 
 @Html.PagedListPager(Model.PagedLogs, page => Url.Action("Index", new { request = Model.RequestID, 
@@ -118,10 +124,14 @@
             }
         }
         <td>
-            Time goes here
+            @Html.DisplayFor(modelItem => item.TimePerformed)
         </td>
     </tr>
 }
 
 </table>
 
+@if (Model.PagedLogs.Count == 0)
+{
+    <p>No results found!</p>
+}

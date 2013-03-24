@@ -269,6 +269,9 @@
         <p>
             @Html.ActionLink("Export", "Export", new { reqId = Model.RequestID })
         </p>
+        <p>
+            @Html.ActionLink("Audit Request (Unsaved changes will be lost)", "Index", "LogsAdmin", new { request = Model.RequestID }, "")
+        </p>
     </fieldset>
     }
 }

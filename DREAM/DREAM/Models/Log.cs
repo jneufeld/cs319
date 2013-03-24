@@ -20,6 +20,7 @@ namespace DREAM.Models
         public int Action { get; set; }
         public Guid UserID { get; set; }
         public int RequestID { get; set; }
+        public DateTime TimePerformed { get; set; }
 
         public virtual Request Request { get; set; }
 
@@ -38,6 +39,7 @@ namespace DREAM.Models
                 Action = (int)LogAction.CREATE,
                 UserID = (Guid)user.ProviderUserKey,
                 RequestID = request.ID,
+                TimePerformed = DateTime.UtcNow,
             };
             return log;
         }
@@ -49,6 +51,7 @@ namespace DREAM.Models
                 Action = (int)LogAction.EDIT,
                 UserID = (Guid)user.ProviderUserKey,
                 RequestID = request.ID,
+                TimePerformed = DateTime.UtcNow,
             };
             return log;
         }
@@ -60,6 +63,7 @@ namespace DREAM.Models
                 Action = (int)LogAction.CLOSE,
                 UserID = (Guid)user.ProviderUserKey,
                 RequestID = request.ID,
+                TimePerformed = DateTime.UtcNow,
             };
             return log;
         }
@@ -71,6 +75,7 @@ namespace DREAM.Models
                 Action = (int)LogAction.VIEW,
                 UserID = (Guid)user.ProviderUserKey,
                 RequestID = request.ID,
+                TimePerformed = DateTime.UtcNow,
             };
             return log;
         }
