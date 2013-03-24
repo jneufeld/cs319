@@ -36,28 +36,6 @@ namespace DREAM.Controllers
         {
             if (ModelState.IsValid && Membership.ValidateUser(model.UserName, model.Password))
             {
-                using (DREAMContext db = new DREAMContext())
-                {
-                    MembershipUser user = Membership.GetUser(model.UserName);
-
-                    DateTime dt = DateTime.MinValue;
-                    foreach (PreviousPassword prevPass in db.PreviousPasswords)
-                    {
-                        if (prevPass.User.UserName == model.UserName)
-                        {
-                            if (prevPass.Timestamp > dt)
-                                dt = prevPass.Timestamp;
-                        }
-                    }
-                    if (user.LastPasswordChangedDate < DateTime.Now.AddDays(-42))
-                    {
-                        RouteValueDictionary routes = new RouteValueDictionary();
-                        routes.Add("userName", model.UserName);
-                        routes.Add("success", true);
-                        return RedirectToAction("ChangePassword", "Users", routes);
-                    }
-
-                }
                 FormsAuthentication.RedirectFromLoginPage(model.UserName, model.RememberMe);
                 return RedirectToLocal(returnUrl);
             }
@@ -80,7 +58,6 @@ namespace DREAM.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public ActionResult ChangePassword(String userName, bool success = false)
         {
             ChangePasswordModel pm = new ChangePasswordModel();
@@ -90,7 +67,6 @@ namespace DREAM.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ChangePassword(ChangePasswordModel model)
         {
@@ -110,18 +86,12 @@ namespace DREAM.Controllers
                     {
                         routes.Add("statusMessage", "Your Password was not changed");
                     }
-                    if (Request.IsAuthenticated)
-                        return RedirectToAction("Manage", "Users", routes);
-                    else
-                    {
-                        RouteValueDictionary routs = new RouteValueDictionary();
-                        routes.Add("returnUrl", null);
-                        return RedirectToAction("Login", "Users", routs);
-                    }
+                    return RedirectToAction("Manage", "Users", routes);
                 }
                 else return RedirectToAction("Index", "Home");
             }
-            else {
+            else
+            {
                 ModelState.AddModelError(model.UserName, "ModelState is not valid");
                 return View(model);
             }
@@ -179,7 +149,7 @@ namespace DREAM.Controllers
                         rVDictionary.Add("email", passwordResetRequestModel.Email);
                         rVDictionary.Add("success", true);
                         rVDictionary.Add("statusMessage", "Password Reset Successfully");
-                        return RedirectToAction("ResetPassword", "Users", rVDictionary);
+                        return RedirectToAction("Index", "Home");
                     }
                     catch
                     {
@@ -201,13 +171,89 @@ namespace DREAM.Controllers
             }
             else
             {
-                //RouteValueDictionary rVDictionary = new RouteValueDictionary();
-                //rVDictionary.Add("email", "");
-                //rVDictionary.Add("success", true);
-                //rVDictionary.Add("statusMessage", "There is no registered user in DREAM with that email.");
-                return View(passwordResetRequestModel) ;
+                ModelState.AddModelError("", "ModelState is not valid");
+                return View(passwordResetRequestModel);
             }
         }
+
+
+        //[AllowAnonymous]
+        // [HttpPost]
+        // public ActionResult ResetPasswordLinkAcceptance(String username, String newPassword, String resetPasswordRequestHash)
+        // {
+        //     if (ModelState.IsValid)
+        //     {
+        //         if (resetPasswordRequestHash == null)
+        //         {
+        //             return RedirectToAction("ResetPassword", "Users");
+        //         }
+        //         DREAMContext db = new DREAMContext();
+        //         PasswordResetRequest resetPasswordRequest = null;
+        //         long resetPasswordRequestHashInt = Convert.ToInt64(resetPasswordRequestHash);
+
+        //         foreach(PasswordResetRequest prr in db.PasswordResetRequests) 
+        //         {
+        //             if(prr.ID == resetPasswordRequestHashInt)
+        //             {
+        //                 resetPasswordRequest = prr;
+        //             }
+        //         }
+
+        //         if (resetPasswordRequest != null)
+        //         {
+        //             DateTime dateOfRequest = resetPasswordRequest.Timestamp;
+        //             MembershipUser user = Membership.GetUser(username);
+
+        //             bool IDInTable = false;
+
+        //             foreach (PasswordResetRequest prr in db.PasswordResetRequests)
+        //             {
+        //                 if (prr.ID == resetPasswordRequest.ID)
+        //                 {
+        //                     IDInTable = true;
+        //                 }
+        //             }
+
+        //             if ((DateTime.Now - dateOfRequest).TotalDays > 1)
+        //             {
+        //                 ModelState.AddModelError(Convert.ToString(resetPasswordRequest.Timestamp), "The link password request has expired past 24 hours.");
+        //                 return RedirectToAction("ResetPassword", "Users");
+        //             }
+        //             else if (!IDInTable)
+        //             {
+        //                 ModelState.AddModelError(Convert.ToString(resetPasswordRequest.ID), "The link ID does not exist in the table.");
+        //             }
+        //             else if ((Guid)user.ProviderUserKey != resetPasswordRequest.UserID)
+        //             {
+        //                 ModelState.AddModelError(Convert.ToString(resetPasswordRequest.UserID), "The person who is changing their password is not the same as the person who generated the reset request");
+        //             }
+        //             else
+        //             {
+        //                 if (user.ChangePassword(user.GetPassword(), newPassword))
+        //                 {
+        //                     return RedirectToAction("Index", "Home"); ;
+        //                 }
+        //                 else
+        //                 {
+        //                     ModelState.AddModelError(newPassword, "Error with changing password");
+        //                     return RedirectToAction("ResetPasswordLinkAcceptance", "Users", new { username = username, newPassword = newPassword, resetPasswordRequest = resetPasswordRequest });
+        //                 }
+        //             }
+        //         }
+        //         else
+        //         {
+        //             ModelState.AddModelError(resetPasswordRequestHash, "There is no reset password link password request associated with this ID");
+        //         }
+
+        //         return View();
+        //     }
+        //     else
+        //     {
+        //         ModelState.AddModelError(resetPasswordRequestHash, "ModelState is not valid");
+        //         return View();
+        //     }
+        // }
+
     }
 
 }
