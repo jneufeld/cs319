@@ -72,12 +72,12 @@ namespace DREAM.Models
 
             if (this.Before != null)
             {
-                
+                this.Logs = this.Logs.Where(log => log.TimePerformed.Date.CompareTo(this.Before.Value.Date) < 0);
             }
 
             if (this.After != null)
             {
-
+                this.Logs = this.Logs.Where(log => log.TimePerformed.Date.CompareTo(this.After.Value.Date) > 0);
             }
 
             this.PagedLogs = this.Logs.OrderByDescending(m => m.ID).ToPagedList(page, 10);
