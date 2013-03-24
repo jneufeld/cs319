@@ -1,0 +1,32 @@
+﻿@model DREAM.Models.Keyword
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Keyword</h2>
+
+<html>
+<body>
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <fieldset>
+            <legend>Edit Keyword for @Model.KeywordText</legend>
+
+            <table border="0">
+                <tr>
+                    <td>The new version of the keyword will be: </td>
+                    <td>
+                        @Html.TextBoxFor(d => Model.KeywordText)
+                    </td>
+            </table>
+            <p>
+                <input type="submit" value="Edit Keyword" />
+            </p>
+    </fieldset>
+    }
+</body>
+</html>
+
+
