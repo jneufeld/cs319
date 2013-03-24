@@ -6,7 +6,7 @@
     {
         @Html.HiddenFor(m => m.Delete)
         <span>
-            @Html.TextBoxFor(m => m.Keyword)
+            @Html.TextBoxFor(m => m.Keyword, new { @class = "keywordAutocomplete" })
             @Html.ValidationMessageFor(m => m.Keyword)
         </span>
     }

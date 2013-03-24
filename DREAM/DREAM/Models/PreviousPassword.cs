@@ -15,16 +15,16 @@ namespace DREAM.Models
     public class PreviousPassword
     {
         public int ID { get; set; }
-	    [Required]
-	    public MembershipPasswordFormat PasswordFormat { get; set; }
-	    [Required]
-	    public string PasswordSalt { get; set; }
-	    [Required]
-	    public string Password { get; set; }
-	    [Required]
-	    public Guid UserID { get; set; }
         [Required]
-	    public DateTime Timestamp { get; set; }
+        public MembershipPasswordFormat PasswordFormat { get; set; }
+        [Required]
+        public string PasswordSalt { get; set; }
+        [Required]
+        public string Password { get; set; }
+        [Required]
+        public Guid UserID { get; set; }
+        [Required]
+        public DateTime Timestamp { get; set; }
 
         public MembershipUser User
         {
@@ -41,20 +41,20 @@ namespace DREAM.Models
 
         //Returns true if the password can be used by the user,
         //false if the password has been recently used by the user.
-	    public static bool CheckPassword(MembershipUser user, string password) 
+        public static bool CheckPassword(MembershipUser user, string password) 
         {
-		    string hashAlgorithm = Membership.HashAlgorithmType;
-		    DateTime checkPasswordsAfter = DateTime.Now - new TimeSpan(253, 0, 0, 0);
+            string hashAlgorithm = Membership.HashAlgorithmType;
+            DateTime checkPasswordsAfter = DateTime.Now - new TimeSpan(253, 0, 0, 0);
             using(DREAMContext db = new DREAMContext())
             {
-			    foreach(PreviousPassword prevPwd in db.PreviousPasswords.Where(p => p.UserID.Equals((Guid)user.ProviderUserKey) && p.Timestamp > checkPasswordsAfter))
+                foreach(PreviousPassword prevPwd in db.PreviousPasswords.Where(p => p.UserID.Equals((Guid)user.ProviderUserKey) && p.Timestamp > checkPasswordsAfter))
                 {
                     string passwordHash = prevPwd.EncodePassword(password, prevPwd.PasswordSalt);
-				    if(passwordHash == prevPwd.Password)
-					    return false;
+                    if(passwordHash == prevPwd.Password)
+                        return false;
                 }
             }
-		    return true;
+            return true;
         }
         //Returns a hash of the given password and password salt. 
         public string EncodePassword(string pass, string salt)

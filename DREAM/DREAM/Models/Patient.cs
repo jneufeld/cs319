@@ -19,7 +19,8 @@ namespace DREAM.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        public int AgencyID { get; set; }
+
+        public string AgencyID { get; set; }
 
         public string FirstName { get; set; }
 

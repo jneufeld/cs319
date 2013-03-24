@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using DataAnnotationsExtensions;
 
 namespace DREAM.Models
 {
@@ -53,6 +54,7 @@ namespace DREAM.Models
         [Display(Name = "Phone Number")]
         public string CallerPhoneNumber { get; set; }
 
+        [Email]
         [Display(Name = "Email")]
         public string CallerEmail { get; set; }
 
@@ -70,7 +72,8 @@ namespace DREAM.Models
         public int PatientID { get; set; }
 
         [Display(Name = "Agency ID")]
-        public int PatientAgencyID { get; set; }
+        [Digits]
+        public string PatientAgencyID { get; set; }
 
         [Display(Name = "First Name")]
         public string PatientFirstName { get; set; }

@@ -62,7 +62,7 @@ namespace DREAM.Controllers
                 rv.MapToRequest(request);
 
                 Patient patient = null;
-                if (rv.PatientAgencyID != 0)
+                if (rv.PatientAgencyID != "0")
                 {
                     patient = db.Patients.SingleOrDefault(p => p.AgencyID == rv.PatientAgencyID);
                     if (patient != null)
@@ -138,9 +138,11 @@ namespace DREAM.Controllers
         //
         // GET: /Requests/ViewRequest/5
 
+        // TODO Rename to View - seems redundant to have Requests/ViewRequest/5
         [HttpGet]
         public ActionResult ViewRequest(int id = 0)
         {
+            // TODO: Use RequestViewModel instead
             Request request = FindRequest(id);
 
             if (request.CreatedBy != null)
@@ -243,6 +245,8 @@ namespace DREAM.Controllers
                 return HttpNotFound();
             }
 
+            // Why is this here? Of course the request is locked. How is someone editing it if it isn't?
+            // TODO Make the whole request locking system work properly
             if (isLocked(request, true))
             {
                 ViewBag.IsLocked = true;
@@ -329,10 +333,11 @@ namespace DREAM.Controllers
 
                 db.SaveChanges();
 
+                //request.Unlock();
                 return RedirectToAction("Index");
             }
 
-            //request.Unlock();
+            // TODO Add drop down lists to ViewBag
             return View(rv);
         }
 
@@ -646,26 +651,11 @@ namespace DREAM.Controllers
         //      True if the given Request is currently locked, else false.
         private bool isLocked(Request request, bool isEditing = false)
         {
-            bool returnValue = false;
             DREAM.Models.Lock requestLock = findRequestLock(request.ID);
             MembershipUser lockingUser = getUserFromLock(requestLock);
             MembershipUser currentUser = Membership.GetUser();
 
-            if ((requestLock != null) && (!currentUser.UserName.Equals(lockingUser.UserName)))
-            {
-                ViewBag.LockingUser = lockingUser;
-                returnValue = true;
-            }
-            else if (requestLock != null)
-            {
-                returnValue = false;
-            }
-            else
-            {
-                returnValue = false;
-            }
-
-            return returnValue;
+            return requestLock != null && currentUser.UserName != lockingUser.UserName;
         }
 
         // Find and return the Lock for the given request. If there is no Lock, null is returned.
@@ -677,19 +667,7 @@ namespace DREAM.Controllers
         //      The Lock holding the given Request or null if there is no lock.
         private DREAM.Models.Lock findRequestLock(int requestID)
         {
-            DREAM.Models.Lock returnValue = null;
-
-            List<DREAM.Models.Lock> locks = db.Locks.ToList();
-            foreach (DREAM.Models.Lock requestLock in locks)
-            {
-                if (requestLock.RequestID == requestID)
-                {
-                    returnValue = requestLock;
-                    break;
-                }
-            }
-
-            return returnValue;
+            return db.Locks.SingleOrDefault(l => l.RequestID == requestID);
         }
 
         // Find and return the MembershipUser associated with a Lock.
@@ -701,14 +679,7 @@ namespace DREAM.Controllers
         //      The MembershipUser object of the user holding the Lock or null.
         private MembershipUser getUserFromLock(DREAM.Models.Lock requestLock)
         {
-            MembershipUser returnValue = null;
-
-            if (requestLock != null)
-            {
-                returnValue = Membership.GetUser(requestLock.UserID);
-            }
-
-            return returnValue;
+            return requestLock != null ? Membership.GetUser(requestLock.UserID) : null;
         }
 
         // Find and return the username belonging to the given user ID.
