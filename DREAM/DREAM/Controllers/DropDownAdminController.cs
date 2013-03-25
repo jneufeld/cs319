@@ -84,6 +84,7 @@ namespace DREAM.Controllers
             }
             m.Code = model.Code;
             m.FullName = model.FullName;
+            m.Enabled = true;
             if (ModelState.IsValid)
             {
                 DbSet dropDowns;
@@ -110,7 +111,7 @@ namespace DREAM.Controllers
         /// <param name="dropDownClass"> The drop down menu of the element to be edited </param>
         /// <returns>The view for editing an element from a given drop down </returns>
         [HttpGet]
-        public ActionResult Edit(int dropDownId, string dropDownCode, string dropDownFullName, string dropDownClass)
+        public ActionResult Edit(int dropDownId, string dropDownCode, string dropDownFullName, bool enabled, string dropDownClass)
         {
             DropDown m = null;
             switch (dropDownClass)
@@ -128,6 +129,7 @@ namespace DREAM.Controllers
                     m = new Region();
                     break;
             }
+            m.Enabled = enabled;
             m.ID = dropDownId;
             m.Code = dropDownCode;
             m.FullName = dropDownFullName;
@@ -173,7 +175,7 @@ namespace DREAM.Controllers
         /// <param name="dropDownClass"> The drop down menu of the element to be deleted </param>
         /// <returns>The view for deleting an element from a given drop down </returns>
         [HttpGet]
-        public ActionResult Delete(int dropDownId, string dropDownCode, string dropDownFullName, string dropDownClass)
+        public ActionResult Delete(int dropDownId, string dropDownCode, string dropDownFullName, bool enabled, string dropDownClass)
         {
             DropDown m = null;
             switch (dropDownClass)
@@ -191,6 +193,7 @@ namespace DREAM.Controllers
                     m = new Region();
                     break;
             }
+            m.Enabled = enabled;
             m.ID = dropDownId;
             m.Code = dropDownCode;
             m.FullName = dropDownFullName;
