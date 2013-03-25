@@ -43,11 +43,11 @@ else
                 @Html.DisplayFor(d => dp.FullName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass=dp.GetType().Name})
+                @Html.ActionLink("Edit", "Edit", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, enabled=dp.Enabled, dropDownClass=dp.GetType().Name})
             </td>
             <td>
-                @if (dp.Enabled) {@Html.ActionLink("Disable", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass=dp.GetType().Name})}
-                else {@Html.ActionLink("Enable", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass=dp.GetType().Name})}
+                @if (dp.Enabled) {@Html.ActionLink("Disable", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, enabled=dp.Enabled, dropDownClass=dp.GetType().Name})}
+                else {@Html.ActionLink("Enable", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, enabled=dp.Enabled, dropDownClass=dp.GetType().Name})}
             </td>
         </tr>
     }

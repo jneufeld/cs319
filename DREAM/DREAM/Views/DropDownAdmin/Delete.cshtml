@@ -4,7 +4,14 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+    @if (Model.Enabled) 
+    {
+        <h2>Disable</h2>  
+    }
+    else 
+    {
+        <h2>Enable</h2>
+    }
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
