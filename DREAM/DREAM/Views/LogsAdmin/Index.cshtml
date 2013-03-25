@@ -34,7 +34,7 @@
                 @Html.LabelFor(model => model.UserName)
             </td>
             <td>
-                @Html.EditorFor(model => model.UserName)
+                @Html.DropDownListFor(model => model.UserName, (IEnumerable<SelectListItem>)ViewData["UsersList"])
                 @Html.ValidationMessageFor(model => model.UserName)
             </td>
         </tr>

@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using DREAM.Models;
 
 namespace DREAM.Controllers
@@ -23,6 +24,7 @@ namespace DREAM.Controllers
         {
             LogFilterModel lfm = new LogFilterModel(request, user, act, before, after, page);
             ViewBag.ActionList = BuildActionDropdownList();
+            ViewBag.UsersList = BuildUserDropdownList();
             lfm.filter();
             return View(lfm);
         }
@@ -31,6 +33,7 @@ namespace DREAM.Controllers
         public ActionResult Index(String button, LogFilterModel lfm)
         {
             ViewBag.ActionList = BuildActionDropdownList();
+            ViewBag.UsersList = BuildUserDropdownList();
 
             if (button.Equals("Filter"))
             {
@@ -82,6 +85,29 @@ namespace DREAM.Controllers
             });
 
             return actions;
+        }
+
+        private IEnumerable<SelectListItem> BuildUserDropdownList()
+        {
+            List<SelectListItem> userList = new List<SelectListItem>();
+            MembershipUserCollection users = Membership.GetAllUsers();
+
+            userList.Add(new SelectListItem
+            {
+                Value = "",
+                Text = "All Users",
+            });
+
+            foreach (MembershipUser user in users)
+            {
+                userList.Add(new SelectListItem
+                {
+                    Value = user.UserName,
+                    Text = user.UserName,
+                });
+            }
+
+            return userList;
         }
     }
 }
