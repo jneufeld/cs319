@@ -13,6 +13,7 @@ namespace DREAM.Models
         public int ID { get; set; }
         public string Code { get; set; }
         public string FullName { get; set; }
+        public bool enabled { get; set; }
 
         public override string ToString()
         {

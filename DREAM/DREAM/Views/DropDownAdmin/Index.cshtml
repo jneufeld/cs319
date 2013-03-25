@@ -46,7 +46,8 @@ else
                 @Html.ActionLink("Edit", "Edit", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass=dp.GetType().Name})
             </td>
             <td>
-                @Html.ActionLink("Delete", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass=dp.GetType().Name})
+                @if (dp.enabled) {@Html.ActionLink("Disable", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass=dp.GetType().Name})}
+                else {@Html.ActionLink("Enable", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, dropDownClass=dp.GetType().Name})}
             </td>
         </tr>
     }

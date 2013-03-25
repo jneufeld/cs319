@@ -49,7 +49,7 @@ namespace DREAM.Controllers
                 case "TumourGroup":
                     m = new TumourGroup();
                     break;
-                case "Regions":
+                case "Region":
                     m = new Region();
                     break;
             }
@@ -78,7 +78,7 @@ namespace DREAM.Controllers
                 case "TumourGroup":
                     m = new TumourGroup();
                     break;
-                case "Regions":
+                case "Region":
                     m = new Region();
                     break;
             }
@@ -124,7 +124,7 @@ namespace DREAM.Controllers
                 case "TumourGroup":
                     m = new TumourGroup();
                     break;
-                case "Regions":
+                case "Region":
                     m = new Region();
                     break;
             }
@@ -187,7 +187,7 @@ namespace DREAM.Controllers
                 case "TumourGroup":
                     m = new TumourGroup();
                     break;
-                case "Regions":
+                case "Region":
                     m = new Region();
                     break;
             }
@@ -211,7 +211,8 @@ namespace DREAM.Controllers
             DropDown dropDown = new DropDown();
             dropDowns = getDropDowns(dropDownClass);
             dropDown = (DropDown)dropDowns.Find(dropDownId);
-            dropDowns.Remove(dropDown);
+            //dropDowns.Remove(dropDown);
+            dropDown.enabled = !dropDown.enabled;
             db.SaveChanges();
             RouteValueDictionary routes = new RouteValueDictionary();
             routes.Add("dropDownClass", dropDownClass);
@@ -233,7 +234,7 @@ namespace DREAM.Controllers
                     return db.QuestionTypes;
                 case "TumourGroup":
                     return db.TumourGroups;
-                case "Regions":
+                case "Region":
                     return db.Regions;
             }
             return null;
