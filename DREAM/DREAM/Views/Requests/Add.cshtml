@@ -15,7 +15,7 @@
         <ol>
             <li>
                 @Html.LabelFor(m => m.RequesterTypeStringID)
-                @Html.DropDownListFor(m => m.RequesterTypeStringID, (IEnumerable<SelectListItem>)ViewData["RequesterTypeList"])
+                @Html.DropDownListFor(m => m.RequesterTypeStringID, (IEnumerable<SelectListItem>)ViewData["RequesterTypeList"], new { id = "req-type" })
             </li>
 
             <li>
@@ -34,7 +34,7 @@
                                     @Html.LabelFor(m => m.CallerFirstName)
                                 </td>
                                 <td>
-                                    @Html.EditorFor(m => m.CallerFirstName)
+                                    @Html.TextBoxFor(m => m.CallerFirstName, new { id = "caller-first" })
                                     @Html.ValidationMessageFor(m => m.CallerFirstName)
                                 </td>
                             </tr>
@@ -44,7 +44,7 @@
                                     @Html.LabelFor(m => m.CallerLastName)
                                 </td>
                                 <td>
-                                    @Html.EditorFor(m => m.CallerLastName)
+                                    @Html.TextBoxFor(m => m.CallerLastName, new { id = "caller-last" })
                                     @Html.ValidationMessageFor(m => m.CallerLastName)
                                 </td>
                             </tr>
@@ -99,7 +99,7 @@
                                     @Html.LabelFor(m => m.PatientFirstName)
                                 </td>
                                 <td>
-                                    @Html.EditorFor(m => m.PatientFirstName)
+                                    @Html.TextBoxFor(m => m.PatientFirstName, new { id = "patient-first" })
                                     @Html.ValidationMessageFor(m => m.PatientFirstName)
                                 </td>
                             </tr>
@@ -109,7 +109,7 @@
                                     @Html.LabelFor(m => m.PatientLastName)
                                 </td>
                                 <td>
-                                    @Html.EditorFor(m => m.PatientLastName)
+                                    @Html.TextBoxFor(m => m.PatientLastName, new { id = "patient-last" })
                                     @Html.ValidationMessageFor(m => m.PatientLastName)
                                 </td>
                             </tr>
@@ -161,4 +161,40 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery")
+
+    <script type="text/javascript">
+        var patient = false;
+
+        $(document).ready(function() {
+            $('#req-type').change(function () {
+                if ($('#req-type').children("option:selected").text() == "Patient") {
+                    patient = true;
+                    $('#patient-first').val($('#caller-first').val());
+                    $('#patient-last').val($('#caller-last').val());
+                }
+                else patient = false;
+            });
+
+            $('#caller-first').keyup(function () {
+                if (patient == true)
+                    $('#patient-first').val($('#caller-first').val());
+            });
+
+            $('#caller-last').keyup(function () {
+                if (patient == true)
+                    $('#patient-last').val($('#caller-last').val());
+            });
+
+            $('#patient-first').keyup(function () {
+                if (patient == true)
+                    $('#caller-first').val($('#patient-first').val());
+            });
+
+            $('#patient-last').keyup(function () {
+                if (patient == true)
+                    $('#caller-last').val($('#patient-last').val());
+            });
+        });
+    </script>
 }
