@@ -17,9 +17,6 @@ namespace DREAM.Reports
 
         private static Random rand = new Random();
 
-        public static List<Question> Questions = null;
-        public static List<Request> Requests = null;
-
         public static void Initialize()
         {
             while(Membership.GetAllUsers().Count < 6)
@@ -39,14 +36,15 @@ namespace DREAM.Reports
                 db.SaveChanges();
             }
 
-            Requests = generateRandomRequests();
-            Questions = generateRandomQuestions(Requests);
+            GenerateRandomRequests(NUMBER_OF_REQUESTS - db.Requests.Count());
+            GenerateRandomQuestions(NUMBER_OF_QUESTIONS - db.Questions.Count());
         }
 
-        private static List<Question> generateRandomQuestions(List<Request> requests)
+        public static void GenerateRandomQuestions(int number, IEnumerable<Request> requests=null)
         {
-            List<Question> questions = new List<Question>();
-            for (int i = 0; i < NUMBER_OF_QUESTIONS; i++)
+            requests = requests ?? db.Requests;
+
+            for (int i = 0; i < number; i++)
             {
                 List<Keyword> keywords = new List<Keyword>();
                 int numKeywords = rand.Next(2) + 1;
@@ -71,7 +69,6 @@ namespace DREAM.Reports
 
                 Question newQuestion = new Question
                 {
-                    ID = i,
                     TumourGroup = pickRandom(db.TumourGroups),
                     TimeTaken = rand.Next(240),
                     SpecialNotes = "",
@@ -85,32 +82,27 @@ namespace DREAM.Reports
                     Keywords = keywords,
                 };
 
-                questions.Add(newQuestion);
+                db.Questions.Add(newQuestion);
                 request.Questions.Add(newQuestion);
             }
-
-            return questions;
+            db.SaveChanges();
         }
 
-        private static List<Request> generateRandomRequests()
+        public static void GenerateRandomRequests(int number)
         {
-            List<Request> requests = new List<Request>();
-
             IEnumerable<MembershipUser> users = Membership.GetAllUsers().Cast<MembershipUser>();
 
-            for (int i = 0; i < NUMBER_OF_REQUESTS; i++)
+            for (int i = 0; i < number; i++)
             {
                 DateTime startDate = generateRandomDate();
-                requests.Add(new Request
+                db.Requests.Add(new Request
                 {
-                    ID = i,
                     CreationTime = startDate,
                     CompletionTime = generateRandomDate(startDate),
                     CreatedBy = (Guid)pickRandom(users).ProviderUserKey,
                     ClosedBy = (Guid)pickRandom(users).ProviderUserKey,
                     Caller = new Caller
                     {
-                        ID = i,
                         FirstName = generateRandomString(20),
                         LastName = generateRandomString(20),
                         Email = generateRandomString(20) + "@example.com",
@@ -125,13 +117,11 @@ namespace DREAM.Reports
                         AgencyID = rand.Next(100000).ToString(),
                         FirstName = generateRandomString(20),
                         Gender = (int)Gender.UNKNOWN,
-                        ID = i,
                         LastName = generateRandomString(20),
                     },
                 });
             }
-
-            return requests;
+            db.SaveChanges();
         }
 
         private static string generateRandomString(int length)

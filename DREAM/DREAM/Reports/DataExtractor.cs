@@ -10,7 +10,7 @@ namespace DREAM.Reports
 {
     public class DataExtractor
     {
-        public static List<KeyValuePair<string, List<object>>> GetDataRows<ObjectType>(ChartModel chart, List<ObjectType> objects,
+        public static List<KeyValuePair<string, List<object>>> GetDataRows<ObjectType>(ChartModel chart, IEnumerable<ObjectType> objects,
             MemberInfo member, StatFunction function, MemberInfo stratificationMember = null) where ObjectType:IReportable
         {
             Dictionary<string, List<object>> dataRows = new Dictionary<string, List<object>>();
@@ -59,7 +59,7 @@ namespace DREAM.Reports
             return dataRows.ToList();
         }
 
-        public static object[][] GetRawData<ObjectType>(List<ObjectType> objects, List<MemberInfo> members)
+        public static object[][] GetRawData<ObjectType>(IEnumerable<ObjectType> objects, List<MemberInfo> members)
         {
             return objects.Select(obj => getValues(obj, members)).ToArray();
         }

@@ -8,6 +8,20 @@ using System.Web.Security;
 
 namespace DREAM.Models
 {
+    public enum Probability
+    {
+        Probable,
+        Possible,
+        Unlikely,
+    }
+
+    public enum Severity
+    {
+        Minor,
+        Moderate,
+        Major,
+    }
+
     public class QuestionViewModel
     {
         public int QuestionID { get; set; }
@@ -25,10 +39,13 @@ namespace DREAM.Models
         public string Response { get; set; }
 
         [Display(Name = "Probability")]
-        public int Probability { get; set; }
+        public Probability Probability { get; set; }
 
         [Display(Name = "Severity")]
-        public int Severity { get; set; }
+        public Severity Severity { get; set; }
+
+        [Display(Name = "Impact")]
+        public string Impact { get; set; }
 
         [Display(Name = "Special Notes")]
         public string SpecialNotes { get; set; }
@@ -69,8 +86,8 @@ namespace DREAM.Models
                 QuestionText = q.QuestionText,
                 TimeTaken = q.TimeTaken,
                 Response = q.Response,
-                Probability = q.Probability,
-                Severity = q.Severity,
+                Probability = (Probability)q.Probability,
+                Severity = (Severity)q.Severity,
                 SpecialNotes = q.SpecialNotes,
                 QuestionTypeID = q.QuestionType != null ? q.QuestionType.ID : 0,
                 TumourGroupID = q.TumourGroup != null ? q.TumourGroup.ID : 0,
@@ -85,8 +102,8 @@ namespace DREAM.Models
             q.QuestionText = QuestionText;
             q.TimeTaken = TimeTaken;
             q.Response = Response;
-            q.Probability = Probability;
-            q.Severity = Severity;
+            q.Probability = (int)Probability;
+            q.Severity = (int)Severity;
             q.SpecialNotes = SpecialNotes;
         }
     }
