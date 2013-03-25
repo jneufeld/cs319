@@ -319,11 +319,9 @@
                             data: "{ \"prefix\": \"" + request.term + "\" }",
                             async: true,
                             success: function (data) {
-                                console.log(data);
                                 response(data);
                             },
                             error: function (result) {
-                                console.log('Fail: ' + result);
                                 response(null);
                             }
                         });
@@ -331,7 +329,6 @@
                     delay: 500,
                     minLength: 2,
                     select: function (event, ui) {
-                        console.log(ui.item);
                         $(node).find("input[name$=Keyword]").val(ui.item.value);
                     },
                 });
@@ -411,13 +408,11 @@
                         data: "{ \"agencyId\": \"" + request.term + "\" }",
                         async: true,
                         success: function (data) {
-                            //console.log(data);
                             response($.map(data, function (item) {
                                 return item;
                             }))
                         },
                         error: function (result) {
-                            console.log(result);
                             response(null);
                         }
                     });
@@ -425,7 +420,6 @@
                 delay: 500,
                 minLength: 2,
                 select: function (event, ui) {
-                    console.log(ui.item);
                     $("input[name=PatientAgencyID]").val(ui.item.AgencyID);
                     $("input[name=PatientFirstName]").val(ui.item.FirstName);
                     $("input[name=PatientLastName]").val(ui.item.LastName);

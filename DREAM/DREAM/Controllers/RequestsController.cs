@@ -22,6 +22,8 @@ namespace DREAM.Controllers
     {
         private DREAMContext db = new DREAMContext();
 
+        private SearchIndex SearchIndex = new SearchIndex();
+
         //
         // GET: /Requests/
 
@@ -88,6 +90,7 @@ namespace DREAM.Controllers
                 db.Callers.Add(request.Caller);
                 if (request.Patient.ID == 0)
                     db.Patients.Add(request.Patient);
+                SearchIndex.AddOrUpdateIndex(request);
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
                 db.SaveChanges();
 
@@ -338,6 +341,9 @@ namespace DREAM.Controllers
 
                 request.Caller.Type = db.RequesterTypes.SingleOrDefault(rt => rt.ID == rv.RequesterTypeID);
                 request.Caller.Region = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID);
+
+                SearchIndex.AddOrUpdateIndex(request);
+
                 db.Logs.Add(Log.Edit(request, Membership.GetUser()));
 
                 db.SaveChanges();

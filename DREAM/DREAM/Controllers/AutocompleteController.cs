@@ -7,11 +7,15 @@ using System.Web;
 using System.Web.Mvc;
 using DREAM.Models;
 
+
 namespace DREAM.Controllers
 {
     public class AutocompleteController : Controller
     {
         private DREAMContext db = new DREAMContext();
+
+        private SearchAutoComplete SearchAutocomplete =
+            new SearchAutoComplete(AppDomain.CurrentDomain.BaseDirectory + "/App_Data/SearchAutocompleteIndex");
 
         //
         // POST: /Autocomplete/Keyword/
@@ -56,6 +60,21 @@ namespace DREAM.Controllers
                     Age = p.Age
                 });
             return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult Search(string query)
+        {
+            List<string> response = new List<string>();
+            if (string.IsNullOrWhiteSpace(query))
+                return Json(new string[] { });
+
+            query = query.Split().Last();
+
+            // Fetch suggestions
+            string[] suggestions = SearchAutocomplete.SuggestTermsFor(query).ToArray();
+
+            return Json(suggestions, JsonRequestBehavior.AllowGet);
         }
 
     }

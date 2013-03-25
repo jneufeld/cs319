@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Lucene.Net.Store;
 using DREAM.Models;
 
 namespace DREAM
@@ -34,6 +36,12 @@ namespace DREAM
 
             //initializeDomain.InitializeDatabase(context);
             //initializeMigrations.InitializeDatabase(context);
+
+            //using (FSDirectory d = FSDirectory.Open(new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "/App_Data/LuceneIndex")))
+            //{
+            //    SearchAutoComplete sac = new SearchAutoComplete(AppDomain.CurrentDomain.BaseDirectory + "/App_Data/SearchAutocompleteIndex");
+            //    sac.BuildAutoCompleteIndex(d, "Keywords");
+            //}
 
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<DREAMContext, DREAM.Migrations.Configuration>());
 
