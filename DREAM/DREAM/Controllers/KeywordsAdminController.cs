@@ -11,7 +11,7 @@ using DREAM.Models;
 
 namespace DREAM.Controllers
 {
-   // [Authorize(Roles="ADMIN")]
+   [Authorize(Roles="ADMIN")]
     public class KeywordsAdminController : Controller
     {
         private DREAMContext db = new DREAMContext();
