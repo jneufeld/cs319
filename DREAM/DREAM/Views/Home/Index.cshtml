@@ -21,8 +21,11 @@
             <thead>
                 <tr>
                     <th>ID </th>
-                    <th>Type </th>
+                    <th>Requester Type </th>
+                    <th>Created By </th>
                     <th>Status </th>
+                    <th>Creation Time </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -31,6 +34,9 @@
             {
                 <tr>
                     <td>No open requests </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -42,7 +48,13 @@
                 <tr>
                     <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequestID)</td>
                     <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequesterTypeStringID)</td>
+                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].CreatedBy)</td>
                     <td>@Html.DisplayFor(d => Model.OpenRequests[i].Status)</td>
+                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].CreationTime)</td>
+                    <td>
+                        @Html.ActionLink("View", "ViewRequest", new { id = Model.OpenRequests[i].RequestID }) |
+                        @Html.ActionLink("Edit", "Edit", new { id = Model.OpenRequests[i].RequestID })
+                    </td>
                 </tr>
                  
                 }
@@ -56,8 +68,11 @@
             <thead>
                 <tr>
                     <th>ID </th>
-                    <th>Type </th>
+                    <th>Requester Type </th>
+                    <th>Created By </th>
                     <th>Status </th>
+                    <th>Creation Time </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -68,6 +83,9 @@
                     <td>No recent requests </td>
                     <td></td>
                     <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             }
             else
@@ -75,9 +93,15 @@
                 for (int i = 0; i < Model.RecentRequests.Count; i++)
                 {
                 <tr>
-                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].RequestID)</td>
-                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].RequesterTypeStringID)</td>
-                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].Status)</td>
+                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequestID)</td>
+                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequesterTypeStringID)</td>
+                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].CreatedBy)</td>
+                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].Status)</td>
+                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].CreationTime)</td>
+                    <td>
+                        @Html.ActionLink("View", "ViewRequest", new { id = Model.OpenRequests[i].RequestID }) |
+                        @Html.ActionLink("Edit", "Edit", new { id = Model.OpenRequests[i].RequestID })
+                    </td>
                 </tr>
                  
                 }

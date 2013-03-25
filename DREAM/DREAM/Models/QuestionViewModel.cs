@@ -39,10 +39,10 @@ namespace DREAM.Models
         public string Response { get; set; }
 
         [Display(Name = "Probability")]
-        public Probability Probability { get; set; }
+        public string Probability { get; set; }
 
         [Display(Name = "Severity")]
-        public Severity Severity { get; set; }
+        public string Severity { get; set; }
 
         [Display(Name = "Impact")]
         public string Impact { get; set; }
@@ -86,8 +86,8 @@ namespace DREAM.Models
                 QuestionText = q.QuestionText,
                 TimeTaken = q.TimeTaken,
                 Response = q.Response,
-                Probability = (Probability)q.Probability,
-                Severity = (Severity)q.Severity,
+                Probability = ((Probability)q.Probability).ToString(),
+                Severity = ((Severity)q.Severity).ToString(),
                 SpecialNotes = q.SpecialNotes,
                 QuestionTypeID = q.QuestionType != null ? q.QuestionType.ID : 0,
                 TumourGroupID = q.TumourGroup != null ? q.TumourGroup.ID : 0,
@@ -102,8 +102,15 @@ namespace DREAM.Models
             q.QuestionText = QuestionText;
             q.TimeTaken = TimeTaken;
             q.Response = Response;
-            q.Probability = (int)Probability;
-            q.Severity = (int)Severity;
+
+            Probability p;
+            Enum.TryParse(Probability, true, out p);
+            q.Probability = (int)p;
+
+            Severity s;
+            Enum.TryParse(Severity, true, out s);
+            q.Severity = (int)s;
+            
             q.SpecialNotes = SpecialNotes;
         }
     }
