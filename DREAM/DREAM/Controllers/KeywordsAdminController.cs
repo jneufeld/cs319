@@ -69,5 +69,18 @@ namespace DREAM.Controllers
                 return View(keyword);
             }
         }
+
+        public ActionResult ChangeKeywordStatus(Keyword keyword)
+        {
+            DREAMContext db = new DREAMContext();
+            using (db)
+            {
+                bool curKeywordStatus = keyword.Enabled;
+                keyword.Enabled = !curKeywordStatus;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "KeywordsAdmin");
+        }
     }
 }

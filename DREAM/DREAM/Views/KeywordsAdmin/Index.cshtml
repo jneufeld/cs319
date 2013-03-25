@@ -21,40 +21,8 @@
     }
 </style>
 
-<!--
-<table>
-    <tr>
-        <th>Word</th>
-        <th>Enabled</th>
-        <th>Number of Tagged Questions</th>
-        <th>Edit Button</th>
-        <th> </th>
-    </tr>
 
-@if (Model == null)
-{
-    <tr>
-        <td>NoValues</td>
-        <td>NoValues</td>
-        <td>NoValues</td>
-    </tr>
-}
-else
-{
-    foreach (DREAM.Models.Keyword dp in Model)
-    {
-        <tr>
-            <td>@Html.DisplayFor(d => dp.KeywordText)</td>
-            <td>@Html.DisplayFor(d => dp.Enabled)</td>
-            <td>@Html.DisplayFor(d => dp.AssociatedQuestions.Count)</td>
-            <td><button>Edit</button></td>
-        </tr>
-    }
-}
-</table>
--->
-
- <!-- taken from http://imar.spaanjaars.com/312/how-do-i-make-a-full-table-row-clickable -->
+<!-- taken from http://imar.spaanjaars.com/312/how-do-i-make-a-full-table-row-clickable -->
 <script type="text/javascript">
     function ChangeColour(tableRow, highLight) {
         if (highLight) {
@@ -64,51 +32,44 @@ else
             tableRow.style.backgroundColor = 'white';
         }
     }
-
-    function editKeyword(editButton) {
-        
-
-        var userAction = prompt("What do you want to edit \"" + editButton.name + "\" to?  Please enter the new keyword into the box below.");
-
-        if (userAction != null) {
-            alert("Will update keyword\"" + editButton.name + "\" to \"" + userAction + "\"");
-        }
-    }
-
-    function mergeKeyword(keyword) {
-    }
 </script>
 
 
-<head>
-    <body>
-        @if (Model == null)
-        {
-            <h3>No keywords found in the database </h3>
+@if (Model == null)
+{
+    <h3>No keywords found in the database </h3>
         }
-        else
-        {
+else
+{
             
-                <table>
-                    <tr>
-                        <th>Word</th>
-                        <th>Enabled</th>
-                        <th>Number of Tagged Questions</th>
-                        <th>Edit</th>
-                    </tr>
+    <table>
+        <tr>
+            <th>Word</th>
+            <th>Enabled</th>
+            <th>Number of Tagged Questions</th>
+            <th>Edit</th>
+        </tr>
 
-                    @foreach (DREAM.Models.Keyword dp in Model)
-                    {
-                        <tr onmouseover="ChangeColour(this, true);" onmouseout="ChangeColour(this, false);" onclick="">
-                            <td>@Html.DisplayFor(d => dp.KeywordText)</td>
-                            <td>@Html.DisplayFor(d => dp.Enabled)</td>
-                            <td>@Html.DisplayFor(d => dp.AssociatedQuestions.Count)</td>
-                            <td>@Html.ActionLink("Edit", "Edit", new { keyword=dp.ID})</td>
-                        </tr>
-                    }
-                </table>
-       
+        @foreach (DREAM.Models.Keyword dp in Model)
+        {
+            <tr onmouseover="ChangeColour(this, true);" onmouseout="ChangeColour(this, false);" onclick="">
+                <td>@Html.DisplayFor(d => dp.KeywordText)</td>
+               
+                 @if (dp.Enabled)
+                {
+                    <td>@Html.ActionLink("Yes", "ChangeKeywordStatus", "KeywordsAdmin", new { keyword = dp })</td>                                                  
+                 }
+                else
+                {
+                    <td>@Html.ActionLink("No", "ChangeKeywordStatus", "KeywordsAdmin", new { keyword = dp })</td>
+                 }
+
+                <td>@Html.DisplayFor(d => dp.AssociatedQuestions.Count)</td>
+                <td>@Html.ActionLink("Edit", "Edit", new { keyword = dp.ID })</td>
+            </tr>
         }
-    </body>a
-</head>
+
+    </table>
+}
+
 
