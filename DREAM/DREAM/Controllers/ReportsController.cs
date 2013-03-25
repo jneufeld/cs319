@@ -291,6 +291,8 @@ namespace DREAM.Controllers
             ViewBag.RequestStratificationOptions = (new JavaScriptSerializer()).Serialize(ViewBag.RequestStratificationList);
             ViewBag.QuestionPropertyOptions = (new JavaScriptSerializer()).Serialize(ViewBag.QuestionPropertiesList);
             ViewBag.QuestionStratificationOptions = (new JavaScriptSerializer()).Serialize(ViewBag.QuestionStratificationList);
+            ViewBag.RequestStatFunctionMap = (new JavaScriptSerializer()).Serialize(buildStatFunctionMap(typeof(Request)));
+            ViewBag.QuestionStatFunctionMap = (new JavaScriptSerializer()).Serialize(buildStatFunctionMap(typeof(Request)));
         }
 
         private IEnumerable<SelectListItem> buildTimeRangeDropdownList()
@@ -430,6 +432,26 @@ namespace DREAM.Controllers
             }
 
             return stratifications;
+        }
+
+        private Dictionary<string, List<SelectListItem>> buildStatFunctionMap(Type type)
+        {
+            Dictionary<string, List<SelectListItem>> statFunctionMap = new Dictionary<string, List<SelectListItem>>();
+            ChartableAttribute chartableAttribute;
+
+            foreach (MemberInfo member in type.GetProperties())
+            {
+                if(!Attribute.IsDefined(member, typeof(ChartableAttribute)))
+                {
+                    continue;
+                }
+
+                chartableAttribute = (ChartableAttribute)Attribute.GetCustomAttribute(member, typeof(ChartableAttribute));
+
+                statFunctionMap.Add(chartableAttribute.Name ?? member.Name, chartableAttribute.StatFunctions.Select(statFunc => new SelectListItem { Text = statFunc.ToString(), Value = statFunc.ToString() }).ToList());
+            }
+
+            return statFunctionMap;
         }
 
         private IEnumerable<SelectListItem> buildObjectTypeDropdownList()
