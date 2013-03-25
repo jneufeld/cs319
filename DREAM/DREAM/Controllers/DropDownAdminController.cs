@@ -212,7 +212,7 @@ namespace DREAM.Controllers
             dropDowns = getDropDowns(dropDownClass);
             dropDown = (DropDown)dropDowns.Find(dropDownId);
             //dropDowns.Remove(dropDown);
-            dropDown.enabled = !dropDown.enabled;
+            dropDown.Enabled = !dropDown.Enabled;
             db.SaveChanges();
             RouteValueDictionary routes = new RouteValueDictionary();
             routes.Add("dropDownClass", dropDownClass);
