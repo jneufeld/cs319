@@ -93,14 +93,14 @@
                 for (int i = 0; i < Model.RecentRequests.Count; i++)
                 {
                 <tr>
-                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequestID)</td>
-                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequesterTypeStringID)</td>
-                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].CreatedBy)</td>
-                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].Status)</td>
-                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].CreationTime)</td>
+                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].RequestID)</td>
+                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].RequesterTypeStringID)</td>
+                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].CreatedBy)</td>
+                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].Status)</td>
+                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].CreationTime)</td>
                     <td>
-                        @Html.ActionLink("View", "ViewRequest", new { id = Model.OpenRequests[i].RequestID }) |
-                        @Html.ActionLink("Edit", "Edit", new { id = Model.OpenRequests[i].RequestID })
+                        @Html.ActionLink("View", "ViewRequest", new { id = Model.RecentRequests[i].RequestID }) |
+                        @Html.ActionLink("Edit", "Edit", new { id = Model.RecentRequests[i].RequestID })
                     </td>
                 </tr>
                  
