@@ -84,7 +84,7 @@ namespace DREAM.Models
                 }
                 db.SaveChanges();
 
-                String newPassword = user.ResetPassword();
+                String newPassword = user.ResetPassword()+"!A2";
 
                 SendEmail("souffle.dream@gmail.com", user.Email, "", "", "DREAM Password Reset", newPassword);
 
