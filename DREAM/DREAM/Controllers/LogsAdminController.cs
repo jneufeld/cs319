@@ -10,6 +10,7 @@ using DREAM.Models;
 
 namespace DREAM.Controllers
 {
+    [Authorize(Roles=Role.ADMIN)]
     public class LogsAdminController : Controller
     {
         private DREAMContext db = new DREAMContext();
@@ -17,6 +18,7 @@ namespace DREAM.Controllers
         //
         // GET: /LogsAdmin/
 
+        [HttpGet]
         public ActionResult Index(int? request = null, String act = null, String user = null, DateTime? before = null, DateTime? after = null, int page = 1)
         {
             LogFilterModel lfm = new LogFilterModel(request, user, act, before, after, page);
