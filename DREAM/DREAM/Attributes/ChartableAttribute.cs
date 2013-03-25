@@ -8,7 +8,7 @@ namespace DREAM.Attributes
 {
     public class ChartableAttribute : ReportableAttribute
     {
-        public StatFunction[] StatFunctions = new StatFunction[] { StatFunction.AVG, StatFunction.COUNT, StatFunction.MAX, StatFunction.MIN, StatFunction.SUM };
+        public StatFunction[] StatFunctions = new StatFunction[] { StatFunction.AVG, StatFunction.MAX, StatFunction.MIN, StatFunction.SUM };
 
         public ChartableAttribute() : base() { }
 

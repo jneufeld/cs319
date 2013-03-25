@@ -82,9 +82,11 @@
 
         var requestPropertyOptions = @Html.Raw(ViewData["RequestPropertyOptions"]);
         var requestStratificationOptions = @Html.Raw(ViewData["RequestStratificationOptions"]);
+        var requestStatFunctionMap = @Html.Raw(ViewData["RequestStatFunctionMap"]);
 
         var questionPropertyOptions = @Html.Raw(ViewData["QuestionPropertyOptions"]);
         var questionStratificationOptions = @Html.Raw(ViewData["QuestionStratificationOptions"]);
+        var questionStatFunctionMap = @Html.Raw(ViewData["QuestionStatFunctionMap"]);
 
         $.datepicker.setDefaults({
             dateFormat: "M dd yy"
@@ -127,6 +129,42 @@
                         $stratificationDropDown.append($("<option></option>").attr("value", option.Value).text(option.Text));
                     });
                     break;
+            }
+        });
+
+        $("body").on("change", ".propertySelector", function() {
+            var $objectTypeSelector = $(this).parents(".chartValues").siblings("span").children(".objectTypeSelector");
+            var $statFunctionSelector = $(this).siblings(".statFuctionSelector");
+            var statFunction = $statFunctionSelector.val();
+            var $newOption;
+
+            $statFunctionSelector.empty();
+
+            switch($objectTypeSelector.val()) {
+                case "Request":
+                    $.each(requestStatFunctionMap[$(this).val()], function(i, option) {
+                        $newOption = $("<option></option>").attr("value", option.Value).text(option.Text)
+                        if(option.Value == statFunction)
+                            $newOption.attr("selected", "selected");
+                        $statFunctionSelector.append($newOption);
+                    });
+                    break;
+                case "Question":
+                    $.each(questionStatFunctionMap[$(this).val()], function(i, option) {
+                        $newOption = $("<option></option>").attr("value", option.Value).text(option.Text)
+                        if(option.Value == statFunction)
+                            $newOption.attr("selected", "selected");
+                        $statFunctionSelector.append($newOption);
+                    });
+                    break;
+            }
+        });
+
+        $("body").on("change", ".statFunctionSelector", function() {
+            var $propertySelector = $(this).siblings(".propertySelector");
+            var $valNameSelector = $(this).siblings("input[type='text']");
+            if($propertySelector.val() && $(this).val() && $valNameSelector.val() == "") {
+                $valNameSelector.val($(this).val() + " " + $propertySelector.val());
             }
         });
     </script>
