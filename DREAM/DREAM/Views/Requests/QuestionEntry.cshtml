@@ -59,6 +59,8 @@
                     @Html.DropDownListFor(m => m.Severity, (IEnumerable<SelectListItem>)ViewData["SeverityList"])
                     @Html.ValidationMessageFor(m => m.Severity)
                 </td>
+            </tr>
+            <tr>
                 <td>
                     @Html.LabelFor(m => m.Probability)
                 </td>
@@ -66,9 +68,13 @@
                     @Html.DropDownListFor(m => m.Probability, (IEnumerable<SelectListItem>)ViewData["ProbabilityList"])
                     @Html.ValidationMessageFor(m => m.Probability)
                 </td>
+            </tr>
+            <tr>
                 <td>
                     @Html.LabelFor(m => m.Impact)
-                    @Html.DisplayFor(m => m.Impact)
+                </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Impact, new { disabled = "disabled", @readonly = "readonly" })
                 </td>
             </tr>
             <tr>

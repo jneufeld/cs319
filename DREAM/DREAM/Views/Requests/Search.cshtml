@@ -26,41 +26,42 @@
         </tr>
     </table>
     
-    if (Model.Executed == true)
+    @if (Model.Executed == true)
     {
-        if (Model.Results.ToList().Count == 0)
+        @if (Model.Results.ToList().Count == 0)
         {
-    <p>No results found!</p>
+            <p>No results found!</p>
         }
         else
         {
-    <table id="results">
-        <thead>
-            <tr>
-                <th>Request</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @for (int i = 0; i < Model.Results.Count; i++)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(m => m.Results[i].RequestID)
-                    </td>
-                    <td>
-                        @Html.ActionLink("View", "ViewRequest", new { id = Model.Results[i].RequestID })
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = Model.Results[i].RequestID })
-                    </td>
-                </tr>
-            }
-
-        </tbody>
-    </table>
+            <table id="results">
+                <thead>
+                    <tr>
+                        <th>ID </th>
+                        <th>Requester Type </th>
+                        <th>Created By </th>
+                        <th>Status </th>
+                        <th>Creation Time </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Results.Count; i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(d => Model.Results[i].RequestID)</td>
+                            <td>@Html.DisplayFor(d => Model.Results[i].RequesterTypeStringID)</td>
+                            <td>@Html.DisplayFor(d => Model.Results[i].CreatedBy)</td>
+                            <td>@Html.DisplayFor(d => Model.Results[i].Status)</td>
+                            <td>@Html.DisplayFor(d => Model.Results[i].CreationTime)</td>
+                            <td>
+                                @Html.ActionLink("View", "ViewRequest", "Requests", new { id = Model.Results[i].RequestID }) |
+                        @Html.ActionLink("Edit", "Edit", "Requests", new { id = Model.Results[i].RequestID })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
     }
 }

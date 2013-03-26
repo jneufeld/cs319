@@ -52,7 +52,7 @@
                     @Html.LabelFor(model => model.Status)
                 </td>
                 <td>
-                    @Html.DisplayTextFor(model => model.Status)
+                    @Html.TextBoxFor(model => model.Status, new { disabled = "disabled", @readonly = "readonly" })
                     @Html.HiddenFor(model => model.Close)
                 </td>
             </tr>
@@ -351,8 +351,8 @@
                 var unlikelyLookup = { "Major": 5, "Moderate": 5, "Minor": 5 };
                 var problookup = {};
                 problookup["Probable"] = probableLookup;
-                problookup["Possible"] = probableLookup;
-                problookup["Unlikely"] = probableLookup;
+                problookup["Possible"] = possibleLookup;
+                problookup["Unlikely"] = unlikelyLookup;
                 var l = problookup[probability];
                 if (l) {
                     return l[severity];
@@ -363,22 +363,25 @@
 
             addImpactUpdateHandler: function (questionItem) {
                 var handler = function (obj) {
-                    var $prob = questionItem.find("input[name$=Probability]");
-                    var $severity = questionItem.find("input[name$=Severity]");
+                    var $prob = questionItem.find("select[name$=Probability]");
+                    var $severity = questionItem.find("select[name$=Severity]");
                     var prob = $prob.val();
                     var severity = $severity.val();
                     var $impact = questionItem.find("input[name$=Impact]");
                     var impact = viewModel.computeImpact(severity, prob);
+                    console.log(prob);
                     $impact.val(impact);
                 }
-                var $prob = questionItem.find("input[name$=Probability]");
-                var $severity = questionItem.find("input[name$=Severity]");
+                var $prob = questionItem.find("select[name$=Probability]");
+                var $severity = questionItem.find("select[name$=Severity]");
                 $prob.change(handler);
+                $prob.trigger('change');
+                $severity.change(handler);
             },
 
             closeRequest: function () {
                 $("input[name=Close]:hidden").val('True');
-                $("input[name=Status]:hidden").val('Closed');
+                $("input[name=Status]").val('Closed');
             }
 
         };

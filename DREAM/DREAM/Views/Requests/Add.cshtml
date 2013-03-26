@@ -166,7 +166,7 @@
     <script type="text/javascript">
         var patient = false;
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#req-type').change(function () {
                 if ($('#req-type').children("option:selected").text() == "Patient") {
                     patient = true;
@@ -194,6 +194,34 @@
             $('#patient-last').keyup(function () {
                 if (patient == true)
                     $('#caller-last').val($('#patient-last').val());
+            });
+
+            $("#PatientAgencyID").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Autocomplete/Patient", type: "POST", dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        data: "{ \"agencyId\": \"" + request.term + "\" }",
+                        async: true,
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return item;
+                            }))
+                        },
+                        error: function (result) {
+                            response(null);
+                        }
+                    });
+                },
+                delay: 500,
+                minLength: 2,
+                select: function (event, ui) {
+                    $("input[name=PatientAgencyID]").val(ui.item.AgencyID);
+                    $("input[name=PatientFirstName]").val(ui.item.FirstName);
+                    $("input[name=PatientLastName]").val(ui.item.LastName);
+                    $("input[name=PatientGender]").val(ui.item.Gender);
+                    $("input[name=PatientAge]").val(ui.item.Age);
+                },
             });
         });
     </script>
