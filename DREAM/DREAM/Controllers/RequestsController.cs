@@ -22,7 +22,7 @@ namespace DREAM.Controllers
     {
         private DREAMContext db = new DREAMContext();
 
-        private SearchIndex SearchIndex = new SearchIndex();
+        //private SearchIndex SearchIndex = new SearchIndex();
 
         //
         // GET: /Requests/
@@ -90,7 +90,7 @@ namespace DREAM.Controllers
                 db.Callers.Add(request.Caller);
                 if (request.Patient.ID == 0)
                     db.Patients.Add(request.Patient);
-                SearchIndex.AddOrUpdateIndex(request);
+                //SearchIndex.AddOrUpdateIndex(request);
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
                 db.SaveChanges();
 
@@ -128,10 +128,11 @@ namespace DREAM.Controllers
             // Split based on whitespace
             string[] keywords = search.Query.Split(null);
             IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Contains(k.KeywordText))
-                .Include(k => k.AssociatedQuestions.Select(c => c.Request));
+                .Include(k => k.AssociatedQuestions.Select(c => c.Request)).ToList();
             foreach (var k in matched)
             {
-                requests.UnionWith(k.AssociatedQuestions.Select(q => q.Request));
+                List<int> ints = k.AssociatedQuestions.Select(q => q.Request.ID).ToList();
+                requests.UnionWith(ints.Select(id => FindRequest(id)));
             }
             //IEnumerable<Request> requests = db.Requests.Where(request => request.Patient.FirstName.Equals(search.Query));
             search.Results = new List<RequestViewModel>(requests.Select(r => RequestViewModel.CreateFromRequest(r)));
@@ -230,7 +231,7 @@ namespace DREAM.Controllers
             ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
             ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
-            ViewBag.ProbablityList = BuildProbabilityDropdownList();
+            ViewBag.ProbabilityList = BuildProbabilityDropdownList();
             ViewBag.SeverityList = BuildSeverityDropdownList();
 
             return View(rv);
@@ -342,7 +343,7 @@ namespace DREAM.Controllers
                 request.Caller.Type = db.RequesterTypes.SingleOrDefault(rt => rt.ID == rv.RequesterTypeID);
                 request.Caller.Region = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID);
 
-                SearchIndex.AddOrUpdateIndex(request);
+                //SearchIndex.AddOrUpdateIndex(request);
 
                 db.Logs.Add(Log.Edit(request, Membership.GetUser()));
 

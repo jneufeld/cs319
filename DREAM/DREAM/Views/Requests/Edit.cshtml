@@ -25,7 +25,7 @@
     <fieldset>
         <legend>Request</legend>
 
-        <a href="javascript:void(0);" class="viewModel.closeRequest();">Close Request</a>
+        <a href="javascript:void(0);" onclick="viewModel.closeRequest();">Close Request</a>
 
         <table>
             <tr>
@@ -444,9 +444,10 @@
             });
 
             $questionItems = $(".questionItem");
-            $.each($questionItems, function (i, val) {
-                viewModel.addImpactUpdateHandler(val);
-                val.find("input[name$=Probability]").change();
+            $.each($questionItems, function (i, question) {
+                var $question = $(question);
+                viewModel.addImpactUpdateHandler($question);
+                $question.find("input[name$=Probability]").change();
             });
         });
     </script>

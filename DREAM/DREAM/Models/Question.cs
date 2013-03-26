@@ -32,6 +32,12 @@ namespace DREAM.Models
         public List<Keyword> Keywords { get; set; }
         public List<Reference> References { get; set; }
 
+        public Question()
+        {
+            Keywords = new List<Keyword>();
+            References = new List<Reference>();
+        }
+
         [Reportable("Request's Received Date")]
         public DateTime CreationTime
         {
