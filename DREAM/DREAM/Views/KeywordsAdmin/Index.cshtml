@@ -57,15 +57,15 @@ else
                
                  @if (dp.Enabled)
                 {
-                    <td>@Html.ActionLink("Yes", "ChangeKeywordStatus", "KeywordsAdmin", new { keyword = dp })</td>                                                  
+                    <td>@Html.ActionLink("Yes", "ChangeKeywordStatus", new { keywordID = dp.ID, keywordText = dp.KeywordText })</td>                                                  
                  }
                 else
                 {
-                    <td>@Html.ActionLink("No", "ChangeKeywordStatus", "KeywordsAdmin", new { keyword = dp })</td>
+                    <td>@Html.ActionLink("No", "ChangeKeywordStatus", new { keywordID = dp.ID, keywordText = dp.KeywordText })</td>
                  }
 
                 <td>@Html.DisplayFor(d => dp.AssociatedQuestions.Count)</td>
-                <td>@Html.ActionLink("Edit", "Edit", new { keyword = dp.ID })</td>
+                <td>@Html.ActionLink("Edit", "Edit", new { id = dp.ID })</td>
             </tr>
         }
 

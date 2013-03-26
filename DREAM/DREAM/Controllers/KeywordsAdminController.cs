@@ -38,7 +38,7 @@ namespace DREAM.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         // parameter keyword = old one updated with the changes
-        public ActionResult Edit(Keyword keyword){
+        public ActionResult Edit(Keyword model, Keyword keyword){
             if (ModelState.IsValid)
             {
                 Keyword currKeywordToChange = db.Keywords.Find(keyword.KeywordText);
@@ -50,7 +50,7 @@ namespace DREAM.Controllers
                     {
                         List<Keyword> keywordsInCurrQuestion = questionsReferencingOldKeyword[i].Keywords;
 
-                        foreach(Keyword curKeyword in keywordsInCurrQuestion)
+                        foreach (Keyword curKeyword in keywordsInCurrQuestion)
                         {
                             if (keywordsInCurrQuestion[i].ID == keyword.ID)
                             {
@@ -59,28 +59,31 @@ namespace DREAM.Controllers
                         }
                     }
                 }
-                
+
                 db.SaveChanges();
                 return RedirectToAction("Edit", currKeywordToChange.KeywordText);
             }
             else
             {
-                ModelState.AddModelError("", "Keyword cannot be edited.");
+                ModelState.AddModelError(keyword.KeywordText, "Keyword cannot be edited.");
                 return View(keyword);
             }
         }
-
-        public ActionResult ChangeKeywordStatus(Keyword keyword)
+       
+       [HttpGet]
+       public ActionResult ChangeKeywordStatus(int keywordID)
         {
-            DREAMContext db = new DREAMContext();
-            using (db)
+           
+            Keyword keywordToWorkWith = db.Keywords.Find(keywordID);
+
+            if (keywordToWorkWith != null)
             {
-                bool curKeywordStatus = keyword.Enabled;
-                keyword.Enabled = !curKeywordStatus;
+                keywordToWorkWith.Enabled = !keywordToWorkWith.Enabled;
                 db.SaveChanges();
             }
-
-            return RedirectToAction("Index", "KeywordsAdmin");
+                RouteValueDictionary routeValueDictionary = new RouteValueDictionary();
+                routeValueDictionary.Add("page", 1);
+                return RedirectToAction("Index", "KeywordsAdmin", routeValueDictionary);
         }
     }
 }
