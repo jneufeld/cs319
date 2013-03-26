@@ -32,7 +32,6 @@ namespace DREAM.Models
         [Required]
         public eChartType ChartType { get; set; }
 
-        [Required]
         public string Stratification { get; set; }
 
         public IList<ChartValueModel> Values { get; set; }

@@ -12,6 +12,6 @@ namespace DREAM.Attributes
 
         public ChartableAttribute() : base() { }
 
-        public ChartableAttribute(string name) : base() { }
+        public ChartableAttribute(string name) : base(name) { }
     }
 }

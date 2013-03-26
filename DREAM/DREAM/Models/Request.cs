@@ -81,7 +81,8 @@ namespace DREAM.Models
             }
         }
 
-        [Stratifiable("Pharmacist")]
+        //[Stratifiable("Pharmacist")]
+        [Reportable("Pharmacist")]
         public MembershipUser Creator
         {
             get
@@ -90,7 +91,7 @@ namespace DREAM.Models
             }
         }
 
-        [Stratifiable(Reportable=false)]
+        //[Stratifiable(Reportable=false)]
         public MembershipUser Closer
         {
             get
