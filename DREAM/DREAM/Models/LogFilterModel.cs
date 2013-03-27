@@ -19,11 +19,11 @@ namespace DREAM.Models
         [Display(Name = "Action", Prompt = "Leave blank to search all actions")]
         public String Action { get; set; }
 
-        [Display(Name = "Before This Date (dd/mm/yyyy)", Prompt = "Leave blank to unbound bottom of date filter")]
+        [Display(Name = "Before This Date", Prompt = "Leave blank to unbound bottom of date filter")]
         [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? Before { get; set; }
 
-        [Display(Name = "After This Date (dd/mm/yyyy)", Prompt = "Leave blank to unbound top of date filter")]
+        [Display(Name = "After This Date", Prompt = "Leave blank to unbound top of date filter")]
         [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? After { get; set; }
 
