@@ -20,6 +20,7 @@ using System.Web.Security;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
+using System.ComponentModel;
 
 namespace DREAM.Controllers
 {
@@ -448,7 +449,8 @@ namespace DREAM.Controllers
 
                 chartableAttribute = (ChartableAttribute)Attribute.GetCustomAttribute(member, typeof(ChartableAttribute));
 
-                statFunctionMap.Add(chartableAttribute.Name ?? member.Name, chartableAttribute.StatFunctions.Select(statFunc => new SelectListItem { Text = statFunc.ToString(), Value = statFunc.ToString() }).ToList());
+                statFunctionMap.Add(member.Name, chartableAttribute.StatFunctions.Select(
+                    statFunc => new SelectListItem { Text = GetDescription(statFunc) ,Value = statFunc.ToString() }).ToList());
             }
 
             return statFunctionMap;
@@ -465,6 +467,28 @@ namespace DREAM.Controllers
             objectTypes.Add(new SelectListItem { Text = "Question", Value = "Question" });
 
             return objectTypes;
+        }
+
+        // http://stackoverflow.com/a/1415187 but modified to not be an extension method
+        public static string GetDescription(Enum value)
+        {
+            Type type = value.GetType();
+            string name = Enum.GetName(type, value);
+            if (name != null)
+            {
+                FieldInfo field = type.GetField(name);
+                if (field != null)
+                {
+                    DescriptionAttribute attr =
+                           Attribute.GetCustomAttribute(field,
+                             typeof(DescriptionAttribute)) as DescriptionAttribute;
+                    if (attr != null)
+                    {
+                        return attr.Description;
+                    }
+                }
+            }
+            return null;
         }
         #endregion
     }
