@@ -1,10 +1,10 @@
-﻿@model DREAM.Models.Request
+﻿@model DREAM.Models.RequestViewModel
 
 @{
     ViewBag.Title = "ViewRequest";
 }
 
-<h2>View Request @Html.DisplayTextFor(m => m.ID)</h2>
+<h2>View Request @Html.DisplayTextFor(m => m.RequestID)</h2>
 
 @using (Html.BeginForm())
 {
@@ -14,20 +14,20 @@
         <legend>View Request</legend>
         <ol>
             <li>
-                @Html.LabelFor(m => m.ID)
-                @Html.DisplayTextFor(m => m.ID)
+                @Html.LabelFor(m => m.RequestID)
+                @Html.DisplayTextFor(m => m.RequestID)
             </li>
-            <li>
-                @Html.LabelFor(m => m.Type)
-                @Html.DisplayTextFor(m => m.Type.FullName)
-            </li>
+            @*<li>
+                @Html.LabelFor(m => m.RequesterType.FullName)
+                @Html.DisplayTextFor(m => m.RequesterType.FullName)
+            </li>*@
             <li>
                 @Html.LabelFor(m => m.CreationTime)
                 @Html.DisplayTextFor(m => m.CreationTime)
             </li>
             <li>
                 @Html.LabelFor(m => m.CreatedBy)
-                @ViewBag.CreatedBy
+                @Html.DisplayTextFor(m => m.CreatedBy)
             </li>
             <li>
                 @Html.LabelFor(m => m.CompletionTime)
@@ -35,7 +35,11 @@
             </li>
             <li>
                 @Html.LabelFor(m => m.ClosedBy)
-                @ViewBag.ClosedBy
+                @Html.DisplayTextFor(m => m.ClosedBy)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Status)
+                @Html.DisplayTextFor(m => m.Status)
             </li>
 
             <li>
@@ -49,48 +53,48 @@
                         <table>
                             <tr>
                                 <td>
-                                    @Html.LabelFor(m => m.Caller.FirstName)
+                                    @Html.LabelFor(m => m.CallerFirstName)
                                 </td>
                                 <td>
-                                    @Html.DisplayTextFor(m => m.Caller.FirstName)
+                                    @Html.DisplayTextFor(m => m.CallerFirstName)
                                 </td>
                             </tr>
 
                             <tr>
                                 <td>
-                                    @Html.LabelFor(m => m.Caller.LastName)
+                                    @Html.LabelFor(m => m.CallerLastName)
                                 </td>
                                 <td>
-                                    @Html.DisplayTextFor(m => m.Caller.LastName)
+                                    @Html.DisplayTextFor(m => m.CallerLastName)
                                 </td>
                             </tr>
 
                             <tr>
                                 <td>
-                                    @Html.LabelFor(m => m.Caller.Email)
+                                    @Html.LabelFor(m => m.CallerEmail)
                                 </td>
                                 <td>
-                                    @Html.DisplayTextFor(m => m.Caller.Email)
+                                    @Html.DisplayTextFor(m => m.CallerEmail)
                                 </td>
                             </tr>
 
                             <tr>
                                 <td>
-                                    @Html.LabelFor(m => m.Caller.PhoneNumber)
+                                    @Html.LabelFor(m => m.CallerPhoneNumber)
                                 </td>
                                 <td>
-                                    @Html.DisplayTextFor(m => m.Caller.PhoneNumber)
+                                    @Html.DisplayTextFor(m => m.CallerPhoneNumber)
                                 </td>
                             </tr>
 
-                            <tr>
+                            @*<tr>
                                 <td>
-                                    @Html.LabelFor(m => m.Caller.Region)
+                                    @Html.LabelFor(m => m.CallerRegion)
                                 </td>
                                 <td>
-                                    @Html.DisplayTextFor(m => m.Caller.Region.FullName)
+                                    @Html.DisplayTextFor(m => m.CallerRegion)
                                 </td>
-                            </tr>
+                            </tr>*@
                         </table>
                     </fieldset>
                 </div>
@@ -107,49 +111,49 @@
                         <table>
                             <tr>
                                 <td>
-                                    @Html.LabelFor(m => m.Patient.FirstName)
+                                    @Html.LabelFor(m => m.PatientFirstName)
                                 </td>
                                 <td>
-                                    @Html.DisplayTextFor(m => m.Patient.FirstName)
+                                    @Html.DisplayTextFor(m => m.PatientFirstName)
                                 </td>
                             </tr>
 
                             <tr>
                                 <td>
-                                    @Html.LabelFor(m => m.Patient.LastName)
+                                    @Html.LabelFor(m => m.PatientLastName)
                                 </td>
                                 <td>
-                                    @Html.DisplayTextFor(m => m.Patient.LastName)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    @Html.LabelFor(m => m.Patient.AgencyID)
-                                </td>
-                                <td>
-                                    @Html.DisplayTextFor(m => m.Patient.AgencyID)
+                                    @Html.DisplayTextFor(m => m.PatientLastName)
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    @Html.LabelFor(m => m.Patient.Gender)
+                                    @Html.LabelFor(m => m.PatientAgencyID)
                                 </td>
                                 <td>
-                                    @Html.DisplayTextFor(m => m.Patient.Gender)
+                                    @Html.DisplayTextFor(m => m.PatientAgencyID)
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    @Html.LabelFor(m => m.Patient.Age)
+                                    @Html.LabelFor(m => m.PatientGender)
                                 </td>
                                 <td>
-                                    @Html.DisplayTextFor(m => m.Patient.Age)
+                                    @Html.DisplayTextFor(m => m.PatientGender)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(m => m.PatientAge)
+                                </td>
+                                <td>
+                                    @Html.DisplayTextFor(m => m.PatientAge)
                                 </td>
                             </tr>
                         </table>
                     </fieldset>
                 </div>
-                @Html.ActionLink("Audit Request", "Index", "LogsAdmin", new { request = Model.ID }, "")
+                @Html.ActionLink("Audit Request", "Index", "LogsAdmin", new { request = Model.RequestID }, "")
             </li>
 
         </ol>

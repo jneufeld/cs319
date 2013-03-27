@@ -26,9 +26,9 @@
         </tr>
     </table>
     
-    @if (Model.Executed == true)
+    if (Model.Executed == true)
     {
-        @if (Model.Results.ToList().Count == 0)
+        if (Model.Results.ToList().Count == 0)
         {
             <p>No results found!</p>
         }

@@ -147,14 +147,7 @@ namespace DREAM.Controllers
         [HttpGet]
         public ActionResult ViewRequest(int id = 0)
         {
-            // TODO: Use RequestViewModel instead
             Request request = FindRequest(id);
-
-            if (request.CreatedBy != null)
-                ViewBag.CreatedBy = Membership.GetUser(request.CreatedBy).UserName;
-
-            if (request.ClosedBy != Guid.Empty)
-                ViewBag.ClosedBy = Membership.GetUser(request.ClosedBy).UserName;
 
             if (request == null)
             {
@@ -166,9 +159,11 @@ namespace DREAM.Controllers
                 return View();
             }
 
+            RequestViewModel rv = RequestViewModel.CreateFromRequest(request);
+
             db.Logs.Add(Log.View(request, Membership.GetUser()));
             db.SaveChanges();
-            return View(request);
+            return View(rv);
         }
 
         //
@@ -176,9 +171,9 @@ namespace DREAM.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ViewRequest(Request request)
+        public ActionResult ViewRequest(RequestViewModel rv)
         {
-
+            Request request = FindRequest(rv.RequestID);
             if (isLocked(request, true))
             {
                 return View();
@@ -190,7 +185,7 @@ namespace DREAM.Controllers
             }
 
             ModelState.AddModelError("", "View Request failed!");
-            return View(request);
+            return View(rv);
         }
 
         // Find a request and return a view for editing it. If no request exists, we send a HTTP 404 error.
@@ -269,6 +264,7 @@ namespace DREAM.Controllers
                 {
                     request.CompletionTime = DateTime.UtcNow;
                     request.ClosedBy = (Guid)Membership.GetUser().ProviderUserKey;
+                    db.Logs.Add(Log.Close(request, Membership.GetUser()));
                 }
 
                 if (rv.Questions == null)
