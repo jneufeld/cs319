@@ -22,21 +22,22 @@ namespace DREAM.Reports
                     obj => obj.CreationTime >= stepper.CurrentStartDate && obj.CreationTime < stepper.CurrentEndDate);
                 IEnumerable<IGrouping<object, ObjectType>> groupedRequests = getStratifiedData(currentObjects, stratificationMember);
 
-                IEnumerable<Tuple<string, int>> stratifiedValues;
+                IEnumerable<Tuple<string, object>> stratifiedValues;
 
                 if (chart.Stratification == null)
                 {
-                    stratifiedValues = new List<Tuple<string, int>>{
-                        new Tuple<string, int>("", (int)performStatFunction(function, currentObjects, member))
+                    Type t = ((PropertyInfo)member).PropertyType;
+                    stratifiedValues = new List<Tuple<string, object>>{
+                        new Tuple<string, object>("", performStatFunction(function, currentObjects, member))
                     };
                 }
                 else
                 {
-                    stratifiedValues = groupedRequests.Select(group => new Tuple<string, int>(group.Key.ToString(),
+                    stratifiedValues = groupedRequests.Select(group => new Tuple<string, object>(group.Key.ToString(),
                         (int)performStatFunction(function, group, member)));
                 }
 
-                foreach(Tuple<string, int> stratifiedValue in stratifiedValues)
+                foreach(Tuple<string, object> stratifiedValue in stratifiedValues)
                 {
                     string stratification = stratifiedValue.Item1;
                     if(!dataRows.ContainsKey(stratification))
@@ -118,6 +119,10 @@ namespace DREAM.Reports
                     return objects.Sum(obj => (int)getValue(obj, member));
                 case StatFunction.COUNT:
                     return objects.Count();
+                case StatFunction.MAX:
+                    return objects.Max(obj => (int)getValue(obj, member));
+                case StatFunction.MIN:
+                    return objects.Min(obj => (int)getValue(obj, member));
                 default:
                     throw new Exception("Unknown stat function '" + function.ToString() + "'.");
             }

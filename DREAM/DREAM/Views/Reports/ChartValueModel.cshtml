@@ -9,11 +9,14 @@
         @Html.ValidationMessageFor(model => model.Name)
 
         @Html.LabelFor(model => model.PropertyName)
-        @Html.DropDownListFor(model => model.PropertyName, new List<SelectListItem>(), new Dictionary<string, object>{ {"class","propertySelector"} })//(IEnumerable<SelectListItem>)ViewData["RequestPropertiesList"])
+        @Html.DropDownListFor(model => model.PropertyName, (IEnumerable<SelectListItem>)(
+            new List<SelectListItem>()
+            ), new Dictionary<string, object>{ {"class","propertySelector"} })
         @Html.ValidationMessageFor(model => model.PropertyName)
 
         @Html.LabelFor(model => model.Function)
-        @Html.DropDownListFor(model => model.Function, (IEnumerable<SelectListItem>)ViewData["StatFunctionList"], new Dictionary<string, object>{ {"class", "statFunctionSelector"} })
+        @Html.DropDownListFor(model => model.Function, (IEnumerable<SelectListItem>)ViewData["StatFunctionList"],
+            new Dictionary<string, object>{ {"class", "statFunctionSelector"} })
         @Html.ValidationMessageFor(model => model.Function)
     }
 </li>

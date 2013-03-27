@@ -517,14 +517,20 @@ namespace DREAM.Controllers
                         if (q.Keywords != null)
                         {
                             String kWords = "";
+                            int i = 0;
                             foreach (Keyword k in q.Keywords)
                             {
-                                kWords = kWords + ", " + k.KeywordText;
-                                wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                if (k.KeywordText != null && k.KeywordText.Trim() != "")
+                                {
+                                    if (i == 0) kWords = k.KeywordText;
+                                    else kWords = kWords + ", " + k.KeywordText;
+                                    i++;
+                                }
+                            }
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
                                     new Paragraph(
                                         new Run(
-                                            new Text(kWords))));
-                            }
+                                            new Text("Key Words: " + kWords))));
                         }
                         if (q.QuestionText != null)
                         {
@@ -569,14 +575,26 @@ namespace DREAM.Controllers
                         }
                         if (q.References != null)
                         {
-                            String refer = "";
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                   new Paragraph(
+                                       new Run(
+                                           new Text(""))));
+                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                new Paragraph(
+                                    new Run(
+                                        new Text("References: "))));
+                            //String refer = "";
+                            int i = 1;
                             foreach (Reference r in q.References)
                             {
-                                refer = refer + ", " + r.Value;
-                                wordDoc.MainDocumentPart.Document.Body.AppendChild(
-                                    new Paragraph(
-                                        new Run(
-                                            new Text(refer))));
+                                if (r.Value != null && r.Value.Trim() != "")
+                                {
+                                    wordDoc.MainDocumentPart.Document.Body.AppendChild(
+                                        new Paragraph(
+                                            new Run(
+                                                new Text(i + ". " + r.Value))));
+                                    i++;
+                                }
                             }
                         }
                     }

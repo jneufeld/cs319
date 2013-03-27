@@ -16,7 +16,7 @@
                 @Html.LabelFor(model => model.RequestID)
             </td>
             <td>
-                @Html.EditorFor(model => model.RequestID)
+                @Html.TextBoxFor(model => model.RequestID, new { placeholder = "Leave blank to show all requests" })
                 @Html.ValidationMessageFor(model => model.RequestID)
             </td>
         </tr>
@@ -43,7 +43,7 @@
                 @Html.LabelFor(model => model.Before)
             </td>
             <td>
-                @Html.EditorFor(model => model.Before)
+                @Html.TextBoxFor(model => model.Before, new { id = "before-date", placeholder = "None selected" })
                 @Html.ValidationMessageFor(model => model.Before)
             </td>
         </tr>
@@ -52,7 +52,7 @@
                 @Html.LabelFor(model => model.After)
             </td>
             <td>
-                @Html.EditorFor(model => model.After)
+                @Html.TextBoxFor(model => model.After, new { id = "after-date", placeholder = "None selected" })
                 @Html.ValidationMessageFor(model => model.After)
             </td>
         </tr>
@@ -134,4 +134,28 @@
 @if (Model.PagedLogs.Count == 0)
 {
     <p>No results found!</p>
+}
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/jQuery.tmpl.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.datepicker.setDefaults({
+                dateFormat: "M dd yy"
+            });
+
+            $("#before-date").click(function() {
+                $(this).datepicker();
+                $(this).datepicker("show");
+            });
+
+            $("#after-date").click(function () {
+                $(this).datepicker();
+                $(this).datepicker("show");
+            });
+        });
+    </script>
 }
