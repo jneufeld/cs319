@@ -72,7 +72,7 @@ namespace DREAM.Controllers
 
             populateDropdownLists();
 
-            return View();
+            return View(report);
         }
 
         private void dumpRawData<ObjectType>(ExcelPackage package, IEnumerable<ObjectType> objects)
