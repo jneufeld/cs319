@@ -7,26 +7,37 @@
 <h2>Edit Keyword</h2>
 
 <html>
-<body>
+    <body>
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
-        <fieldset>
-            <legend>Edit Keyword for @Model.KeywordText</legend>
+            <fieldset>
+                <legend>Edit Keyword for @Html.DisplayFor(d => Model.KeywordText)</legend>
+                @Html.HiddenFor(d => Model.ID)
 
-            <table border="0">
-                <tr>
-                    <td>The new version of the keyword will be: </td>
-                    <td>
-                        @Html.TextBoxFor(d => Model.KeywordText)
-                    </td>
-            </table>
-            <p>
-                <input type="submit" value="Edit Keyword" />
-            </p>
-    </fieldset>
-    }
-</body>
+                <table border="0">
+                    <tr>
+                        <td> Keyword to change: </td>
+                        <td> @Html.DisplayFor(d => Model.KeywordText) </td>
+                    </tr>
+                    <tr>
+                        <td> New keyword: </td>
+                        <td>
+                            @Html.EditorFor(d=>Model.KeywordText)
+                            @Html.ValidationMessageFor(d=>Model.KeywordText)
+                        </td>
+                    </tr>
+                </table>
+
+                <p>
+                    <input type="submit" value="Edit Keyword" />
+                </p>
+        </fieldset>
+        }
+
+         @Html.ActionLink("Cancel", "Index", new { page= 1 })
+
+    </body>
 </html>
 
 

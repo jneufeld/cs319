@@ -65,7 +65,7 @@ else
                  }
 
                 <td>@Html.DisplayFor(d => dp.AssociatedQuestions.Count)</td>
-                <td>@Html.ActionLink("Edit", "Edit", new { id = dp.ID })</td>
+                <td>@Html.ActionLink("Edit", "Edit", new { keywordText = dp.KeywordText })</td>
             </tr>
         }
 

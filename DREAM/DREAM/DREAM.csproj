@@ -420,6 +420,7 @@
     <Content Include="Views\Requests\KeywordEntry.cshtml" />
     <Content Include="Views\Requests\ReferenceEntry.cshtml" />
     <Content Include="Views\Home\GuestIndex.cshtml" />
+    <Content Include="Views\KeywordsAdmin\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

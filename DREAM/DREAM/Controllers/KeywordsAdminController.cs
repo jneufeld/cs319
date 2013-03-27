@@ -24,8 +24,8 @@ namespace DREAM.Controllers
         }
 
         [HttpGet]
-	    public ActionResult Edit(int id) {
-            Keyword keyword = db.Keywords.Find(id);
+	    public ActionResult Edit(String keywordText) {
+            Keyword keyword = findKeywordFromText(keywordText);
 
             if (keyword == null)
             {
@@ -35,45 +35,91 @@ namespace DREAM.Controllers
             return View(keyword); 
         }
 
+       
+        private Keyword findKeywordFromText(String keywordText)
+        {
+            DbSet<Keyword> allKeywords = db.Keywords;
+            Keyword keywordToReturn = null;
+
+            foreach (Keyword k in allKeywords)
+            {
+                if (k.KeywordText.Equals(keywordText))
+                {
+                    keywordToReturn = k;
+                }
+            }
+
+            return keywordToReturn;
+        }
+
+        private List<Question> allQuestionsWithKeyword(Keyword keyword)
+        {
+            DbSet<Question> questions = db.Questions;
+            bool keywordFoundInQuestion=false;
+
+            List<Question> questionsThatHaveKeyword = null;
+
+            foreach (Question q in questions)
+            {
+                List<Keyword> qKeywords = q.Keywords;
+
+                foreach (Keyword k in qKeywords)
+                {
+                    if (k.KeywordText.Equals(keyword.KeywordText) && !keywordFoundInQuestion)
+                    {
+                        questionsThatHaveKeyword.Add(q);
+                        keywordFoundInQuestion = true;
+                    }
+
+                }
+                keywordFoundInQuestion = false;
+            }
+
+            return questionsThatHaveKeyword;
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         // parameter keyword = old one updated with the changes
-        public ActionResult Edit(Keyword model, Keyword keyword){
+        public ActionResult Edit(Keyword model){
             if (ModelState.IsValid)
             {
-                Keyword currKeywordToChange = db.Keywords.Find(keyword.KeywordText);
-                if (currKeywordToChange != null)
-                {
-                    List<Question> questionsReferencingOldKeyword = keyword.AssociatedQuestions;
+               Keyword oldKeyword = db.Keywords.Find(model.ID);
+               Keyword versionOfNewKeywordInDB = findKeywordFromText(model.KeywordText);
 
-                    for (int i = 0; i < questionsReferencingOldKeyword.Count; i++)
-                    {
-                        List<Keyword> keywordsInCurrQuestion = questionsReferencingOldKeyword[i].Keywords;
+               if (versionOfNewKeywordInDB != null)
+               {
+                   List<Question> questionsWithKeyword = allQuestionsWithKeyword(oldKeyword);
 
-                        foreach (Keyword curKeyword in keywordsInCurrQuestion)
-                        {
-                            if (keywordsInCurrQuestion[i].ID == keyword.ID)
-                            {
-                                keywordsInCurrQuestion[i].KeywordText = keyword.KeywordText;
-                            }
-                        }
-                    }
-                }
+                   foreach (Question q in questionsWithKeyword)
+                   {
+                       q.Keywords.Remove(oldKeyword);
+                       q.Keywords.Add(model);
+                   }
+               }
+               else
+               {
+                   oldKeyword.KeywordText = model.KeywordText;
+               }
 
-                db.SaveChanges();
-                return RedirectToAction("Edit", currKeywordToChange.KeywordText);
+               db.SaveChanges();
+
+                RouteValueDictionary routeValueDictionary = new RouteValueDictionary();
+                routeValueDictionary.Add("page", 1);
+                return RedirectToAction("Index", "KeywordsAdmin", routeValueDictionary);
             }
             else
             {
-                ModelState.AddModelError(keyword.KeywordText, "Keyword cannot be edited.");
-                return View(keyword);
+                ModelState.AddModelError(model.KeywordText, "Keyword cannot be edited.");
+                return View(model);
             }
         }
        
        [HttpGet]
        public ActionResult ChangeKeywordStatus(int keywordID)
         {
-           
+
             Keyword keywordToWorkWith = db.Keywords.Find(keywordID);
 
             if (keywordToWorkWith != null)
@@ -81,9 +127,10 @@ namespace DREAM.Controllers
                 keywordToWorkWith.Enabled = !keywordToWorkWith.Enabled;
                 db.SaveChanges();
             }
-                RouteValueDictionary routeValueDictionary = new RouteValueDictionary();
-                routeValueDictionary.Add("page", 1);
-                return RedirectToAction("Index", "KeywordsAdmin", routeValueDictionary);
+
+            RouteValueDictionary routeValueDictionary = new RouteValueDictionary();
+            routeValueDictionary.Add("page", 1);
+            return RedirectToAction("Index", "KeywordsAdmin", routeValueDictionary);
         }
     }
 }
