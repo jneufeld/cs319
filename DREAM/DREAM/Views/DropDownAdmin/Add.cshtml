@@ -10,7 +10,7 @@
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
     <fieldset>
-        <legend>Add New @Html.DisplayFor(d => Model.GetType().Name)</legend>
+        <legend>@Html.DisplayFor(d => Model.GetType().Name)</legend>
 
         <table border="0">
             <tr>
