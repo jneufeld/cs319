@@ -4,43 +4,44 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<div class="row">
+    <div class="span12">
+        <h2>Delete Request</h2>
 
-<h3>Are you sure you want to delete this?</h3>
-<fieldset>
-    <legend>Request</legend>
+        <hr />
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.CreationTime)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreationTime)
-    </div>
+        <p>Are you sure you want to disable this request?</p>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.CompletionTime)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CompletionTime)
-    </div>
+        <div>
+             <b>@Html.DisplayNameFor(model => model.CreationTime)</b>
+        </div>
+        <div>
+            @Html.DisplayFor(model => model.CreationTime)
+        </div>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.CreatedBy)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreatedBy)
-    </div>
+        <div>
+             <b>@Html.DisplayNameFor(model => model.CompletionTime)</b>
+        </div>
+        <div>
+            @Html.DisplayFor(model => model.CompletionTime)
+        </div>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.ClosedBy)
+        <div class="display-label">
+             <b>@Html.DisplayNameFor(model => model.CreatedBy)</b>
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.CreatedBy)
+        </div>
+
+        <div class="display-label">
+             <b>@Html.DisplayNameFor(model => model.ClosedBy)</b>
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.ClosedBy)
+        </div>
+
+        @using (Html.BeginForm()) {
+            <button type="submit" class="btn btn-danger span4">Disable Request</button>
+        }
     </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.ClosedBy)
-    </div>
-</fieldset>
-@using (Html.BeginForm()) {
-    <p>
-        <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-}
+</div>
