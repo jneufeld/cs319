@@ -7,32 +7,11 @@
 <h2>Keyword Administration</h2>
 
 <style>
-    table, th {
-        border: 1px;
-        padding: 15px;
-        background-color: lightpink;
-        color: black;
+    table, td, th {
+        padding: 5px; 
         text-align: center;
     }
-
-    td {
-        background-color: white;
-        color: black;
-    }
 </style>
-
-
-<!-- taken from http://imar.spaanjaars.com/312/how-do-i-make-a-full-table-row-clickable -->
-<script type="text/javascript">
-    function ChangeColour(tableRow, highLight) {
-        if (highLight) {
-            tableRow.style.backgroundColor = '#dcfac9';
-        }
-        else {
-            tableRow.style.backgroundColor = 'white';
-        }
-    }
-</script>
 
 
 @if (Model == null)
@@ -46,7 +25,6 @@ else
         <tr>
             <th>Word</th>
             <th>Enabled</th>
-            <th>Number of Tagged Questions</th>
             <th>Edit</th>
         </tr>
 
@@ -63,8 +41,6 @@ else
                 {
                     <td>@Html.ActionLink("No", "ChangeKeywordStatus", new { keywordID = dp.ID, keywordText = dp.KeywordText })</td>
                  }
-
-                <td>@Html.DisplayFor(d => dp.AssociatedQuestions.Count)</td>
                 <td>@Html.ActionLink("Edit", "Edit", new { keywordText = dp.KeywordText })</td>
             </tr>
         }
