@@ -24,6 +24,7 @@ using System.ComponentModel;
 
 namespace DREAM.Controllers
 {
+    [Authorize(Roles=Role.REPORTER)]
     public class ReportsController : Controller
     {
         private DREAMContext db = new DREAMContext();
