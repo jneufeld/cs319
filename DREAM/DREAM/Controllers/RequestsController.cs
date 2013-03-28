@@ -152,6 +152,11 @@ namespace DREAM.Controllers
         public ActionResult ViewRequest(int id = 0)
         {
             Request request = FindRequest(id);
+            ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
+            ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
+            ViewBag.ProbabilityList = BuildProbabilityDropdownList();
+            ViewBag.SeverityList = BuildSeverityDropdownList();
+            ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
 
             if (request == null)
             {

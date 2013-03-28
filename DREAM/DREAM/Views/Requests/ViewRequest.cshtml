@@ -1,4 +1,6 @@
 ﻿@model DREAM.Models.RequestViewModel
+@using DREAM.Models
+@using DREAM.Helpers
 
 @{
     ViewBag.Title = "ViewRequest";
@@ -153,6 +155,25 @@
                         </table>
                     </fieldset>
                 </div>
+
+                <h3>Questions</h3>
+        
+                @if (Model.Questions == null || Model.Questions.Count == 0)
+                {
+                    <p>None.</p>
+                }
+                <div style="border: solid; border-width: 1px; margin: 5px">
+                    <ul id="questionList" style="list-style-type: none">
+                        @if (Model.Questions != null)
+                        {
+                            foreach (QuestionViewModel qv in Model.Questions)
+                            {
+                                Html.RenderPartial("QuestionEntry", qv);
+                            }
+                        }
+                    </ul>
+                </div>
+
                 @Html.ActionLink("Audit Request", "Index", "LogsAdmin", new { request = Model.RequestID }, "")
             </li>
 
