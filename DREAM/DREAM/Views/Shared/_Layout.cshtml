@@ -43,11 +43,16 @@
                                     <li>@Html.ActionLink("Create Request", "Add", "Requests")</li>
                                 }
 
+                                if (isViewer || isDISpecialist)
+                                {
+                                    <li>@Html.ActionLink("View Requests", "Index", "Requests")</li>
+                                }
+
                                 if (isDISpecialist || isViewer)
                                 {
                                     <li>@Html.RouteLink("Search", "Search")</li>
                                 }
-                                
+
                                 if(isAdmin) 
                                 {
                                     <li>@Html.ActionLink("Admin Panel", "Admin", "Home")</li>
@@ -69,10 +74,12 @@
             </section>
 
             <footer>
+                <hr />
+
                 <center>
-                @Html.ActionLink("About", "About", "Home")
+                @Html.ActionLink("About", "About", "Home") |
                 @Html.ActionLink("Contact", "Contact", "Home")
-                <p>&copy; @DateTime.Now.Year - DREAM</p>
+                <p>&copy; @DateTime.Now.Year DREAM</p>
                 </center>
             </footer>
         </div>
