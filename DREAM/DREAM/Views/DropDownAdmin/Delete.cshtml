@@ -1,7 +1,7 @@
 ﻿@model DREAM.Models.DropDown
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Disable/Enable";
 }
 
     @if (Model.Enabled) 
@@ -16,9 +16,6 @@
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>@Html.DisplayFor(d => Model.GetType().Name)</legend>
-
         <table border="0">
             <tr>
                 <td>            
@@ -36,14 +33,10 @@
                     @Html.DisplayFor(d => Model.FullName)
                     @Html.ValidationMessageFor(d => Model.FullName)
                 </td>
+            <tr>
+                <td>
+                    <button type="submit" class="btn span2">Submit</button>
+                </td>
             </tr>
         </table>
-        <p>
-            <input type="submit" value="Submit" />
-        </p>
-    </fieldset>
 }
-
-<div>
-    @Html.ActionLink("Cancel", "Index", new { dropDownClass=Model.GetType().Name})
-</div>

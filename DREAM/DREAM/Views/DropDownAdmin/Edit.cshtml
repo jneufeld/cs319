@@ -1,7 +1,7 @@
 ﻿@model DREAM.Models.DropDown
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit ";
 }
 
 <h2>Edit</h2>
@@ -10,36 +10,29 @@
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>@Html.DisplayFor(d => Model.GetType().Name)</legend>
+    @Html.HiddenFor(d => Model.ID)
 
-        @Html.HiddenFor(d => Model.ID)
-
-        <table border="0">
-            <tr>
-                <td>            
-                    @Html.LabelFor(d => Model.Code)
-                </td>
-                <td>
-                    @Html.EditorFor(d => Model.Code)
-                    @Html.ValidationMessageFor(d => Model.Code)
-                </td>
-            </tr>
-            <tr><td>            
-                    @Html.LabelFor(d => Model.FullName)
-                </td>
-                <td>
-                    @Html.EditorFor(d => Model.FullName)
-                    @Html.ValidationMessageFor(d => Model.FullName)
-                </td>
-            </tr>
-        </table>
-        <p>
-            <input type="submit" value="Submit" />
-        </p>
-    </fieldset>
+    <table>
+        <tr>
+            <td>            
+                @Html.LabelFor(d => Model.Code)
+            </td>
+            <td>
+                @Html.EditorFor(d => Model.Code)
+                @Html.ValidationMessageFor(d => Model.Code)
+            </td>
+        </tr>
+        <tr><td>            
+                @Html.LabelFor(d => Model.FullName)
+            </td>
+            <td>
+                @Html.EditorFor(d => Model.FullName)
+                @Html.ValidationMessageFor(d => Model.FullName)
+            </td>
+        <tr>
+            <td>
+                <button type="submit" class="btn span2">Submit</button>
+            </td>
+        </tr>
+    </table>
 }
-
-<div>
-    @Html.ActionLink("Cancel", "Index", new { dropDownClass=Model.GetType().Name})
-</div>

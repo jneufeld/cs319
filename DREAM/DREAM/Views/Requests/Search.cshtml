@@ -48,7 +48,7 @@
                         <tr>
                             <td>@Html.DisplayFor(d => Model.Results[i].RequestID)</td>
                             <td>@Html.DisplayFor(d => Model.Results[i].RequesterTypeStringID)</td>
-                            <td>@Html.Action("FindUsernameFromID", "RequestsController", new { userID = Model.Results[i].CreatedBy })</td>
+                            <td>@*@Html.Action("FindUsernameFromID", new { userID = Model.Results[i].CreatedBy })*@</td>
                             <td>@Html.DisplayFor(d => Model.Results[i].Status)</td>
                             <td>@Html.DisplayFor(d => Model.Results[i].CreationTime)</td>
                             <td>

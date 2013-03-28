@@ -3,79 +3,90 @@
 @using PagedList;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Administrator Logs";
 }
 
-<h2>Index</h2>
+<h2>Administrator Logs</h2>
 
 @using (@Html.BeginForm())
 {
-    <table>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.RequestID)
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.RequestID, new { placeholder = "Leave blank to show all requests" })
-                @Html.ValidationMessageFor(model => model.RequestID)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.Action)
-            </td>
-            <td>
-                @Html.DropDownListFor(model => model.Action, (IEnumerable<SelectListItem>)ViewData["ActionList"])
-                @Html.ValidationMessageFor(model => model.Action)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.UserName)
-            </td>
-            <td>
-                @Html.DropDownListFor(model => model.UserName, (IEnumerable<SelectListItem>)ViewData["UsersList"])
-                @Html.ValidationMessageFor(model => model.UserName)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.Before)
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.Before, new { id = "before-date", placeholder = "None selected" })
-                @Html.ValidationMessageFor(model => model.Before)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.After)
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.After, new { id = "after-date", placeholder = "None selected" })
-                @Html.ValidationMessageFor(model => model.After)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p>
-                    <input type="submit" name="button" value="Filter" />
-                    <input type="submit" name="button" value="Clear" />
-                </p>
-            </td>
-        </tr>
-    </table>
-    @Html.ValidationSummary()
+    <div class="row">
+        <div class="span8">
+            <table>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.RequestID)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.RequestID, new { placeholder = "Leave blank to show all requests" })
+                        @Html.ValidationMessageFor(model => model.RequestID)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Action)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.Action, (IEnumerable<SelectListItem>)ViewData["ActionList"])
+                        @Html.ValidationMessageFor(model => model.Action)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.UserName)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.UserName, (IEnumerable<SelectListItem>)ViewData["UsersList"])
+                        @Html.ValidationMessageFor(model => model.UserName)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Before)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Before, new { id = "before-date", placeholder = "None selected" })
+                        @Html.ValidationMessageFor(model => model.Before)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.After)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.After, new { id = "after-date", placeholder = "None selected" })
+                        @Html.ValidationMessageFor(model => model.After)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="input-append pull-right">
+                            @Html.ValidationSummary()
+
+                            <button type="submit" name="button" class="btn span2">Filter</button>
+                            <button type="submit" name="button" class="btn span2">Clear</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 }
 
-@Html.PagedListPager(Model.PagedLogs, page => Url.Action("Index", new { request = Model.RequestID, 
-                                                                        act = Model.Action, 
-                                                                        user = Model.UserName,
-                                                                        before = Model.Before, 
-                                                                        after = Model.After,
-                                                                        page = page }))
+<div class="row">
+    <div class="span12">
+        <center>
+            @Html.PagedListPager(Model.PagedLogs, page => Url.Action("Index", new { request = Model.RequestID, 
+                                                                                    act = Model.Action, 
+                                                                                    user = Model.UserName,
+                                                                                    before = Model.Before, 
+                                                                                    after = Model.After,
+                                                                                    page = page }))
+        </center>
+    </div>
+</div>
 
-<table>
+<table class="table table-striped">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.UserName)

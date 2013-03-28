@@ -4,14 +4,11 @@
     ViewBag.Title = "Register";
 }
 
-<h2>Register</h2>
+<h2>Register New User</h2>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-
-    <fieldset>
-        <legend>Add User</legend>
 
         <div class="editor-label">
             @Html.LabelFor(model => Model.UserName)
@@ -116,7 +113,6 @@
         </div>
 
         <p>
-            <input type="submit" value="Add" />
+            <button type="submit" class="btn span2">Create new user</button>
         </p>
-    </fieldset>
 }

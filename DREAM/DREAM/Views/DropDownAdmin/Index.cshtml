@@ -1,65 +1,58 @@
 ﻿@model System.Data.Entity.DbSet
 
 @{
-    ViewBag.Title = "IndexDropDown";
+    ViewBag.Title = "View";
 }
 
-<h2>@Html.DisplayFor(d => Model.ElementType.Name) Index</h2>
+<div class="row">
+    <div class="span12">
+        <h2>View</h2>
+        @Html.ActionLink("Add New Type", "Add", new { dropDownClass = Model.ElementType.Name }, new { @class = "btn btn-primary span2" })
+    </div>
+</div>
 
-<table>
-    <tr>
-        <th>Code</th>
-        <th>FullName</th>
-        <th></th>
-        <th></th>
-    </tr>
+<hr />
 
-@if (Model == null)
-{
-    <tr>
-        <td>
-            NoValues
-        </td>
-        <td>
-            NoValues
-        </td>
-        <td>
-            NoValues
-        </td>
-        <td>
-            NoValues
-        </td>
-    </tr>
-}
-else 
-{
-    foreach (DREAM.Models.DropDown dp in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(d => dp.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(d => dp.FullName)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, enabled=dp.Enabled, dropDownClass=dp.GetType().Name})
-            </td>
-            <td>
-                @if (dp.Enabled) {@Html.ActionLink("Disable", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, enabled=dp.Enabled, dropDownClass=dp.GetType().Name})}
-                else {@Html.ActionLink("Enable", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, enabled=dp.Enabled, dropDownClass=dp.GetType().Name})}
-            </td>
-        </tr>
-    }
-}
-</table>
+<div class="row">
+    <div class="span12">
+        <table class="table table-striped"> <tr> <th>Code</th> <th>Full Value</th> <th></th> <th></th> </tr>  @if (Model == null) { <tr> <td> NoValues </td> <td> NoValues </td> <td> NoValues </td> <td> NoValues </td> </tr> } else 
+        {
+            foreach (DREAM.Models.DropDown dp in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(d => dp.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(d => dp.FullName)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, enabled=dp.Enabled, dropDownClass=dp.GetType().Name})
+                    </td>
+                    <td>
+                        @if (dp.Enabled)
+                        {
+                            @Html.ActionLink("Disable", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, enabled=dp.Enabled, dropDownClass=dp.GetType().Name})
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Enable", "Delete", new { dropDownId=dp.ID, dropDownCode=dp.Code, dropDownFullName=dp.FullName, enabled=dp.Enabled, dropDownClass=dp.GetType().Name})
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        </table>
+    </div>
+</div>
+
 <table>
     <tr>
         <th></th>
     </tr>
     <tr>
             <td>
-                @Html.ActionLink("Add", "Add", new {dropDownClass=Model.ElementType.Name})
+                @Html.ActionLink("Add New Type", "Add", new { dropDownClass = Model.ElementType.Name }, new { @class = "btn btn-primary span2" })
             </td>
     </tr>
 </table>

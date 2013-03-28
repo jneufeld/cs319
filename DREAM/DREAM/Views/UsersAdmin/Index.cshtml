@@ -5,8 +5,11 @@
 }
 
 <h2>Users</h2>
+@Html.ActionLink("Add new user", "Register", null, new { @class = "btn" })
 
-<table>
+<hr />
+
+<table class="table table-striped">
     <tr>
         <th>Username</th>
         <th>Email Address</th>
@@ -37,4 +40,4 @@
 }
 </table>
 
-@Html.ActionLink("Add new user", "Register")
+@Html.ActionLink("Add new user", "Register", null, new { @class = "btn" })

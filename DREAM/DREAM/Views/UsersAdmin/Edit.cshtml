@@ -1,17 +1,14 @@
 ﻿@model DREAM.Models.EditUserModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit User";
 }
 
-<h2>Edit</h2>
+<h2>Edit User Account</h2>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-
-    <fieldset>
-        <legend>Add User</legend>
 
 
         <div class="editor-label">
@@ -99,7 +96,6 @@
         </div>
 
         <p>
-            <input type="submit" value="Save" />
+            <button type="submit" class="btn span2">Edit user</button>
         </p>
-    </fieldset>
 }
