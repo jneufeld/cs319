@@ -81,22 +81,23 @@ namespace DREAM.Models
             }
         }
 
-        //[Stratifiable("Pharmacist")]
-        [Reportable("Pharmacist")]
-        public MembershipUser Creator
+        [Stratifiable("Pharmacist")]
+        public string Creator
         {
             get
             {
-                return Membership.GetUser(CreatedBy);
+                MembershipUser user = Membership.GetUser(CreatedBy);
+                return user != null ? user.UserName : "";
             }
         }
 
-        //[Stratifiable(Reportable=false)]
-        public MembershipUser Closer
+        [Stratifiable(Reportable=false)]
+        public string Closer
         {
             get
             {
-                return Membership.GetUser((Guid)ClosedBy);
+                MembershipUser user = Membership.GetUser(ClosedBy);
+                return user != null ? user.UserName : "";
             }
         }
 
