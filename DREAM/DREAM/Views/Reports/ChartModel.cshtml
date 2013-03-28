@@ -36,7 +36,7 @@
             @Html.LabelFor(model => model.Stratification)
             @Html.DropDownListFor(model => model.Stratification, (IEnumerable<SelectListItem>)(
                 Model != null && Model.ObjectTypeName == "Request" ? ViewData["RequestStratificationList"] :
-                Model != null && Model.ObjectTypeName == "Question" ? ViewData["QuestionsStratificationList"] :
+                Model != null && Model.ObjectTypeName == "Question" ? ViewData["QuestionStratificationList"] :
                 new List<SelectListItem>()
                 ), new Dictionary<string, object> { {"class", "stratificationSelector" } })
             @Html.ValidationMessageFor(model => model.Stratification)

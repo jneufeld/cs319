@@ -25,14 +25,12 @@
                         </div>
                     </div>
 
-                    @*
                     <div class="control-group">
-                        @Html.LabelFor(model => model.RequesterTypeStringID)
+                        @Html.LabelFor(model => model.RequesterTypeString)
                         <div class="controls">
-                            @Html.DropDownListFor(m => m.RequesterTypeStringID, (IEnumerable<SelectListItem>)ViewData["RequesterTypeList"])
+                            @Html.DisplayFor(m => m.RequesterTypeString)
                         </div>
                     </div>
-                    *@
 
                     <div class="control-group">
                         @Html.LabelFor(model => model.Status)
@@ -133,17 +131,12 @@
 
                     <br />
 
-                    @*
                     <div class="control-group">
-                        @Html.LabelFor(m => m.CallerRegionStringID)
+                        @Html.LabelFor(m => m.CallerRegionString)
                         <div class="controls">
-                            @Html.DropDownListFor(m => m.CallerRegionStringID, (IEnumerable<SelectListItem>)ViewData["RegionList"])
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.CallerRegionStringID)
-                            </div>
+                            @Html.DisplayFor(m => m.CallerRegionString)
                         </div>
                     </div>
-                    *@
                 </div>
 
                 <div class="span6">
@@ -186,17 +179,15 @@
 
                     <br />
 
-                    @*
                     <div class="control-group">
                         @Html.LabelFor(m => m.PatientGender)
                         <div class="controls">
-                            @Html.DropDownListFor(m => m.PatientGender, (IEnumerable<SelectListItem>)ViewData["GenderList"])
+                            @Html.DisplayFor(m => m.PatientGender)
                             <div class="span5">
                                 @Html.ValidationMessageFor(m => m.PatientGender)
                             </div>
                         </div>
                     </div>
-                    *@
 
                     <br />
 

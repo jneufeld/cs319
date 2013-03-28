@@ -45,6 +45,9 @@ namespace DREAM.Models
             set { RequesterTypeStringID = value.ToString(); }
         }
 
+        [Display(Name = "Requester Type")]
+        public string RequesterTypeString { get; set; }
+
         public int CallerID { get; set; }
 
         [Display(Name = "First Name")]
@@ -73,6 +76,9 @@ namespace DREAM.Models
             set { CallerRegionStringID = value.ToString(); }
         }
 
+        [Display(Name = "Region")]
+        public string CallerRegionString { get; set; }
+
         public int PatientID { get; set; }
 
         [Display(Name = "Agency ID")]
@@ -97,18 +103,22 @@ namespace DREAM.Models
         #region Constructor Methods
         public static RequestViewModel CreateFromRequest(Request r)
         {
+            MembershipUser createdBy = Membership.GetUser(r.CreatedBy);
+            MembershipUser closedBy = Membership.GetUser(r.ClosedBy);
             RequestViewModel requestViewModel = new RequestViewModel
             {
                 RequestID = r.ID,
                 CreationTime = r.CreationTime.ToLocalTime().ToString(),
                 CompletionTime = r.CompletionTime != null ? r.CompletionTime.Value.ToLocalTime().ToString() : "",
                 RequesterTypeID = r.Caller.Type != null ? r.Caller.Type.ID : 0,
+                RequesterTypeString = r.Caller.Type != null ? r.Caller.Type.ToString() : "",
                 CallerID = r.Caller.ID,
                 CallerFirstName = r.Caller.FirstName,
                 CallerLastName = r.Caller.LastName,
                 CallerPhoneNumber = r.Caller.PhoneNumber,
                 CallerEmail = r.Caller.Email,
                 CallerRegionID = r.Caller.Region != null ? r.Caller.Region.ID : 0,
+                CallerRegionString = r.Caller.Region != null ? r.Caller.Region.FullName : "",
                 PatientID = r.Patient.ID,
                 PatientAgencyID = r.Patient.AgencyID,
                 PatientFirstName = r.Patient.FirstName,
@@ -116,6 +126,8 @@ namespace DREAM.Models
                 PatientGender = ((Gender)r.Patient.Gender).ToString(),
                 PatientAge = r.Patient.Age,
                 Questions = new List<QuestionViewModel>(),
+                CreatedBy = createdBy != null ? createdBy.UserName : "",
+                ClosedBy = closedBy != null ? closedBy.UserName : "",
             };
             int idx = 0;
             foreach (Question q in r.Questions)

@@ -126,6 +126,7 @@ namespace DREAM.Reports
                         Gender = (int)Gender.UNKNOWN,
                         LastName = getRandomValueFromFile("lastnames.txt"),
                     },
+                    Enabled = true,
                 });
             }
             db.SaveChanges();

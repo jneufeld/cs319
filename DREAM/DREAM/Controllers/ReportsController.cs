@@ -294,7 +294,7 @@ namespace DREAM.Controllers
             ViewBag.QuestionPropertyOptions = (new JavaScriptSerializer()).Serialize(ViewBag.QuestionPropertiesList);
             ViewBag.QuestionStratificationOptions = (new JavaScriptSerializer()).Serialize(ViewBag.QuestionStratificationList);
             ViewBag.RequestStatFunctionMap = (new JavaScriptSerializer()).Serialize(buildStatFunctionMap(typeof(Request)));
-            ViewBag.QuestionStatFunctionMap = (new JavaScriptSerializer()).Serialize(buildStatFunctionMap(typeof(Request)));
+            ViewBag.QuestionStatFunctionMap = (new JavaScriptSerializer()).Serialize(buildStatFunctionMap(typeof(Question)));
         }
 
         private IEnumerable<SelectListItem> buildTimeRangeDropdownList()
