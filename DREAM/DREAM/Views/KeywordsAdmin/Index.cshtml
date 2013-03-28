@@ -30,7 +30,7 @@ else
 
         @foreach (DREAM.Models.Keyword dp in Model)
         {
-            <tr onmouseover="ChangeColour(this, true);" onmouseout="ChangeColour(this, false);" onclick="">
+            <tr>
                 <td>@Html.DisplayFor(d => dp.KeywordText)</td>
                
                  @if (dp.Enabled)
