@@ -4,7 +4,7 @@
 
         <ul class="dropdown-menu">
             <li>
-                @Html.ActionLink("Manage Account", "Manage", "Users", routeValues: null, htmlAttributes: new { @class = "username", title = "Manage" })
+                @Html.ActionLink("Change Password", "ChangePassword", "Users", routeValues: null, htmlAttributes: new { @class = "username", title = "Change Password" })
             </li>
             <li>
                 @using (Html.BeginForm("LogOff", "Users", FormMethod.Post, new { id = "logoutForm" })) {
