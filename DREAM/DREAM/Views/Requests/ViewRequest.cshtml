@@ -162,7 +162,7 @@
                 {
                     <p>None.</p>
                 }
-                <div style="border: solid; border-width: 1px; margin: 5px">
+                <div class="questions" style="border: solid; border-width: 1px; margin: 5px">
                     <ul id="questionList" style="list-style-type: none">
                         @if (Model.Questions != null)
                         {
@@ -189,4 +189,24 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input').each(function () {
+                $(this).attr('readonly', true);
+            });
+            $('select').each(function () {
+                $(this).attr('readonly', true);
+            });
+            $('textarea').each(function () {
+                $(this).attr('readonly', true);
+            });
+            $('a').each(function () {
+                if ($(this).closest('div').attr('class') == "questions") {
+                    $(this).hide();
+                }
+            });
+        });
+    </script>
 }
