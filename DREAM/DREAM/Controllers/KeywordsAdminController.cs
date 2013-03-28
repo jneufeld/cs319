@@ -104,8 +104,13 @@ namespace DREAM.Controllers
                         Keyword oldKeyword = db.Keywords.Find(model.ID);
                         String modelKeywordTextLowerCase = model.KeywordText.ToLower();
                         Keyword versionOfNewKeywordInDB = findKeywordFromText(model.KeywordText);
-                        String lowerCaseModelKeyword = model.KeywordText.ToLower();
 
+                        if (oldKeyword.KeywordText.ToLower().Equals(modelKeywordTextLowerCase))
+                        {
+                            oldKeyword.KeywordText = model.KeywordText;
+                        }
+                        else
+                        {
 
                             if (versionOfNewKeywordInDB != null)
                             {
@@ -116,6 +121,7 @@ namespace DREAM.Controllers
                             {
                                 oldKeyword.KeywordText = model.KeywordText;
                             }
+                        }
                         
 
                         db.SaveChanges();
