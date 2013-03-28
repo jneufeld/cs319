@@ -17,7 +17,7 @@ using DREAM.Models;
 
 namespace DREAM.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Role.DI_SPECIALIST + ", " + Role.VIEWER)]
     public class RequestsController : Controller
     {
         private DREAMContext db = new DREAMContext();
@@ -36,6 +36,7 @@ namespace DREAM.Controllers
         // GET: /Requests/Add
 
         [HttpGet]
+        [Authorize(Roles=Role.DI_SPECIALIST)]
         public ActionResult Add()
         {
             Request request = new Request();
@@ -112,6 +113,7 @@ namespace DREAM.Controllers
         // GET: /Requests/Search
 
         [HttpGet]
+        [Authorize(Roles = Role.DI_SPECIALIST + ", " + Role.VIEWER)]
         public ActionResult Search()
         {
             SearchViewModel sm = new SearchViewModel();
@@ -144,7 +146,9 @@ namespace DREAM.Controllers
         // GET: /Requests/ViewRequest/5
 
         // TODO Rename to View - seems redundant to have Requests/ViewRequest/5
+        // ^ Don't do that, terrible, terrible, terrible things will happen.
         [HttpGet]
+        [Authorize(Roles=Role.DI_SPECIALIST + ", " + Role.VIEWER)]
         public ActionResult ViewRequest(int id = 0)
         {
             Request request = FindRequest(id);
@@ -199,6 +203,7 @@ namespace DREAM.Controllers
         // Returns:
         //      The view for editing the request, or a 404 if the request doesn't exist.
         [HttpGet]
+        [Authorize(Roles = Role.DI_SPECIALIST)]
         public ActionResult Edit(int id)
         {
             Request request = FindRequest(id);
@@ -388,6 +393,8 @@ namespace DREAM.Controllers
         //
         // GET: /Requests/Export
         [HttpGet]
+        [Authorize(Roles = Role.DI_SPECIALIST)]
+        [Authorize(Roles = Role.VIEWER)]
         public ActionResult Export(int reqId)
         {
             Request request = FindRequest(reqId);
