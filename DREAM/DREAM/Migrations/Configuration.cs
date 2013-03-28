@@ -118,13 +118,13 @@ namespace DREAM.Migrations
             id = 1;
             List<Group> groups = new List<Group>
             {
-                new Group { ID = id++, Code = "VC",  Name = "VANCOUVER CANCER CENTRE"}, 
-                new Group { ID = id++, Code = "VIC", Name = "VANCOUVER ISLAND CENTRE"},
-                new Group { ID = id++, Code = "AC", Name = "ABBOTSFORD CANCER CENTRE"},
-                new Group { ID = id++, Code = "FVC", Name = "FRASER VALLEY CENTRE"},
-                new Group { ID = id++, Code = "CSI", Name = "CENTRE FOR THE SOUTHERN INTERIOR"},
-                new Group { ID = id++, Code = "CN", Name = "DON'T KNOW"},
-                new Group { ID = id++, Code = "Provincial", Name = "PROVINCIAL"}
+                new Group { ID = id++, Code = "AC", Name = "Abbottsford Centre"},
+                new Group { ID = id++, Code = "CN", Name = "Centre for the North"},
+                new Group { ID = id++, Code = "CSI", Name = "Centre for the Southern Interior"},
+                new Group { ID = id++, Code = "FVC", Name = "Fraser Valley Centre"},
+                new Group { ID = id++, Code = "VC",  Name = "Vancouver Centre"}, 
+                new Group { ID = id++, Code = "VIC", Name = "Vancouver Island Centre"},
+                new Group { ID = id++, Code = "Prov", Name = "Provincial"},
             };
             groups.ForEach(g => context.Groups.AddOrUpdate(g));
 

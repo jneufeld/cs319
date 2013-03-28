@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
+using System.IO;
+using System.Web.Hosting;
 
 namespace DREAM.Reports
 {
@@ -21,19 +23,22 @@ namespace DREAM.Reports
         {
             while(Membership.GetAllUsers().Count < 6)
             {
-                string username = generateRandomString(12);
+                string username = getRandomValueFromFile("firstnames.txt") + "." + getRandomValueFromFile("lastnames.txt");
                 Membership.CreateUser(username, Membership.GeneratePassword(32, 5), username + "@example.com");
             }
 
-            while (db.Keywords.Count() < 20)
+            using (StreamReader reader = new StreamReader(Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "bin", "Reports", "drugs.txt")))
             {
-                string keyword = generateRandomString(20);
-                db.Keywords.Add(new Keyword
+                string keyword = reader.ReadLine();
+                if (db.Keywords.Where(kw => kw.KeywordText == keyword).Count() == 0)
                 {
-                    Enabled = true,
-                    KeywordText = keyword,
-                });
-                db.SaveChanges();
+                    db.Keywords.Add(new Keyword
+                    {
+                        Enabled = true,
+                        KeywordText = keyword,
+                    });
+                    db.SaveChanges();
+                }
             }
 
             GenerateRandomRequests(NUMBER_OF_REQUESTS - db.Requests.Count());
@@ -55,13 +60,12 @@ namespace DREAM.Reports
 
                 List<Reference> references = new List<Reference>();
                 int numReferences = rand.Next(2) + 1;
-                for (int j = 0; j < numReferences; j++)
+                foreach (Keyword keyword in keywords)
                 {
                     references.Add(new Reference
                     {
-                        //QuestionID = i,
-                        ReferenceType = (int)ReferenceType.TEXT,
-                        Value = generateRandomString(20),
+                        ReferenceType = (int)ReferenceType.URL,
+                        Value = "http://en.wikipedia.org/wiki/" + keyword.KeywordText,
                     });
                 }
 
@@ -95,6 +99,9 @@ namespace DREAM.Reports
             for (int i = 0; i < number; i++)
             {
                 DateTime startDate = generateRandomDate();
+                string firstName = getRandomValueFromFile("firstnames.txt");
+                string lastName = getRandomValueFromFile("firstnames.txt");
+
                 db.Requests.Add(new Request
                 {
                     CreationTime = startDate,
@@ -103,9 +110,9 @@ namespace DREAM.Reports
                     ClosedBy = (Guid)pickRandom(users).ProviderUserKey,
                     Caller = new Caller
                     {
-                        FirstName = generateRandomString(20),
-                        LastName = generateRandomString(20),
-                        Email = generateRandomString(20) + "@example.com",
+                        FirstName = firstName,
+                        LastName = lastName,
+                        Email = firstName + "." + lastName + "@wearesasquatch.com",
                         Region = pickRandom(db.Regions),
                         RequestID = i,
                         PhoneNumber = "(555) 555-5555",
@@ -115,9 +122,9 @@ namespace DREAM.Reports
                     {
                         Age = rand.Next(100),
                         AgencyID = rand.Next(100000).ToString(),
-                        FirstName = generateRandomString(20),
+                        FirstName = getRandomValueFromFile("firstnames.txt"),
                         Gender = (int)Gender.UNKNOWN,
-                        LastName = generateRandomString(20),
+                        LastName = getRandomValueFromFile("lastnames.txt"),
                     },
                 });
             }
@@ -149,6 +156,21 @@ namespace DREAM.Reports
         {
             int choice = (int)(rand.NextDouble() * objects.Count());
             return objects.ToArray()[choice];
+        }
+
+        private static string getRandomValueFromFile(string filename)
+        {
+            List<string> lines = new List<string>();
+
+            using(StreamReader reader = new StreamReader(Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "bin", "Reports", filename)))
+            {
+                while(!reader.EndOfStream)
+                {
+                    lines.Add(reader.ReadLine());
+                }
+            }
+
+            return pickRandom(lines);
         }
     }
 }

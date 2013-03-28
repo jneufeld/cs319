@@ -390,7 +390,7 @@
 
         $("body").on("click", ".addNewKeyword", function () {
             var $keywordList = $(this).siblings(".keywordValues");
-            var keywordIndex = $(this).siblings("input['hidden']").val();
+            var keywordIndex = $(this).siblings("input[type='hidden']").val();
             var prefix = "Questions[" + keywordIndex + "].";
             viewModel.addNewKeyword($keywordList, prefix);
             return false;
@@ -398,7 +398,7 @@
 
         $("body").on("click", ".addNewReference", function () {
             var $referenceList = $(this).siblings(".referenceValues");
-            var referenceIndex = $(this).siblings("input['hidden']").val();
+            var referenceIndex = $(this).siblings("input[type='hidden']").val();
             var prefix = "Questions[" + referenceIndex + "].";
             viewModel.addNewReference($referenceList, prefix);
             return false;
