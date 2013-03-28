@@ -34,7 +34,7 @@ namespace DREAM.Reports
                 else
                 {
                     stratifiedValues = groupedRequests.Select(group => new Tuple<string, object>(group.Key.ToString(),
-                        (int)performStatFunction(function, group, member)));
+                        performStatFunction(function, group, member)));
                 }
 
                 foreach(Tuple<string, object> stratifiedValue in stratifiedValues)

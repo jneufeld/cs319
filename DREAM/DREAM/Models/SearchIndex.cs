@@ -71,7 +71,7 @@ namespace DREAM.Models
         {
             Document d = new Document();
             d.Add(new NumericField("ID", Field.Store.YES, true));
-            d.Add(CreateField("", "Creator", r.Creator.UserName));
+            d.Add(CreateField("", "Creator", r.Creator));
             if (r.Caller != null)
             {
                 string prefix = "Caller";
