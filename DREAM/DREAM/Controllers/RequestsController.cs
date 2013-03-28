@@ -492,23 +492,36 @@ namespace DREAM.Controllers
                                 new Paragraph(
                                     new Run(
                                         new Text(""))));
-                        wordDoc.MainDocumentPart.Document.Body.AppendChild(
-                            new Paragraph(
-                                new Run(
-                                    new Text("Question" + q.ID.ToString() + " - Probability " + q.Probability.ToString() + ", Severity " + q.Severity.ToString()))));
-                        if (q.QuestionType != null || q.TumourGroup != null)
+                        Paragraph para1 = wordDoc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
+                        Run run1 = para1.AppendChild(new Run());
+                        RunProperties runProperties1 = run1.AppendChild(new RunProperties());
+                        Bold bold1 = new Bold();
+                        bold1.Val = OnOffValue.FromBoolean(true);
+                        runProperties1.AppendChild(bold1);
+                        run1.AppendChild(new Text("Question" + q.ID.ToString()));
+                        Run run3 = para1.AppendChild(new Run(new Text(" - Probability " + q.Probability.ToString() + ", Severity " + q.Severity.ToString())));
+
+                        if (q.QuestionType != null)
                         {
-                            String qTypeAndGroup = "";
-                            if (q.QuestionType != null || q.TumourGroup != null) qTypeAndGroup = "Type: " + q.QuestionType.FullName + ", Tumour Group: " + q.TumourGroup.FullName;
-                            else
-                            {
-                                if (q.QuestionType != null) qTypeAndGroup = "Type: " + q.QuestionType.FullName;
-                                if (q.TumourGroup != null) qTypeAndGroup = "Tumour Group: " + q.TumourGroup.FullName;
-                            }
-                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
-                                new Paragraph(
-                                    new Run(
-                                        new Text(qTypeAndGroup))));
+                            Paragraph para = wordDoc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
+                            Run run = para.AppendChild(new Run());
+                            RunProperties runProperties = run.AppendChild(new RunProperties());
+                            Italic ital = new Italic();
+                            ital.Val = OnOffValue.FromBoolean(true);
+                            runProperties.AppendChild(ital);
+                            run.AppendChild(new Text("Type"));
+                            Run run2 = para.AppendChild(new Run(new Text(": " + q.QuestionType.FullName)));
+                        }
+                        if (q.TumourGroup != null)
+                        {
+                            Paragraph para = wordDoc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
+                            Run run = para.AppendChild(new Run());
+                            RunProperties runProperties = run.AppendChild(new RunProperties());
+                            Italic ital = new Italic();
+                            ital.Val = OnOffValue.FromBoolean(true);
+                            runProperties.AppendChild(ital);
+                            run.AppendChild(new Text("Tumour Group"));
+                            Run run2 = para.AppendChild(new Run(new Text(": " + q.TumourGroup.FullName)));
                         }
                         if (q.Keywords != null)
                         {
@@ -523,10 +536,14 @@ namespace DREAM.Controllers
                                     i++;
                                 }
                             }
-                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
-                                    new Paragraph(
-                                        new Run(
-                                            new Text("Key Words: " + kWords))));
+                            Paragraph para = wordDoc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
+                            Run run = para.AppendChild(new Run());
+                            RunProperties runProperties = run.AppendChild(new RunProperties());
+                            Italic ital = new Italic();
+                            ital.Val = OnOffValue.FromBoolean(true);
+                            runProperties.AppendChild(ital);
+                            run.AppendChild(new Text("Key Words"));
+                            Run run2 = para.AppendChild(new Run(new Text(": " + kWords)));
                         }
                         if (q.QuestionText != null)
                         {
@@ -545,10 +562,14 @@ namespace DREAM.Controllers
                                    new Paragraph(
                                        new Run(
                                            new Text(""))));
-                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
-                                new Paragraph(
-                                    new Run(
-                                        new Text("Response" + q.ID.ToString()))));
+
+                            Paragraph para = wordDoc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
+                            Run run = para.AppendChild(new Run());
+                            RunProperties runProperties = run.AppendChild(new RunProperties());
+                            Bold bold = new Bold();
+                            bold.Val = OnOffValue.FromBoolean(true);
+                            runProperties.AppendChild(bold);
+                            run.AppendChild(new Text("Response" + q.ID.ToString()));
                             wordDoc.MainDocumentPart.Document.Body.AppendChild(
                                 new Paragraph(
                                     new Run(
@@ -560,10 +581,13 @@ namespace DREAM.Controllers
                                    new Paragraph(
                                        new Run(
                                            new Text(""))));
-                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
-                                new Paragraph(
-                                    new Run(
-                                        new Text("Special Notes" + q.ID.ToString()))));
+                            Paragraph para = wordDoc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
+                            Run run = para.AppendChild(new Run());
+                            RunProperties runProperties = run.AppendChild(new RunProperties());
+                            Bold bold = new Bold();
+                            bold.Val = OnOffValue.FromBoolean(true);
+                            runProperties.AppendChild(bold);
+                            run.AppendChild(new Text("Special Notes" + q.ID.ToString()));
                             wordDoc.MainDocumentPart.Document.Body.AppendChild(
                                 new Paragraph(
                                     new Run(
@@ -575,11 +599,13 @@ namespace DREAM.Controllers
                                    new Paragraph(
                                        new Run(
                                            new Text(""))));
-                            wordDoc.MainDocumentPart.Document.Body.AppendChild(
-                                new Paragraph(
-                                    new Run(
-                                        new Text("References: "))));
-                            //String refer = "";
+                            Paragraph para = wordDoc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
+                            Run run = para.AppendChild(new Run());
+                            RunProperties runProperties = run.AppendChild(new RunProperties());
+                            Bold bold = new Bold();
+                            bold.Val = OnOffValue.FromBoolean(true);
+                            runProperties.AppendChild(bold);
+                            run.AppendChild(new Text("References: "));
                             int i = 1;
                             foreach (Reference r in q.References)
                             {
