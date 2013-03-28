@@ -65,52 +65,76 @@ namespace DREAM.Controllers
             return keywordToReturn;
         }
 
+        private void removeOldKeywordFromQuestions(Keyword newKeyword, Keyword oldKeyword)
+        {
+            DbSet<Question> allQuestions = db.Questions;
+            String newKeywordTestLowerCase = newKeyword.KeywordText.ToLower();
+
+            foreach (Question q in allQuestions)
+            {
+                List<Keyword> keywordsInQuestion = q.Keywords;
+
+                foreach (Keyword k in keywordsInQuestion)
+                {
+                    String lowerCaseCurKeyword = k.KeywordText.ToLower();
+
+                    if (k.KeywordText.Equals(newKeywordTestLowerCase))
+                    {
+                        q.Keywords.Remove(oldKeyword);
+                        q.Keywords.Add(newKeyword);
+                        break;
+                    }
+                }
+            }
+        }
+
+
         /// <summary> The actual logic that implements editing a keyword </summary>
         /// <param name="model"> The keyword that needs to be modified with keyword text variable be the new keyword (but the id of the keyword will stay the same) </param>>
         /// <returns> The main Keyword Admin page on success and stays on the same page upon error </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // parameter keyword = old one updated with the changes
         public ActionResult Edit(Keyword model){
             if (ModelState.IsValid)
             {
-               Keyword oldKeyword = db.Keywords.Find(model.ID);
-               Keyword versionOfNewKeywordInDB = findKeywordFromText(model.KeywordText);
-                String lowerCaseModelKeyword = model.KeywordText.ToLower();
+                if (model.KeywordText != null)
+                {
+                    if (model.KeywordText.Trim() != "")
+                    {
+                        Keyword oldKeyword = db.Keywords.Find(model.ID);
+                        String modelKeywordTextLowerCase = model.KeywordText.ToLower();
+                        Keyword versionOfNewKeywordInDB = findKeywordFromText(model.KeywordText);
+                        String lowerCaseModelKeyword = model.KeywordText.ToLower();
 
-               if (versionOfNewKeywordInDB != null)
-               {
-                   DbSet<Question> allQuestions = db.Questions;
 
-                   foreach (Question q in allQuestions)
-                   {
-                       List<Keyword> keywordsInQuestion = q.Keywords;
+                            if (versionOfNewKeywordInDB != null)
+                            {
+                                removeOldKeywordFromQuestions(versionOfNewKeywordInDB, oldKeyword);
+                                db.Keywords.Remove(oldKeyword);
+                            }
+                            else
+                            {
+                                oldKeyword.KeywordText = model.KeywordText;
+                            }
+                        
 
-                       foreach (Keyword k in keywordsInQuestion)
-                       {
-                           String lowerCaseCurKeyword = k.KeywordText.ToLower();
+                        db.SaveChanges();
 
-                           if (k.KeywordText.Equals(lowerCaseModelKeyword))
-                           {
-                               q.Keywords.Remove(oldKeyword);
-                               q.Keywords.Add(versionOfNewKeywordInDB);
-                               break;
-                           }
-                       }
-                   }
-
-                   db.Keywords.Remove(oldKeyword);
-               }
-               else
-               {
-                   oldKeyword.KeywordText = model.KeywordText;
-               }
-
-               db.SaveChanges();
-
-                RouteValueDictionary routeValueDictionary = new RouteValueDictionary();
-                routeValueDictionary.Add("page", 1);
-                return RedirectToAction("Index", "KeywordsAdmin", routeValueDictionary);
+                        RouteValueDictionary routeValueDictionary = new RouteValueDictionary();
+                        routeValueDictionary.Add("page", 1);
+                        return RedirectToAction("Index", "KeywordsAdmin", routeValueDictionary);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Keyword needs characters other than space(s).");
+                        return View(model);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Keyword cannot be empty.");
+                    return View(model);
+                }
             }
             else
             {
