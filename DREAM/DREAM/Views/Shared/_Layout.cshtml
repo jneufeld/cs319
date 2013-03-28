@@ -53,6 +53,11 @@
                                     <li>@Html.RouteLink("Search", "Search")</li>
                                 }
 
+                                if(isReporter)
+                                {
+                                    <li>@Html.ActionLink("Generate Reports", "Generate", "Reports")</li>
+                                }
+
                                 if(isAdmin) 
                                 {
                                     <li>@Html.ActionLink("Admin Panel", "Admin", "Home")</li>

@@ -94,7 +94,7 @@
 
         $("body").on("click", ".addNewValue", function () {
             var $valueList = $(this).siblings(".chartValues");
-            var chartIndex = $(this).siblings("input['hidden']").val();
+            var chartIndex = $(this).siblings("input[type='hidden']").val();
             var prefix = "Charts[" + chartIndex + "].";
             viewModel.addNewValue($valueList, prefix);
             return false;
