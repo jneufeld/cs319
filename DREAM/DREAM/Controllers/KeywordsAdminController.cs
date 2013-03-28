@@ -62,31 +62,6 @@ namespace DREAM.Controllers
             return keywordToReturn;
         }
 
-        /// <summary> A helper method to find all questions with the given keyword </summary>
-        /// <param name="keyword"> The keyword that we want to find questions for </param>>
-        /// <returns> A list of questions that contain the given keyword </returns>
-        private List<Question> allQuestionsWithKeyword(Keyword keyword)
-        {
-            DbSet<Question> questions = db.Questions;
-            List<Question> questionsThatHaveKeyword = null;
-
-            foreach (Question q in questions)
-            {
-                List<Keyword> qKeywords = q.Keywords;
-
-                foreach (Keyword k in qKeywords)
-                {
-                    if ((k.KeywordText).Equals(keyword.KeywordText))
-                    {
-                        questionsThatHaveKeyword.Add(q);
-                    }
-
-                }
-            }
-
-            return questionsThatHaveKeyword;
-        }
-
         /// <summary> The actual logic that implements editing a keyword </summary>
         /// <param name="model"> The keyword that needs to be modified with keyword text variable be the new keyword (but the id of the keyword will stay the same) </param>>
         /// <returns> The main Keyword Admin page on success and stays on the same page upon error </returns>
