@@ -4,40 +4,51 @@
     ViewBag.Title = "Drug Information Request and Elicitation Management System";
 }
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
-
-<section id="loginForm">
 @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
-    <fieldset>
-        <legend>Log in Form</legend>
-        <ol>
-            <li>
+    <div class="span12">
+        <h2>User Log In</h2>
+        <div class="control-group">
+            <label class="control-label" for="inputEmail">
                 @Html.LabelFor(m => m.UserName)
+            </label>
+            <div class="controls">
                 @Html.TextBoxFor(m => m.UserName)
                 @Html.ValidationMessageFor(m => m.UserName)
-            </li>
-            <li>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="inputEmail">
                 @Html.LabelFor(m => m.Password)
+            </label>
+            <div class="controls">
                 @Html.PasswordFor(m => m.Password)
                 @Html.ValidationMessageFor(m => m.Password)
-            </li>
-            <li>
-                @Html.CheckBoxFor(m => m.RememberMe)
-                @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
-            </li>
-        </ol>
-        <input type="submit" value="Log in" />
-    </fieldset>
-    <p>
-        @Html.ActionLink("Click here to reset your password", "ResetPassword", "Users").
-    </p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    @Html.CheckBoxFor(m => m.RememberMe)
+                    @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
+                </label>
+                <button type="submit" class="btn span2">Log in</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="span12">
+        <p>
+        Did you forget your password?
+
+        @Html.ActionLink("Click here to reset it.", "ResetPassword", "Users").
+        </p>
+    </div>
 }
-</section>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

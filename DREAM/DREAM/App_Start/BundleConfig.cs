@@ -38,6 +38,11 @@ namespace DREAM
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                "~/Scripts/bootstrap*"));
+            bundles.Add(new StyleBundle("~/Content/bootstrapcss").Include(
+                            "~/Content/bootstrap.css"));
         }
     }
 }
