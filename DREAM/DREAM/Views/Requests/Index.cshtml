@@ -32,10 +32,10 @@
             @Html.DisplayFor(modelItem => item.CompletionTime)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.CreatedBy)
+            @Html.Action("FindUsernameFromID", new { userID = item.CreatedBy })
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ClosedBy)
+            @Html.Action("FindUsernameFromID", new { userID = item.ClosedBy })
         </td>
         <td>
             <div class="btn-group">

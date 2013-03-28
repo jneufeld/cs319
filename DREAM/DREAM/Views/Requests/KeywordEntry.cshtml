@@ -5,10 +5,10 @@
     @using (Html.BeginCollectionItem("Keywords"))
     {
         @Html.HiddenFor(m => m.Delete)
-        <span>
-            @Html.TextBoxFor(m => m.Keyword, new { @class = "keywordAutocomplete" })
-            <a href="javascript:void(0);" class="deleteKeyword">Delete</a>
+        <div class="input-append">
+            @Html.TextBoxFor(m => m.Keyword, new { @class = "keywordAutocomplete span3" })
+            <a href="javascript:void(0);" class="deleteKeyword btn btn-danger">x</a>
             @Html.ValidationMessageFor(m => m.Keyword)
-        </span>
+        </div>
     }
 </li>

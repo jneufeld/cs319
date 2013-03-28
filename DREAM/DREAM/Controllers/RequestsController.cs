@@ -29,7 +29,20 @@ namespace DREAM.Controllers
 
         public ActionResult Index()
         {
+            /*
+             List<RequestViewModel> requests = new List<RequestViewModel>();
+
+            foreach (Request request in db.Requests.ToList())
+            {
+                RequestViewModel rv = RequestViewModel.CreateFromRequest(request);
+                rv.CreatedBy = FindUsernameFromID(request.CreatedBy);
+                rv.ClosedBy = FindUsernameFromID(request.ClosedBy);
+                requests.Add(rv);
+            }
+            */
+
             return View(db.Requests.ToList());
+            //return View(requests);
         }
 
         //
@@ -779,7 +792,7 @@ namespace DREAM.Controllers
         //
         // Returns:
         //      The username of the given user ID or null if none could be found.
-        private string FindUsernameFromID(Guid userID)
+        public string FindUsernameFromID(Guid userID)
         {
             MembershipUser user = Membership.GetUser(userID);
 

@@ -6,11 +6,11 @@
     {
         @Html.HiddenFor(m => m.ReferenceID)
         @Html.HiddenFor(m => m.Delete)
-        <span>
-            @Html.DropDownListFor(m => m.ReferenceType, (IEnumerable<SelectListItem>)ViewData["ReferenceTypeList"])
-            @Html.TextBoxFor(m => m.Text)
-            <a href="javascript:void(0);" class="deleteReference">Delete</a>
+        <div class="input-append">
+            @Html.DropDownListFor(m => m.ReferenceType, (IEnumerable<SelectListItem>)ViewData["ReferenceTypeList"], new { @class = "span2" })
+            @Html.TextBoxFor(m => m.Text, new { @class = "span3" })
+            <a href="javascript:void(0);" class="deleteReference btn btn-danger">x</a>
             @Html.ValidationMessageFor(m => m.Text)
-        </span>
+        </div>
     }
 </li>

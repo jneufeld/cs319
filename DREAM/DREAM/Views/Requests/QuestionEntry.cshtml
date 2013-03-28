@@ -51,6 +51,22 @@
                         </div>
                     </div>
                 </div>
+
+                <b>Keywords</b>
+                <ul class="keywordValues" style="list-style-type: none">
+                    @if (Model == null || Model.Keywords == null || Model.Keywords.Count == 0)
+                    {
+                        @Html.Partial("KeywordEntry", new DREAM.Models.KeywordViewModel())
+                    }
+                    else
+                    {
+                        foreach (DREAM.Models.KeywordViewModel value in Model.Keywords)
+                        {
+                            @Html.Partial("KeywordEntry", value)
+                        }
+                    }
+                </ul>
+                <a href="javascript:void(0);" class="addNewKeyword btn btn-success">Add Keyword</a>
             </div>
 
             <div class="span6">
@@ -97,42 +113,24 @@
                         @Html.TextBoxFor(m => m.Impact, new { disabled = "disabled", @readonly = "readonly" })
                     </div>
                 </div>
+
+                <b>References</b>
+                    <ul class="referenceValues" style="list-style-type: none">
+                        @if (Model == null || Model.References == null || Model.References.Count == 0)
+                        {
+                            @Html.Partial("ReferenceEntry", new DREAM.Models.ReferenceViewModel())
+                        }
+                        else
+                        {
+                            foreach (DREAM.Models.ReferenceViewModel value in Model.References)
+                            {
+                                @Html.Partial("ReferenceEntry", value)
+                            }
+                        }
+                    </ul>
+                    <a href="javascript:void(0);" class="addNewReference btn btn-success">Add Reference</a>
             </div>
         </div>
-        
-        <h5 style="display: inline;">Keywords</h5>
-        <a href="javascript:void(0);" class="addNewKeyword">Add</a>
-
-        <ul class="keywordValues" style="list-style-type: none">
-            @if (Model == null || Model.Keywords == null || Model.Keywords.Count == 0)
-            {
-                @Html.Partial("KeywordEntry", new DREAM.Models.KeywordViewModel())
-            }
-            else
-            {
-                foreach (DREAM.Models.KeywordViewModel value in Model.Keywords)
-                {
-                    @Html.Partial("KeywordEntry", value)
-                }
-            }
-        </ul>
-        
-        <h5 style="display: inline;">References</h5>
-        <a href="javascript:void(0);" class="addNewReference">Add</a>
-
-        <ul class="referenceValues" style="list-style-type: none">
-            @if (Model == null || Model.References == null || Model.References.Count == 0)
-            {
-                @Html.Partial("ReferenceEntry", new DREAM.Models.ReferenceViewModel())
-            }
-            else
-            {
-                foreach (DREAM.Models.ReferenceViewModel value in Model.References)
-                {
-                    @Html.Partial("ReferenceEntry", value)
-                }
-            }
-        </ul>
 
         @Html.ValidationSummary(true)
 

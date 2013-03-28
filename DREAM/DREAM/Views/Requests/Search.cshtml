@@ -4,30 +4,27 @@
     ViewBag.Title = "Search";
 }
 
-<h2>Search</h2>
+<div class="row">
+    <div class="span12">
+        <h2>Search Requests</h2>
+    </div>
+</div>
 
 @using (Html.BeginForm())
 {
-    <table>
-        <tr>
-            <td>
-                @Html.TextBoxFor(m => m.Query, new { @class = "search-input-disabled", placeholder = "Enter Keywords" })
-            </td>
-            <td>
-                <p>
-                    <input type="submit" value="Search" />
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.ValidationMessageFor(m => m.Query)
-            </td>
-        </tr>
-    </table>
+    <div class="row">
+        <div class="span12 input-append">
+            @Html.TextBoxFor(m => m.Query, new { @class = "search-input-disabled", placeholder = "Enter Keywords" })
+            <button type="submit" class="btn">Search</button>
+
+            @Html.ValidationMessageFor(m => m.Query)
+        </div>
+    </div>
     
     if (Model.Executed == true)
     {
+        <hr />
+
         if (Model.Results.ToList().Count == 0)
         {
             <p>No results found!</p>
@@ -51,7 +48,7 @@
                         <tr>
                             <td>@Html.DisplayFor(d => Model.Results[i].RequestID)</td>
                             <td>@Html.DisplayFor(d => Model.Results[i].RequesterTypeStringID)</td>
-                            <td>@Html.DisplayFor(d => Model.Results[i].CreatedBy)</td>
+                            <td>@Html.Action("FindUsernameFromID", "RequestsController", new { userID = Model.Results[i].CreatedBy })</td>
                             <td>@Html.DisplayFor(d => Model.Results[i].Status)</td>
                             <td>@Html.DisplayFor(d => Model.Results[i].CreationTime)</td>
                             <td>
