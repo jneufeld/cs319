@@ -49,10 +49,13 @@ namespace DREAM.Controllers
             DbSet<Keyword> allKeywords = db.Keywords;
             Keyword keywordToReturn = null;
             bool foundKeyword = false;
+            String keywordTextLowerCase = keywordText.ToLower();
 
             foreach (Keyword k in allKeywords)
             {
-                if (k.KeywordText.Equals(keywordText) && !foundKeyword)
+                String curKeywordLowerCase = k.KeywordText.ToLower();
+
+                if (curKeywordLowerCase.Equals(keywordTextLowerCase) && !foundKeyword)
                 {
                     keywordToReturn = k;
                     foundKeyword = true;
@@ -73,6 +76,7 @@ namespace DREAM.Controllers
             {
                Keyword oldKeyword = db.Keywords.Find(model.ID);
                Keyword versionOfNewKeywordInDB = findKeywordFromText(model.KeywordText);
+                String lowerCaseModelKeyword = model.KeywordText.ToLower();
 
                if (versionOfNewKeywordInDB != null)
                {
@@ -80,10 +84,18 @@ namespace DREAM.Controllers
 
                    foreach (Question q in allQuestions)
                    {
-                       if (q.Keywords.Contains(oldKeyword))
+                       List<Keyword> keywordsInQuestion = q.Keywords;
+
+                       foreach (Keyword k in keywordsInQuestion)
                        {
-                           q.Keywords.Remove(oldKeyword);
-                           q.Keywords.Add(versionOfNewKeywordInDB);
+                           String lowerCaseCurKeyword = k.KeywordText.ToLower();
+
+                           if (k.KeywordText.Equals(lowerCaseModelKeyword))
+                           {
+                               q.Keywords.Remove(oldKeyword);
+                               q.Keywords.Add(versionOfNewKeywordInDB);
+                               break;
+                           }
                        }
                    }
 
