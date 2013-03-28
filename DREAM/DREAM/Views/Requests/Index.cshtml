@@ -1,15 +1,12 @@
 ﻿@model IEnumerable<DREAM.Models.Request>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "View All Requests";
 }
 
-<h2>Index</h2>
+<h2>All Requests</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Add")
-</p>
-<table>
+<table class="table table-striped">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.CreationTime)
@@ -41,9 +38,14 @@
             @Html.DisplayFor(modelItem => item.ClosedBy)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            <div class="btn-group">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Actions <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Edit", "Edit", new { id=item.ID })</li>
+                    <li>@Html.ActionLink("View", "ViewRequest", new { id=item.ID })</li>
+                    <li>@Html.ActionLink("Delete", "Delete", new { id=item.ID })</li>
+                </ul>
+            </div>
         </td>
     </tr>
 }

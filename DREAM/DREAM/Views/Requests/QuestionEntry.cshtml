@@ -4,89 +4,101 @@
 <li class="questionItem">
     @using (Html.BeginCollectionItem("Questions"))
     {
-        <h4>Question @Html.ValueFor(m => m.Index)</h4>
-        
-        @Html.HiddenFor(m => m.QuestionID)
-        @Html.HiddenFor(m => m.Delete)
+        <div class="row">
+            <div class="span12">
+                <h4>Question @Html.ValueFor(m => m.Index)</h4>
+                
+                @Html.HiddenFor(m => m.QuestionID)
+                @Html.HiddenFor(m => m.Delete)
+            </div>
+        </div>
 
-        <table>
-            <tr>
-                <td>
+        <div class="row">
+            <div class="span6">
+                <div class="control-group">
                     @Html.LabelFor(m => m.QuestionTypeStringID)
-                </td>
-                <td>
-                    @Html.DropDownListFor(m => m.QuestionTypeStringID, (IEnumerable<SelectListItem>)ViewData["QuestionTypeList"])
-                </td>
-                <td>
-                    @Html.LabelFor(m => m.TumourGroupStringID)
-                </td>
-                <td>
-                    @Html.DropDownListFor(m => m.TumourGroupStringID, (IEnumerable<SelectListItem>)ViewData["TumourGroupList"])
-                </td>
-            </tr>
-            <tr>
-                <td>
+                    <div class="controls">
+                        @Html.DropDownListFor(m => m.QuestionTypeStringID, (IEnumerable<SelectListItem>)ViewData["QuestionTypeList"])
+                    </div>
+                </div>
+
+                <div class="control-group">
                     @Html.LabelFor(m => m.QuestionText)
-                </td>
-                <td>
-                    @Html.TextAreaFor(m => m.QuestionText)
-                    @Html.ValidationMessageFor(m => m.QuestionText)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(m => m.Response)
-                </td>
-                <td>
-                    @Html.TextAreaFor(m => m.Response)
-                    @Html.ValidationMessageFor(m => m.Response)
-                </td>
-            </tr>
-            <tr>
-                <td>
+                    <div class="controls">
+                        @Html.TextAreaFor(m => m.QuestionText, new { @class = "span5", rows = "10" })
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.QuestionText)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
                     @Html.LabelFor(m => m.SpecialNotes)
-                </td>
-                <td>
-                    @Html.TextAreaFor(m => m.SpecialNotes)
-                    @Html.ValidationMessageFor(m => m.SpecialNotes)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(m => m.Severity)
-                </td>
-                <td>
-                    @Html.DropDownListFor(m => m.Severity, (IEnumerable<SelectListItem>)ViewData["SeverityList"])
-                    @Html.ValidationMessageFor(m => m.Severity)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(m => m.Probability)
-                </td>
-                <td>
-                    @Html.DropDownListFor(m => m.Probability, (IEnumerable<SelectListItem>)ViewData["ProbabilityList"])
-                    @Html.ValidationMessageFor(m => m.Probability)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.LabelFor(m => m.Impact)
-                </td>
-                <td>
-                    @Html.TextBoxFor(m => m.Impact, new { disabled = "disabled", @readonly = "readonly" })
-                </td>
-            </tr>
-            <tr>
-                <td>
+                    <div class="controls">
+                        @Html.TextAreaFor(m => m.SpecialNotes, new { @class = "span5", rows = "5" })
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.SpecialNotes)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
                     @Html.LabelFor(m => m.TimeTaken)
-                </td>
-                <td>
-                    @Html.EditorFor(m => m.TimeTaken)
-                    @Html.ValidationMessageFor(m => m.TimeTaken)
-                </td>
-            </tr>
-        </table>
+                    <div class="controls">
+                        @Html.EditorFor(m => m.TimeTaken)
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.TimeTaken)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="span6">
+                <div class="control-group">
+                    @Html.LabelFor(m => m.TumourGroupStringID)
+                    <div class="controls">
+                        @Html.DropDownListFor(m => m.TumourGroupStringID, (IEnumerable<SelectListItem>)ViewData["TumourGroupList"])
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    @Html.LabelFor(m => m.Response)
+                    <div class="controls">
+                        @Html.TextAreaFor(m => m.Response, new { @class = "span5", rows = "10" })
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.Response)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    @Html.LabelFor(m => m.Severity)
+                    <div class="controls">
+                        @Html.DropDownListFor(m => m.Severity, (IEnumerable<SelectListItem>)ViewData["SeverityList"])
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.Severity)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    @Html.LabelFor(m => m.Probability)
+                    <div class="controls">
+                        @Html.DropDownListFor(m => m.Probability, (IEnumerable<SelectListItem>)ViewData["ProbabilityList"])
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.Probability)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    @Html.LabelFor(m => m.Impact)
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.Impact, new { disabled = "disabled", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <h5 style="display: inline;">Keywords</h5>
         <a href="javascript:void(0);" class="addNewKeyword">Add</a>
