@@ -87,7 +87,7 @@ namespace DREAM.Controllers
             return questionsThatHaveKeyword;
         }
 
-        /// <summary> To actual logic that implements editing a keyword </summary>
+        /// <summary> The actual logic that implements editing a keyword </summary>
         /// <param name="model"> The keyword that needs to be modified with keyword text variable be the new keyword (but the id of the keyword will stay the same) </param>>
         /// <returns> The main Keyword Admin page on success and stays on the same page upon error </returns>
         [HttpPost]
