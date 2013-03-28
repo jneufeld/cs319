@@ -263,9 +263,11 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="@Url.Content("~/Scripts/jQuery.tmpl.min.js")" type="text/javascript"></script>
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/jquerytmpl")
     @Styles.Render("~/Content/themes/base/css")
+    <script type="text/javascript"> if (!window.console) console = { log: function () { } }; </script>
 
     <script type="text/x-jquery-tmpl" id="questionTemplate">
         @(Html.CollectionItemJQueryTemplate<RequestViewModel, QuestionViewModel>("QuestionEntry", new QuestionViewModel { Index = "${QIndex}"}))
