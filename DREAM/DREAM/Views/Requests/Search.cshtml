@@ -47,13 +47,13 @@
                     {
                         <tr>
                             <td>@Html.DisplayFor(d => Model.Results[i].RequestID)</td>
-                            <td>@Html.DisplayFor(d => Model.Results[i].RequesterTypeStringID)</td>
-                            <td>@*@Html.Action("FindUsernameFromID", new { userID = Model.Results[i].CreatedBy })*@</td>
+                            <td>@Html.DisplayFor(d => Model.Results[i].RequesterTypeString)</td>
+                            <td>@Html.DisplayFor(d => Model.Results[i].CreatedBy)</td>
                             <td>@Html.DisplayFor(d => Model.Results[i].Status)</td>
                             <td>@Html.DisplayFor(d => Model.Results[i].CreationTime)</td>
                             <td>
-                                @Html.ActionLink("View", "ViewRequest", "Requests", new { id = Model.Results[i].RequestID }) |
-                        @Html.ActionLink("Edit", "Edit", "Requests", new { id = Model.Results[i].RequestID })
+                                @Html.ActionLink("View", "ViewRequest", "Requests", new { id = Model.Results[i].RequestID }, new { }) |
+                        @Html.ActionLink("Edit", "Edit", "Requests", new { id = Model.Results[i].RequestID }, new { })
                             </td>
                         </tr>
                     }
