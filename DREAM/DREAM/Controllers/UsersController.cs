@@ -79,6 +79,12 @@ namespace DREAM.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        /// <summary>
+        /// To change a specified user's password
+        /// </summary>
+        /// <param name="userName">The user name of the user to change their passwrod</param>
+        /// <param name="success">A boolean to indicate a password has been changed successfully</param>
+        /// <returns>A view for a user to change their passwrod</returns>
         [HttpGet]
         [AllowAnonymous]
         public ActionResult ChangePassword(String userName, bool success = false)
@@ -89,6 +95,11 @@ namespace DREAM.Controllers
             return View(pm);
         }
 
+        /// <summary>
+        /// The logic for changing a user's password
+        /// </summary>
+        /// <param name="model">The model containing the required user's information</param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
