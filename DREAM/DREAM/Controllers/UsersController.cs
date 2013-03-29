@@ -28,7 +28,13 @@ namespace DREAM.Controllers
 
         //
         // POST: /Account/Login
-
+        /// <summary>
+        /// The logic for logging in a user
+        /// </summary>
+        /// <param name="model">The model containing all necessary login information</param>
+        /// <param name="returnUrl">The returnUrl </param>
+        /// <returns>Redirects the user to the home page if login was successful, else the change password
+        /// page if the user's current password in older than 42 days</returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -99,7 +105,8 @@ namespace DREAM.Controllers
         /// The logic for changing a user's password
         /// </summary>
         /// <param name="model">The model containing the required user's information</param>
-        /// <returns></returns>
+        /// <returns>Redirects the user to the home page if there is no user, else to the PasswordChangeConfirm 
+        /// page to confirm the user has changed their password</returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -122,7 +129,7 @@ namespace DREAM.Controllers
                         routes.Add("statusMessage", "Your Password was not changed");
                     }
                     if (Request.IsAuthenticated)
-                        return RedirectToAction("Manage", "Users", routes);
+                        return RedirectToAction("PasswordChangeConfirm", "Users", routes);
                     else
                     {
                         RouteValueDictionary routs = new RouteValueDictionary();
@@ -139,8 +146,14 @@ namespace DREAM.Controllers
             }
         }
 
+        /// <summary>
+        /// Confirmation a user has changed their password
+        /// </summary>
+        /// <param name="user">The user who's password was changed</param>
+        /// <param name="statusMessage">The message to let the user know if their password change was successful</param>
+        /// <returns>A page showing the confirmation of a user's password change</returns>
         [HttpGet]
-        public ActionResult Manage(String user, String statusMessage)
+        public ActionResult PasswordChangeConfirm(String user, String statusMessage)
         {
             ViewBag.StatusMessage = statusMessage;
             return View();
