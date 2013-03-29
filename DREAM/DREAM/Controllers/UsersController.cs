@@ -60,6 +60,7 @@ namespace DREAM.Controllers
                         RouteValueDictionary routes = new RouteValueDictionary();
                         routes.Add("userName", model.UserName);
                         routes.Add("success", true);
+                        routes.Add("statusMessage", "Your Password is greater than 42 days old. Please change your password to continue using the DREAM system.");
                         return RedirectToAction("ChangePassword", "Users", routes);
                     }
 
@@ -93,11 +94,12 @@ namespace DREAM.Controllers
         /// <returns>A view for a user to change their passwrod</returns>
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult ChangePassword(String userName, bool success = false)
+        public ActionResult ChangePassword(String userName, String statusMessage, bool success = false)
         {
             ChangePasswordModel pm = new ChangePasswordModel();
             pm.UserName = userName;
             ViewBag.success = success;
+            ViewBag.StatusMessage = statusMessage;
             return View(pm);
         }
 
