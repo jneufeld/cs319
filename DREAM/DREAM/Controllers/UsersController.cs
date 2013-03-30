@@ -29,7 +29,7 @@ namespace DREAM.Controllers
         //
         // POST: /Account/Login
         /// <summary>
-        /// The logic for logging in a user
+        /// Logs in a specified user
         /// </summary>
         /// <param name="model">The model containing all necessary login information</param>
         /// <param name="returnUrl">The returnUrl </param>
@@ -87,7 +87,7 @@ namespace DREAM.Controllers
         }
 
         /// <summary>
-        /// To change a specified user's password
+        /// Directs the specified user to the change password page
         /// </summary>
         /// <param name="userName">The user name of the user to change their passwrod</param>
         /// <param name="success">A boolean to indicate a password has been changed successfully</param>
@@ -104,7 +104,7 @@ namespace DREAM.Controllers
         }
 
         /// <summary>
-        /// The logic for changing a user's password
+        /// Changes the specified user's password
         /// </summary>
         /// <param name="model">The model containing the required user's information</param>
         /// <returns>Redirects the user to the home page if there is no user, else to the PasswordChangeConfirm 
@@ -149,7 +149,7 @@ namespace DREAM.Controllers
         }
 
         /// <summary>
-        /// Confirmation a user has changed their password
+        /// Directs the specified user to the password confirmation page
         /// </summary>
         /// <param name="user">The user who's password was changed</param>
         /// <param name="statusMessage">The message to let the user know if their password change was successful</param>
