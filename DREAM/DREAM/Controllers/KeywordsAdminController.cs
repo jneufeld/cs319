@@ -17,7 +17,7 @@ namespace DREAM.Controllers
         private DREAMContext db = new DREAMContext();
 
         /// <summary> Index of the Keyword Admin page; this is the default page shown when accessing Keyword Admin </summary>
-        /// <param name="page"> </param>
+        /// <param name="page"> This is the optional page GET parameter which indicates the current page (defaults to 1)</param>
         /// <returns> The view of Keyword Admin where all keywords currently existing in the system are displayed </returns>
         [HttpGet]
         public ActionResult Index(int page = 1) {
@@ -27,7 +27,7 @@ namespace DREAM.Controllers
         }
 
         /// <summary> To edit a keyword </summary>
-        /// <param name="keywordText"> The keyword that needs to be edited </param>>
+        /// <param name="keywordText"> The keyword that needs to be edited </param>
         /// <returns> The view for editing a keyword </returns>
         [HttpGet]
 	    public ActionResult Edit(String keywordText) {
@@ -42,7 +42,7 @@ namespace DREAM.Controllers
         }
 
         /// <summary> Helper method to find the keyword object based on the keyword text </summary>
-        /// <param name="keywordText"> The keyword text of the keyword that needs to be found </param>>
+        /// <param name="keywordText"> The keyword text of the keyword that needs to be found </param>
         /// <returns> The keyword with the keyword text of value keywordText(parameter) </returns>
         private Keyword findKeywordFromText(String keywordText)
         {
@@ -65,6 +65,10 @@ namespace DREAM.Controllers
             return keywordToReturn;
         }
 
+        /// <summary> Helper method to remove all of the references to the old keyword and change it to all the references to the new keyword </summary>
+        /// <param name="newKeyword"> The new keyword that we want the references to point to </param>
+        /// <param name="oldKeyword"> The old keyword that we want to remove all references to </param>
+        /// <returns> None </returns>
         private void removeOldKeywordFromQuestions(Keyword newKeyword, Keyword oldKeyword)
         {
             DbSet<Question> allQuestions = db.Questions;
