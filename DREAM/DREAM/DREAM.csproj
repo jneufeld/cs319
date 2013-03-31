@@ -403,7 +403,7 @@
     <Content Include="Views\Users\_RemoveExternalLoginsPartial.cshtml" />
     <Content Include="Views\Users\_SetPasswordPartial.cshtml" />
     <Content Include="Views\Users\Login.cshtml" />
-    <Content Include="Views\Users\Manage.cshtml" />
+    <Content Include="Views\Users\PasswordChangeConfirm.cshtml" />
     <Content Include="Views\Users\Register.cshtml" />
     <Content Include="Views\Users\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Users\ExternalLoginConfirmation.cshtml" />

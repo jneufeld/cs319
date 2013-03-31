@@ -17,7 +17,7 @@ namespace DREAM.Controllers
         private DREAMContext db = new DREAMContext();
 
         /// <summary>
-        /// Index of the given drop down menu showing all items from that drop down
+        /// Directs the user to a page displaying all items from the given drop down menu
         /// </summary>
         /// <param name="dropDownClass"> The drop down menu </param>
         /// <returns> The view of the given drop down menu's index of all items </returns>
@@ -26,11 +26,15 @@ namespace DREAM.Controllers
         {
             DbSet dropDowns;
             dropDowns = getDropDowns(dropDownClass);
+            if (dropDowns == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View(dropDowns);
         }
 
         /// <summary>
-        /// To add an element to a specified drop down
+        /// Directs the user to the 'add an element to a specified drop down' page
         /// </summary>
         /// <param name="dropDownClass"> The drop down menu </param>
         /// <returns> The view for adding an element to the given drop down </returns>
@@ -57,7 +61,7 @@ namespace DREAM.Controllers
         }
 
         /// <summary>
-        /// The logic for actually adding the specified element to the given drop down menu
+        /// Adds the specified element to the given drop down menu
         /// </summary>
         /// <param name="model"> The element to add </param>
         /// <param name="dropDownClass"> The drop down menu to add to </param>
@@ -103,7 +107,7 @@ namespace DREAM.Controllers
         }
 
         /// <summary>
-        ///  To edit a specified element in a drop down list
+        ///  Directs the user to the 'edit a specified element in a drop down menu' page
         /// </summary>
         /// <param name="dropDownId"> The ID of the element to be edited </param>
         /// <param name="dropDownCode"> The code of the element to be edited </param>
@@ -137,7 +141,7 @@ namespace DREAM.Controllers
         }
 
         /// <summary>
-        /// The logic for actually editing a specified element from a given drop down menu
+        /// Edits a specified element from a given drop down menu
         /// </summary>
         /// <param name="model"> The element to be edited </param>
         /// <param name="dropDownClass"> The drop down menu of the element to be edited </param>
@@ -167,7 +171,7 @@ namespace DREAM.Controllers
         }
 
         /// <summary>
-        /// To delete an element from a specified drop down
+        /// Directs the user to the 'delete an element from a specified drop down menu' page
         /// </summary>
         /// <param name="dropDownId"> The ID of the element to be deleted </param>
         /// <param name="dropDownCode"> The code of the element to be deleted </param>
@@ -201,7 +205,7 @@ namespace DREAM.Controllers
         }
 
         /// <summary>
-        /// The logic for actually deleting the specified element from the given drop down menu
+        /// Deletes the specified element from the given drop down menu
         /// </summary>
         /// <param name="dropDownId"> The ID of the element to be deleted</param>
         /// <param name="dropDownClass"> The drop down menu to delete an element from</param>
@@ -223,7 +227,7 @@ namespace DREAM.Controllers
         }
 
         /// <summary>
-        /// Method to get a DbSet of all elements of the given drop down menu
+        /// Gets the DbSet of all elements of the given drop down menu
         /// </summary>
         /// <param name="dropDownClass"> The drop down menu </param>
         /// <returns> The desired DbSet else null</returns>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
@@ -28,7 +28,13 @@ namespace DREAM.Controllers
 
         //
         // POST: /Account/Login
-
+        /// <summary>
+        /// Logs in a specified user
+        /// </summary>
+        /// <param name="model">The model containing all necessary login information</param>
+        /// <param name="returnUrl">The returnUrl </param>
+        /// <returns>Redirects the user to the home page if login was successful, else the change password
+        /// page if the user's current password in older than 42 days</returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -54,6 +60,7 @@ namespace DREAM.Controllers
                         RouteValueDictionary routes = new RouteValueDictionary();
                         routes.Add("userName", model.UserName);
                         routes.Add("success", true);
+                        routes.Add("statusMessage", "Your Password is greater than 42 days old. Please change your password to continue using the DREAM system.");
                         return RedirectToAction("ChangePassword", "Users", routes);
                     }
 
@@ -79,16 +86,29 @@ namespace DREAM.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        /// <summary>
+        /// Directs the specified user to the change password page
+        /// </summary>
+        /// <param name="userName">The user name of the user to change their passwrod</param>
+        /// <param name="success">A boolean to indicate a password has been changed successfully</param>
+        /// <returns>A view for a user to change their passwrod</returns>
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult ChangePassword(String userName, bool success = false)
+        public ActionResult ChangePassword(String userName, String statusMessage, bool success = false)
         {
             ChangePasswordModel pm = new ChangePasswordModel();
             pm.UserName = userName;
             ViewBag.success = success;
+            ViewBag.StatusMessage = statusMessage;
             return View(pm);
         }
 
+        /// <summary>
+        /// Changes the specified user's password
+        /// </summary>
+        /// <param name="model">The model containing the required user's information</param>
+        /// <returns>Redirects the user to the home page if there is no user, else to the PasswordChangeConfirm 
+        /// page to confirm the user has changed their password</returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -111,7 +131,7 @@ namespace DREAM.Controllers
                         routes.Add("statusMessage", "Your Password was not changed");
                     }
                     if (Request.IsAuthenticated)
-                        return RedirectToAction("Manage", "Users", routes);
+                        return RedirectToAction("PasswordChangeConfirm", "Users", routes);
                     else
                     {
                         RouteValueDictionary routs = new RouteValueDictionary();
@@ -128,8 +148,14 @@ namespace DREAM.Controllers
             }
         }
 
+        /// <summary>
+        /// Directs the specified user to the password confirmation page
+        /// </summary>
+        /// <param name="user">The user who's password was changed</param>
+        /// <param name="statusMessage">The message to let the user know if their password change was successful</param>
+        /// <returns>A page showing the confirmation of a user's password change</returns>
         [HttpGet]
-        public ActionResult Manage(String user, String statusMessage)
+        public ActionResult PasswordChangeConfirm(String user, String statusMessage)
         {
             ViewBag.StatusMessage = statusMessage;
             return View();
