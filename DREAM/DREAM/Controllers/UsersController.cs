@@ -149,6 +149,11 @@ namespace DREAM.Controllers
         }
         #endregion
 
+        /// <summary> Resets the user password </summary>
+        /// <param name="email"> The email of the user who wants to reset his/her password </param>
+        /// <param name="statusMessage"> Status message for any errors </param>
+        /// <param name="success"> A true/false variable indicating whether or not a password has been successfully reset yet or not </param>
+        /// <returns> The main Keyword Admin page on success and stays on the same page upon error </returns>
         [AllowAnonymous]
         [HttpGet]
         public ActionResult ResetPassword(String email, String statusMessage, bool success = false)
@@ -160,6 +165,9 @@ namespace DREAM.Controllers
             return View();
         }
 
+        /// <summary> The actual logic that implements resetting a password.  Note that the user does not have to be logged in to make this request. </summary>
+        /// <param name="passwordResetRequestModel"> The password reset request model object containing the email of the user who wants to reset his/her password </param>>
+        /// <returns> The main project page upon success; the same page with an error message upon failure </returns>
         [AllowAnonymous]
         [HttpPost]
         public ActionResult ResetPassword(PasswordResetRequestModel passwordResetRequestModel)
