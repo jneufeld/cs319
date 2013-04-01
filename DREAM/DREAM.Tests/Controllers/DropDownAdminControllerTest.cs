@@ -12,6 +12,7 @@ namespace DREAM.Tests.Controllers
     public class DropDownAdminControllerTest
     {
         private DropDownAdminController dDAdminController = new DropDownAdminController();
+        private DREAMContext db = new DREAMContext();
 
         [TestMethod]
         public void nullIndexTest()
@@ -142,35 +143,51 @@ namespace DREAM.Tests.Controllers
             ViewResult result = (ViewResult)dDAdminController.Index("TumourGroup");
             Assert.IsNotNull(result.Model);
         }
-        /*
+        
         [TestMethod]
         public void nullAddLogicTest()
         {
-            ActionResult result = dDAdminController.Add(null, null);
+            DropDown m = new DropDown();
+            ActionResult result = dDAdminController.Add(m, null);
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-
+      
         [TestMethod]
         public void emptyAddLogicTest()
         {
-            ActionResult result = dDAdminController.Add("");
-            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            Region m = new Region();
+            m.Code = "";
+            m.FullName = "";
+            ViewResult result = (ViewResult)dDAdminController.Add(m, "Region");
+            Assert.AreEqual("System.Web.Mvc.ViewResult", result.GetType().FullName);
         }
-
+        
         [TestMethod]
         public void wrongAddLogicTest()
         {
-            ActionResult result = dDAdminController.Add("Bubba");
+            DropDown m = new DropDown();
+            ActionResult result = dDAdminController.Add(m, "Bubba");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-
+        /*
         [TestMethod]
         public void regionAddLogicTest()
         {
-            ViewResult result = (ViewResult)dDAdminController.Index("Region");
-            Assert.IsNotNull(result.Model);
+            Region m = new Region();
+            m.Code = "TST";
+            m.FullName = "RegionAddLogicTest";
+            m.Enabled = true;
+            m.ID = 3478955;
+            ActionResult result = dDAdminController.Add(m, "Region");
+            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            DbSet dropDowns;
+            DropDown dropDown = new DropDown();
+            dropDowns = db.Regions;
+            dropDown = (DropDown)dropDowns.Find(m.ID);
+            dropDowns.Remove(dropDown);
+            db.SaveChanges();
         }
-
+        
         [TestMethod]
         public void requesterTypeAddLogicTest()
         {

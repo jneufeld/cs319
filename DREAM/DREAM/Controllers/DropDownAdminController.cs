@@ -41,22 +41,7 @@ namespace DREAM.Controllers
         [HttpGet]
         public ActionResult Add(string dropDownClass)
         {
-            DropDown m = null;
-            switch (dropDownClass)
-            {
-                case "RequesterType":
-                    m = new RequesterType();
-                    break;
-                case "QuestionType":
-                    m = new QuestionType();
-                    break;
-                case "TumourGroup":
-                    m = new TumourGroup();
-                    break;
-                case "Region":
-                    m = new Region();
-                    break;
-            }
+            DropDown m = getDropDownType(dropDownClass);
             if (m == null)
             {
                 return RedirectToAction("Index", "Home");
@@ -74,25 +59,17 @@ namespace DREAM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add(DropDown model, string dropDownClass)
         {
-            DropDown m = null;
-            switch (dropDownClass)
+            DropDown m = getDropDownType(dropDownClass);
+            if (m == null)
             {
-                case "RequesterType":
-                    m = new RequesterType();
-                    break;
-                case "QuestionType":
-                    m = new QuestionType();
-                    break;
-                case "TumourGroup":
-                    m = new TumourGroup();
-                    break;
-                case "Region":
-                    m = new Region();
-                    break;
+                return RedirectToAction("Index", "Home");
             }
             m.Code = model.Code;
             m.FullName = model.FullName;
-            if (m.Code == null || m.FullName == null) return View(m);
+            if (m.Code == null || m.Code == "" || m.FullName == null || m.FullName == "")
+            {
+                return View(m);
+            }
             m.Enabled = true;
             if (ModelState.IsValid)
             {
@@ -122,22 +99,7 @@ namespace DREAM.Controllers
         [HttpGet]
         public ActionResult Edit(int dropDownId, string dropDownCode, string dropDownFullName, bool enabled, string dropDownClass)
         {
-            DropDown m = null;
-            switch (dropDownClass)
-            {
-                case "RequesterType":
-                    m = new RequesterType();
-                    break;
-                case "QuestionType":
-                    m = new QuestionType();
-                    break;
-                case "TumourGroup":
-                    m = new TumourGroup();
-                    break;
-                case "Region":
-                    m = new Region();
-                    break;
-            }
+            DropDown m = getDropDownType(dropDownClass);
             m.Enabled = enabled;
             m.ID = dropDownId;
             m.Code = dropDownCode;
@@ -157,22 +119,7 @@ namespace DREAM.Controllers
         {
             if (model.Code == null || model.FullName == null)
             {
-                DropDown m = null;
-                switch (dropDownClass)
-                {
-                    case "RequesterType":
-                        m = new RequesterType();
-                        break;
-                    case "QuestionType":
-                        m = new QuestionType();
-                        break;
-                    case "TumourGroup":
-                        m = new TumourGroup();
-                        break;
-                    case "Region":
-                        m = new Region();
-                        break;
-                }
+                DropDown m = getDropDownType(dropDownClass);
                 m.ID = model.ID;
                 m.Code = model.Code;
                 m.FullName = model.FullName;
@@ -210,22 +157,7 @@ namespace DREAM.Controllers
         [HttpGet]
         public ActionResult Delete(int dropDownId, string dropDownCode, string dropDownFullName, bool enabled, string dropDownClass)
         {
-            DropDown m = null;
-            switch (dropDownClass)
-            {
-                case "RequesterType":
-                    m = new RequesterType();
-                    break;
-                case "QuestionType":
-                    m = new QuestionType();
-                    break;
-                case "TumourGroup":
-                    m = new TumourGroup();
-                    break;
-                case "Region":
-                    m = new Region();
-                    break;
-            }
+            DropDown m = getDropDownType(dropDownClass);
             m.Enabled = enabled;
             m.ID = dropDownId;
             m.Code = dropDownCode;
@@ -247,7 +179,6 @@ namespace DREAM.Controllers
             DropDown dropDown = new DropDown();
             dropDowns = getDropDowns(dropDownClass);
             dropDown = (DropDown)dropDowns.Find(dropDownId);
-            //dropDowns.Remove(dropDown);
             dropDown.Enabled = !dropDown.Enabled;
             db.SaveChanges();
             RouteValueDictionary routes = new RouteValueDictionary();
@@ -272,6 +203,21 @@ namespace DREAM.Controllers
                     return db.TumourGroups;
                 case "Region":
                     return db.Regions;
+            }
+            return null;
+        }
+        private DropDown getDropDownType(string dropDownClass)
+        {
+            switch (dropDownClass)
+            {
+                case "RequesterType":
+                    return new RequesterType();
+                case "QuestionType":
+                    return new QuestionType();
+                case "TumourGroup":
+                    return new TumourGroup();
+                case "Region":
+                    return new Region();
             }
             return null;
         }
