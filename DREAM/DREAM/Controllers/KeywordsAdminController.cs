@@ -49,13 +49,23 @@ namespace DREAM.Controllers
             DbSet<Keyword> allKeywords = db.Keywords;
             Keyword keywordToReturn = null;
             bool foundKeyword = false;
-            String keywordTextLowerCase = keywordText.ToLower();
+            String keywordTextLowerCase = keywordText;
+            if (keywordText != null ) keywordTextLowerCase = keywordText.ToLower();
 
             foreach (Keyword k in allKeywords)
             {
-                String curKeywordLowerCase = k.KeywordText.ToLower();
+                String curKeywordLowerCase = k.KeywordText;
+                if (k.KeywordText != null) curKeywordLowerCase = k.KeywordText.ToLower();
 
-                if (curKeywordLowerCase.Equals(keywordTextLowerCase) && !foundKeyword)
+                if (curKeywordLowerCase == null)
+                {
+                    if (keywordTextLowerCase == null && !foundKeyword)
+                    {
+                        keywordToReturn = k;
+                        foundKeyword = true;
+                    }
+                }
+                else if (curKeywordLowerCase.Equals(keywordTextLowerCase) && !foundKeyword)
                 {
                     keywordToReturn = k;
                     foundKeyword = true;
