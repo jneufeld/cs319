@@ -46,15 +46,6 @@ namespace DREAM.Controllers
                 {
                     MembershipUser user = Membership.GetUser(model.UserName);
 
-                    DateTime dt = DateTime.MinValue;
-                    foreach (PreviousPassword prevPass in db.PreviousPasswords)
-                    {
-                        if (prevPass.User.UserName == model.UserName)
-                        {
-                            if (prevPass.Timestamp > dt)
-                                dt = prevPass.Timestamp;
-                        }
-                    }
                     if (user.LastPasswordChangedDate < DateTime.Now.AddDays(-42))
                     {
                         RouteValueDictionary routes = new RouteValueDictionary();
