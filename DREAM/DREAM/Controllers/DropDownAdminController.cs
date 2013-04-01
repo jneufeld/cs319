@@ -57,6 +57,10 @@ namespace DREAM.Controllers
                     m = new Region();
                     break;
             }
+            if (m == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View(m);
         }
 
@@ -88,6 +92,7 @@ namespace DREAM.Controllers
             }
             m.Code = model.Code;
             m.FullName = model.FullName;
+            if (m.Code == null || m.FullName == null) return View(m);
             m.Enabled = true;
             if (ModelState.IsValid)
             {
@@ -101,7 +106,7 @@ namespace DREAM.Controllers
             }
             else
             {
-                ModelState.AddModelError(m.FullName, "ModelState is not valid");
+                ModelState.AddModelError("", "ModelState is not valid");
                 return View(m);
             }
         }
@@ -150,6 +155,30 @@ namespace DREAM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(DropDown model, string dropDownClass)
         {
+            if (model.Code == null || model.FullName == null)
+            {
+                DropDown m = null;
+                switch (dropDownClass)
+                {
+                    case "RequesterType":
+                        m = new RequesterType();
+                        break;
+                    case "QuestionType":
+                        m = new QuestionType();
+                        break;
+                    case "TumourGroup":
+                        m = new TumourGroup();
+                        break;
+                    case "Region":
+                        m = new Region();
+                        break;
+                }
+                m.ID = model.ID;
+                m.Code = model.Code;
+                m.FullName = model.FullName;
+                m.Enabled = model.Enabled;
+                return View(m);
+            }
             if (ModelState.IsValid)
             {
                 DbSet dropDowns;
@@ -165,7 +194,7 @@ namespace DREAM.Controllers
             }
             else
             {
-                ModelState.AddModelError(model.ToString(), "ModelState is not valid");
+                ModelState.AddModelError("", "ModelState is not valid");
                 return View(model);
             }
         }
