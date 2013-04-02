@@ -56,9 +56,8 @@ namespace DREAM.Controllers
             request.Caller = new Caller();
             request.Patient = new Patient();
             RequestViewModel rv = RequestViewModel.CreateFromRequest(request);
-            ViewBag.RequesterTypeList = BuildRequesterTypeDropdownList();
-            ViewBag.RegionList = BuildRegionDropdownList();
-            ViewBag.GenderList = BuildGenderDropdownList();
+
+            PopulateDropDownLists(false, false);
             ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
             ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
             ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
@@ -116,22 +115,19 @@ namespace DREAM.Controllers
                 addQuestions(request, rv);
                 db.SaveChanges();
 
-                return RedirectToAction("Edit", new RouteValueDictionary(new { Id = request.ID }));
+                return RedirectToAction("Edit", new RouteValueDictionary(new { id = request.ID }));
             }
             else
             {
                 ModelState.AddModelError(ModelState.ToString(), "The add request failed!");
             }
 
-            ViewBag.RequesterTypeList = BuildRequesterTypeDropdownList();
-            ViewBag.RegionList = BuildRegionDropdownList();
-            ViewBag.GenderList = BuildGenderDropdownList();
+            PopulateDropDownLists(false, false);
             ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
             ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
             ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
             ViewBag.ProbabilityList = BuildProbabilityDropdownList();
             ViewBag.SeverityList = BuildSeverityDropdownList();
-
 
             return View(rv);
         }
@@ -257,14 +253,7 @@ namespace DREAM.Controllers
             rv.CreatedBy = FindUsernameFromID(request.CreatedBy);
             rv.ClosedBy = FindUsernameFromID(request.ClosedBy);
 
-            ViewBag.RequesterTypeList = BuildRequesterTypeDropdownList();
-            ViewBag.RegionList = BuildRegionDropdownList();
-            ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
-            ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
-            ViewBag.GenderList = BuildGenderDropdownList();
-            ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
-            ViewBag.ProbabilityList = BuildProbabilityDropdownList();
-            ViewBag.SeverityList = BuildSeverityDropdownList();
+            PopulateDropDownLists(request.CompletionTime != null);
 
             return View(rv);
         }
@@ -297,7 +286,7 @@ namespace DREAM.Controllers
                 rv.MapToRequest(request);
                 rv.MapToRequestPatient(request);
 
-                if (rv.Action == "Close")
+                if (request.CompletionTime == null && rv.Status == "Closed")
                 {
                     request.CompletionTime = DateTime.UtcNow;
                     request.ClosedBy = (Guid)Membership.GetUser().ProviderUserKey;
@@ -688,6 +677,23 @@ namespace DREAM.Controllers
         }
 
         #region DropDown Lists
+        private void PopulateDropDownLists(bool closed, bool questionDropDowns = true)
+        {
+            ViewBag.RequesterTypeList = BuildRequesterTypeDropdownList();
+            ViewBag.RegionList = BuildRegionDropdownList();
+            ViewBag.GenderList = BuildGenderDropdownList();
+            ViewBag.StatusList = BuildStatusDropdownList(closed);
+
+            if (questionDropDowns)
+            {
+                ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
+                ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
+                ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
+                ViewBag.ProbabilityList = BuildProbabilityDropdownList();
+                ViewBag.SeverityList = BuildSeverityDropdownList();
+            }
+        }
+
         private IEnumerable<SelectListItem> BuildGenderDropdownList()
         {
             List<SelectListItem> genders = new List<SelectListItem>();
@@ -729,6 +735,17 @@ namespace DREAM.Controllers
             selectItems.Add(new SelectListItem { Text = "Major", Value = Severity.Major.ToString() });
             selectItems.Add(new SelectListItem { Text = "Moderate", Value = Severity.Moderate.ToString() });
             selectItems.Add(new SelectListItem { Text = "Minor", Value = Severity.Minor.ToString() });
+
+            return selectItems;
+        }
+
+        private IEnumerable<SelectListItem> BuildStatusDropdownList(bool closed)
+        {
+            List<SelectListItem> selectItems = new List<SelectListItem>();
+
+            if (!closed)
+                selectItems.Add(new SelectListItem { Text = "In Progress", Value = "Open" });
+            selectItems.Add(new SelectListItem { Text = "Closed", Value = "Closed" });
 
             return selectItems;
         }

@@ -25,14 +25,8 @@ namespace DREAM.Models
 
         [Display(Name = "Closed By")]
         public string ClosedBy { get; set; }
-
-        public bool Close { get; set; }
-        
         [Display(Name = "Status")]
-        public string Status
-        {
-            get { return ClosedBy != null && !ClosedBy.Equals("") ? "Closed" : "Open"; }
-        }
+        public string Status { get; set; }
 
         [Display(Name = "Requester Type")]
         public string RequesterTypeStringID { get; set; }
@@ -114,6 +108,7 @@ namespace DREAM.Models
                 CompletionTime = r.CompletionTime != null ? r.CompletionTime.Value.ToLocalTime().ToString() : "",
                 RequesterTypeID = r.Caller.Type != null ? r.Caller.Type.ID : 0,
                 RequesterTypeString = r.Caller.Type != null ? r.Caller.Type.ToString() : "",
+                Status = r.CompletionTime != null ? "Closed" : "Open",
                 CallerID = r.Caller.ID,
                 CallerFirstName = r.Caller.FirstName,
                 CallerLastName = r.Caller.LastName,
