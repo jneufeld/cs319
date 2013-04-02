@@ -6,17 +6,13 @@
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/bootstrapcss")
-
-        <style>
-          body {
-            padding-top: 60px; /* ugh */
-          }
-        </style>
+        @Styles.Render("~/Content/DREAMcss")
+        @RenderSection("Styles", false)
 
     </head>
     <body>
 
-        <div class="navbar navbar-fixed-top">
+        <div class="navbar navbar-static-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -25,48 +21,55 @@
                         <span class="icon-bar"></span>
                     </a>
 
-                    <!--<a class="brand" href="../"><img src="~/Images/BC_Cancer_logo.jpg"></a>-->
-                    <a class="brand" href="../">DREAM</a>
+                    <div class="row">
+                        <div class="span4">
+                            <a class="brand" href="/">
+                                <img src="~/Images/BC_Cancer_logo.png" />
+                            </a>
+                        </div>
 
-                    <div class="nav-collapse collapse" id="main-menu">
-                        <ul class="nav" id="main-menu-left">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <div class="span8">
+                            <div class="nav-collapse collapse" id="main-menu">
+                                <ul class="nav pull-right" id="menu">
+                                    @{
+                                        bool isAdmin = User.IsInRole("Admin");
+                                        bool isDISpecialist = User.IsInRole("DI Specialist");
+                                        bool isViewer = User.IsInRole("Viewer");
+                                        bool isReporter = User.IsInRole("Reporter");
+                                        
+                                        if(isDISpecialist) 
+                                        {
+                                            <!--<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Requests<b class="caret"></b></a>
 
-                            @{
-                                bool isAdmin = User.IsInRole("Admin");
-                                bool isDISpecialist = User.IsInRole("DI Specialist");
-                                bool isViewer = User.IsInRole("Viewer");
-                                bool isReporter = User.IsInRole("Reporter");
-                                
-                                if(isDISpecialist) 
-                                {
-                                    <li>@Html.ActionLink("Create Request", "Add", "Requests")</li>
+                                                <ul class="dropdown-menu">
+                                                        -->
+                                                        <li>@Html.ActionLink("Create Request", "Add", "Requests")</li>
+                                                        <!--
+                                                    <li>@Html.ActionLink("Search", "Search", "")</li>
+                                                </ul>
+                                            </li>
+                                                -->
+                                        }
+
+                                        if(isReporter)
+                                        {
+                                            <li>@Html.ActionLink("Reports", "Generate", "Reports")</li>
+                                        }
+
+                                        if(isAdmin) 
+                                        {
+                                            <li>@Html.ActionLink("Admin", "Admin", "Home")</li>
+                                        }
+                                    }
+                                    @Html.Partial("_LoginPartial")
+                                </ul>
+                            </div>
+                            <div>
+                                @using(Html.BeginForm("Search", "Requests", FormMethod.Post, new { id = "menu-search", @class = "form-search pull-right" })) {
+                                    @Html.TextBox("Query", "", new { @class = "search-input-disabled", placeholder = "Enter Keywords" })
+                                    <button type="submit" class="btn">Search Requests</button>
                                 }
-
-                                if (isViewer || isDISpecialist)
-                                {
-                                    <li>@Html.ActionLink("View Requests", "Index", "Requests")</li>
-                                }
-
-                                if (isDISpecialist || isViewer)
-                                {
-                                    <li>@Html.RouteLink("Search", "Search")</li>
-                                }
-
-                                if(isReporter)
-                                {
-                                    <li>@Html.ActionLink("Generate Reports", "Generate", "Reports")</li>
-                                }
-
-                                if(isAdmin) 
-                                {
-                                    <li>@Html.ActionLink("Admin Panel", "Admin", "Home")</li>
-                                }
-                            }
-                        </ul>
-                        <ul class="nav pull-right">
-                            @Html.Partial("_LoginPartial")
-                        </ul>
+                        </div>
                     </div>
                 </div>
             </div>

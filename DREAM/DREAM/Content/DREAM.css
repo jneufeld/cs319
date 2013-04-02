@@ -1,0 +1,31 @@
+﻿#menu
+{
+    padding-top: 29px;
+}
+
+#menu a
+{
+    font-size: 28px;
+    padding: 8px 20px !important;
+}
+
+#logoutForm
+{
+    margin: 0 auto 0;
+    max-width: 74px;
+}
+
+#menu .dropdown-menu a
+{
+    font-size: 16px;
+}
+
+#menu-search
+{
+    margin-top: 5px;
+}
+
+#menu-search .btn
+{
+    margin-top: 0;
+}

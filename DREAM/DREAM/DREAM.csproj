@@ -206,6 +206,7 @@
     <Compile Include="Attributes\ChartableAttribute.cs" />
     <Compile Include="Attributes\ReportableAttribute.cs" />
     <Compile Include="Attributes\StratifiableAttribute.cs" />
+    <Content Include="Content\DREAM.css" />
     <Compile Include="Controllers\AutocompleteController.cs" />
     <Compile Include="Controllers\DropDownAdminController.cs" />
     <Compile Include="Controllers\KeywordsAdminController.cs" />

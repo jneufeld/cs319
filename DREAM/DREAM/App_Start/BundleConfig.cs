@@ -43,6 +43,8 @@ namespace DREAM
                 "~/Scripts/bootstrap*"));
             bundles.Add(new StyleBundle("~/Content/bootstrapcss").Include(
                             "~/Content/bootstrap.css"));
+            bundles.Add(new StyleBundle("~/Content/DREAMcss").Include(
+                "~/Content/DREAM.css"));
         }
     }
 }
