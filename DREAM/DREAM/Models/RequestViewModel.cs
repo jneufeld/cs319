@@ -31,7 +31,7 @@ namespace DREAM.Models
         [Display(Name = "Status")]
         public string Status
         {
-            get { return ClosedBy != null ? "Closed" : "Open"; }
+            get { return !ClosedBy.Equals("") ? "Closed" : "Open"; }
         }
 
         [Display(Name = "Requester Type")]
