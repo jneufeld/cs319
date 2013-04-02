@@ -98,6 +98,20 @@
         $prob.trigger('change');
         $severity.change(handler);
     },
+    renewRequestLock: function () {
+        var id = $("input[name=RequestID]:hidden").val();
+        $.ajax({
+            url: "/Requests/RenewRequestLock", type: "POST", dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: "{ \"requestId\": \"" + id + "\" }",
+            success: function (msg) {
+                //console.log(id + " " + msg);
+            },
+            error: function (error) {
+                //console.log(error);
+            }
+        });
+    }
 };
 
 $("body").on("click", ".addNewKeyword", function () {

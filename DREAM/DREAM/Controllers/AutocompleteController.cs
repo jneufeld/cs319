@@ -14,8 +14,8 @@ namespace DREAM.Controllers
     {
         private DREAMContext db = new DREAMContext();
 
-        private SearchAutoComplete SearchAutocomplete =
-            new SearchAutoComplete(AppDomain.CurrentDomain.BaseDirectory + "/App_Data/SearchAutocompleteIndex");
+        //private SearchAutoComplete SearchAutocomplete =
+        //    new SearchAutoComplete(AppDomain.CurrentDomain.BaseDirectory + "/App_Data/SearchAutocompleteIndex");
 
         //
         // POST: /Autocomplete/Keyword/
@@ -72,7 +72,8 @@ namespace DREAM.Controllers
             query = query.Split().Last();
 
             // Fetch suggestions
-            string[] suggestions = SearchAutocomplete.SuggestTermsFor(query).ToArray();
+            //string[] suggestions = SearchAutocomplete.SuggestTermsFor(query).ToArray();
+            string[] suggestions = new string[0];
 
             return Json(suggestions, JsonRequestBehavior.AllowGet);
         }

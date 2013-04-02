@@ -38,31 +38,6 @@ namespace DREAM.Models
             set { _Questions = value; }
         }
 
-        public Lock Lock()
-        {
-            DREAMContext db = new DREAMContext();
-
-            Lock reqLock = new Lock
-            {
-                ExpireTime = DateTime.Now.AddMinutes(1.0),
-                UserID = (Guid)Membership.GetUser().ProviderUserKey,
-                RequestID = this.ID,
-            };
-
-            db.Locks.Add(reqLock);
-            db.SaveChanges();
-            return reqLock;
-        }
-
-        public void Unlock()
-        {
-            DREAMContext db = new DREAMContext();
-
-            Lock reqLock = db.Locks.Single(Lock => Lock.RequestID == this.ID);
-            db.Locks.Remove(reqLock);
-            db.SaveChanges();
-        }
-
         [Chartable("Time Spent")]
         public int TimeSpent
         {

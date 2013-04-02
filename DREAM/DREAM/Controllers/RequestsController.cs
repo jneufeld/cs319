@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -14,6 +15,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DREAM.Models;
+using Lock = DREAM.Models.Lock;
 
 namespace DREAM.Controllers
 {
@@ -21,6 +23,8 @@ namespace DREAM.Controllers
     public class RequestsController : Controller
     {
         private DREAMContext db = new DREAMContext();
+
+        private TimeSpan LockDuration = TimeSpan.FromSeconds(120);
 
         //private SearchIndex SearchIndex = new SearchIndex();
 
@@ -57,12 +61,7 @@ namespace DREAM.Controllers
             request.Patient = new Patient();
             RequestViewModel rv = RequestViewModel.CreateFromRequest(request);
 
-            PopulateDropDownLists(false, false);
-            ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
-            ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
-            ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
-            ViewBag.ProbabilityList = BuildProbabilityDropdownList();
-            ViewBag.SeverityList = BuildSeverityDropdownList();
+            PopulateDropDownLists(false);
             return View(rv);
         }
 
@@ -110,9 +109,9 @@ namespace DREAM.Controllers
                     db.Patients.Add(request.Patient);
                 //SearchIndex.AddOrUpdateIndex(request);
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
-                db.SaveChanges();
 
                 addQuestions(request, rv);
+
                 db.SaveChanges();
 
                 return RedirectToAction("Edit", new RouteValueDictionary(new { id = request.ID }));
@@ -122,13 +121,7 @@ namespace DREAM.Controllers
                 ModelState.AddModelError(ModelState.ToString(), "The add request failed!");
             }
 
-            PopulateDropDownLists(false, false);
-            ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
-            ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
-            ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
-            ViewBag.ProbabilityList = BuildProbabilityDropdownList();
-            ViewBag.SeverityList = BuildSeverityDropdownList();
-
+            PopulateDropDownLists(false);
             return View(rv);
         }
 
@@ -175,21 +168,7 @@ namespace DREAM.Controllers
         public ActionResult ViewRequest(int id = 0)
         {
             Request request = FindRequest(id);
-            ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
-            ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
-            ViewBag.ProbabilityList = BuildProbabilityDropdownList();
-            ViewBag.SeverityList = BuildSeverityDropdownList();
-            ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
-
-            if (request == null)
-            {
-                return HttpNotFound();
-            }
-
-            if (isLocked(request))
-            {
-                return View();
-            }
+            PopulateDropDownLists(request.CompletionTime != null);
 
             RequestViewModel rv = RequestViewModel.CreateFromRequest(request);
 
@@ -206,18 +185,8 @@ namespace DREAM.Controllers
         public ActionResult ViewRequest(RequestViewModel rv)
         {
             Request request = FindRequest(rv.RequestID);
-            if (isLocked(request, true))
-            {
-                return View();
-            }
 
-            else if (request.Lock() != null)
-            {
-                return RedirectToAction("Edit", request.ID);
-            }
-
-            ModelState.AddModelError("", "View Request failed!");
-            return View(rv);
+            return RedirectToAction("Edit", request.ID);
         }
 
         // Find a request and return a view for editing it. If no request exists, we send a HTTP 404 error.
@@ -241,11 +210,12 @@ namespace DREAM.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.IsLocked = false;
-            if (isLocked(request, true))
+            Guid lockingUser;
+            bool success = TryLockRequest(id, out lockingUser);
+            if (!success)
             {
-                ViewBag.IsLocked = true;
-                return View();
+                ViewBag.LockedBy = Membership.GetUser(lockingUser).UserName;
+                return View("RequestLocked");
             }
 
             RequestViewModel rv = RequestViewModel.CreateFromRequest(request);
@@ -266,19 +236,18 @@ namespace DREAM.Controllers
         public ActionResult Edit(RequestViewModel rv)
         {
             Request request = FindRequest(rv.RequestID);
-            ViewBag.IsLocked = false;
 
             if (request == null)
             {
                 return HttpNotFound();
             }
 
-            // Why is this here? Of course the request is locked. How is someone editing it if it isn't?
-            // TODO Make the whole request locking system work properly
-            if (isLocked(request, true))
+            Guid lockingUser;
+            bool success = TryLockRequest(request.ID, out lockingUser);
+            if (!success)
             {
-                ViewBag.IsLocked = true;
-                return View();
+                ViewBag.LockedBy = Membership.GetUser(lockingUser).UserName;
+                return View("RequestLocked");
             }
 
             if (ModelState.IsValid)
@@ -304,11 +273,12 @@ namespace DREAM.Controllers
 
                 db.SaveChanges();
 
-                //request.Unlock();
+                UnlockRequest(request.ID);
                 return RedirectToAction("Index");
             }
 
-            // TODO Add drop down lists to ViewBag
+            PopulateDropDownLists(request.CompletionTime != null);
+
             return View(rv);
         }
 
@@ -384,6 +354,21 @@ namespace DREAM.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult RenewRequestLock(string requestId)
+        {
+            Guid lockingUser;
+            int id;
+            bool parse = Int32.TryParse(requestId, out id);
+            if (!parse)
+                new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            bool success = TryLockRequest(id, out lockingUser);
+            if (!success)
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            else
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
         //
         // GET: /Requests/Delete/5
 
@@ -415,6 +400,8 @@ namespace DREAM.Controllers
             db.Dispose();
             base.Dispose(disposing);
         }
+
+        #region Export
 
         //
         // GET: /Requests/Export
@@ -661,6 +648,8 @@ namespace DREAM.Controllers
             return mem;
         }
 
+        #endregion
+
         #region Helper Methods
 
         private Request FindRequest(int id)
@@ -676,22 +665,65 @@ namespace DREAM.Controllers
                               .Single(r => r.ID == id && r.Enabled == true);
         }
 
+        private bool TryLockRequest(int requestID, out Guid lockingUser)
+        {
+            using (var db = new DREAMContext())
+            {
+                Lock requestLock = db.Locks.SingleOrDefault(l => l.ID == requestID);
+
+                if (requestLock != null)
+                {
+                    MembershipUser currentUser = Membership.GetUser();
+                    if (requestLock.UserID != (Guid)currentUser.ProviderUserKey && requestLock.ExpireTime > DateTime.UtcNow)
+                    {
+                        lockingUser = requestLock.UserID;
+                        return false;
+                    }
+                    requestLock.UserID = (Guid)Membership.GetUser().ProviderUserKey;
+                    requestLock.ExpireTime = DateTime.UtcNow.Add(LockDuration);
+
+                    lockingUser = requestLock.UserID;
+                }
+                else
+                {
+                    requestLock = db.Locks.Create();
+                    requestLock.ID = requestID;
+                    requestLock.UserID = (Guid)Membership.GetUser().ProviderUserKey;
+                    requestLock.ExpireTime = DateTime.UtcNow.Add(LockDuration);
+                    db.Locks.Add(requestLock);
+
+                    lockingUser = requestLock.UserID;
+                }
+
+                db.SaveChanges();
+            }
+
+            return true;
+        }
+
+        private bool UnlockRequest(int requestID)
+        {
+            Lock requestLock = db.Locks.SingleOrDefault(l => l.ID == requestID);
+
+            db.Locks.Remove(requestLock);
+            db.SaveChanges();
+
+            return true;
+        }
+
         #region DropDown Lists
-        private void PopulateDropDownLists(bool closed, bool questionDropDowns = true)
+        private void PopulateDropDownLists(bool closed)
         {
             ViewBag.RequesterTypeList = BuildRequesterTypeDropdownList();
             ViewBag.RegionList = BuildRegionDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
             ViewBag.StatusList = BuildStatusDropdownList(closed);
 
-            if (questionDropDowns)
-            {
-                ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
-                ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
-                ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
-                ViewBag.ProbabilityList = BuildProbabilityDropdownList();
-                ViewBag.SeverityList = BuildSeverityDropdownList();
-            }
+            ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
+            ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
+            ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
+            ViewBag.ProbabilityList = BuildProbabilityDropdownList();
+            ViewBag.SeverityList = BuildSeverityDropdownList();
         }
 
         private IEnumerable<SelectListItem> BuildGenderDropdownList()
@@ -806,9 +838,9 @@ namespace DREAM.Controllers
         //
         // Returns:
         //      The Lock holding the given Request or null if there is no lock.
-        private DREAM.Models.Lock findRequestLock(int requestID)
+        private Lock findRequestLock(int requestID)
         {
-            return db.Locks.SingleOrDefault(l => l.RequestID == requestID);
+            return db.Locks.SingleOrDefault(l => l.ID == requestID);
         }
 
         // Find and return the MembershipUser associated with a Lock.

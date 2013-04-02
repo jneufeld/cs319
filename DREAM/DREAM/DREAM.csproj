@@ -445,6 +445,7 @@
     <Content Include="Views\Requests\ReferenceEntry.cshtml" />
     <Content Include="Views\Home\GuestIndex.cshtml" />
     <Content Include="Views\KeywordsAdmin\Edit.cshtml" />
+    <Content Include="Views\Requests\RequestLocked.cshtml" />
     <Content Include="Views\Requests\_BaseView.cshtml" />
   </ItemGroup>
   <ItemGroup>

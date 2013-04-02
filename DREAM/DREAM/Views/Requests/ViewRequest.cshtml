@@ -35,8 +35,7 @@
                     <div class="control-group">
                         @Html.LabelFor(model => model.Status)
                         <div class="controls">
-                            @Html.TextBoxFor(model => model.Status, new { disabled = "disabled", @readonly = "readonly" })
-                            @Html.HiddenFor(model => model.Close)
+                            @Html.DisplayFor(m => m.Status)
                         </div>
                     </div>
                 </div>
