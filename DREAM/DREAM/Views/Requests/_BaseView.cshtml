@@ -231,7 +231,7 @@
 
         @if (Model.Questions == null || Model.Questions.Count == 0)
         {
-            <p>None.</p>
+            <p id="noQuestions">None.</p>
         }
 
         <ul id="questionList" style="list-style-type: none">
@@ -262,10 +262,9 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/jquery-tmpl")
+    @Scripts.Render("~/Scripts/jQuery.tmpl.min.js")
     @Styles.Render("~/Content/themes/base/css")
     <script type="text/javascript"> if (!window.console) console = { log: function () { } }; </script>
 

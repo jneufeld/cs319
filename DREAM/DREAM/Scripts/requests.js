@@ -1,5 +1,6 @@
 ﻿var viewModel = {
     addNewQuestion: function () {
+        $("#noQuestions").hide();
         var count = $("input[name=QuestionCount]:hidden");
         var idx = count.val();
         var $obj = $("#questionTemplate").tmpl({ Questions_index: viewModel._generateGuid(), Keywords_index: viewModel._generateGuid(), References_index: viewModel._generateGuid(), QIndex: idx });

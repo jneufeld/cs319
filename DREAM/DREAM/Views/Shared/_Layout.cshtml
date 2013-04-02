@@ -39,16 +39,7 @@
                                         
                                         if(isDISpecialist) 
                                         {
-                                            <!--<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Requests<b class="caret"></b></a>
-
-                                                <ul class="dropdown-menu">
-                                                        -->
                                                         <li>@Html.ActionLink("Create Request", "Add", "Requests")</li>
-                                                        <!--
-                                                    <li>@Html.ActionLink("Search", "Search", "")</li>
-                                                </ul>
-                                            </li>
-                                                -->
                                         }
 
                                         if(isReporter)
@@ -64,12 +55,14 @@
                                     @Html.Partial("_LoginPartial")
                                 </ul>
                             </div>
-                            <div>
-                                @using(Html.BeginForm("Search", "Requests", FormMethod.Post, new { id = "menu-search", @class = "form-search pull-right" })) {
-                                    @Html.TextBox("Query", "", new { @class = "search-input-disabled", placeholder = "Enter Keywords" })
-                                    <button type="submit" class="btn">Search Requests</button>
-                                }
-                        </div>
+                            @if(isDISpecialist || isViewer) {
+                                <div>
+                                    @using(Html.BeginForm("Search", "Requests", FormMethod.Post, new { id = "menu-search", @class = "form-search pull-right" })) {
+                                        @Html.TextBox("Query", "", new { @class = "search-input-disabled", placeholder = "Enter Keywords" })
+                                        <button type="submit" class="btn">Search Requests</button>
+                                    }
+                                </div>
+                            }
                     </div>
                 </div>
             </div>
