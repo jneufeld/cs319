@@ -297,7 +297,7 @@ namespace DREAM.Controllers
                 rv.MapToRequest(request);
                 rv.MapToRequestPatient(request);
 
-                if (rv.Close == true)
+                if (rv.Action == "Close")
                 {
                     request.CompletionTime = DateTime.UtcNow;
                     request.ClosedBy = (Guid)Membership.GetUser().ProviderUserKey;

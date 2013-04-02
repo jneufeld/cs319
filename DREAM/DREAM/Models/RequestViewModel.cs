@@ -97,6 +97,8 @@ namespace DREAM.Models
         [Display(Name = "Age")]
         public int PatientAge { get; set; }
 
+        public string Action { get; set; }
+
         public int QuestionCount { get; set; }
         public IList<QuestionViewModel> Questions { get; set; }
 

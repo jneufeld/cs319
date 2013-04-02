@@ -98,12 +98,6 @@
         $prob.trigger('change');
         $severity.change(handler);
     },
-
-    closeRequest: function () {
-        $("input[name=Close]:hidden").val('True');
-        $("input[name=Status]").val('Closed');
-    }
-
 };
 
 $("body").on("click", ".addNewKeyword", function () {
