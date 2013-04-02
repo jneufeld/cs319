@@ -25,6 +25,7 @@ namespace DREAM.Models
 
         [Display(Name = "Closed By")]
         public string ClosedBy { get; set; }
+
         [Display(Name = "Status")]
         public string Status { get; set; }
 
@@ -90,8 +91,6 @@ namespace DREAM.Models
 
         [Display(Name = "Age")]
         public int PatientAge { get; set; }
-
-        public string Action { get; set; }
 
         public int QuestionCount { get; set; }
         public IList<QuestionViewModel> Questions { get; set; }

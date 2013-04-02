@@ -14,259 +14,258 @@
     </div>
 </div>
 
-using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-<fieldset>
+    <fieldset>
 
-    <div class="row">
-        <div class="span6">
-            @if (Model.RequestID != 0)
-            {
-                <div class="control-group">
-                    @Html.LabelFor(model => model.RequestID)
-                    <div class="controls">
-                        @Html.HiddenFor(m => m.RequestID)
-                        @Html.DisplayTextFor(model => model.RequestID)
-                    </div>
-                </div>
-            }
-
-            <div class="control-group">
-                @Html.LabelFor(model => model.RequesterTypeStringID)
-                <div class="controls">
-                    @Html.DropDownListFor(m => m.RequesterTypeStringID, (IEnumerable<SelectListItem>)ViewData["RequesterTypeList"], new { id = "req-type" })
-                </div>
-            </div>
-
-            @if (Model.RequestID != 0)
-            {
-                <div class="control-group">
-                    @Html.LabelFor(model => model.Status)
-                    <div class="controls">
-                        @Html.DropDownListFor(m => m.Status, (IEnumerable<SelectListItem>)ViewData["StatusList"])
-                    </div>
-                </div>
-            }
-        </div>
-
-        @if (Model.RequestID != 0)
-        {
+        <div class="row">
             <div class="span6">
+                @if (Model.RequestID != 0)
+                {
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.RequestID)
+                        <div class="controls">
+                            @Html.HiddenFor(m => m.RequestID)
+                            @Html.DisplayTextFor(model => model.RequestID)
+                        </div>
+                    </div>
+                }
+
                 <div class="control-group">
-                    @Html.LabelFor(model => model.CreationTime)
+                    @Html.LabelFor(model => model.RequesterTypeStringID)
                     <div class="controls">
-                        @Html.HiddenFor(m => m.CreationTime)
-                        @Html.DisplayTextFor(model => model.CreationTime)
+                        @Html.DropDownListFor(m => m.RequesterTypeStringID, (IEnumerable<SelectListItem>)ViewData["RequesterTypeList"], new { id = "req-type" })
                     </div>
                 </div>
 
-                <div class="control-group">
-                    @Html.LabelFor(model => model.CreatedBy)
-                    <div class="controls">
-                        @Html.HiddenFor(m => m.CreatedBy)
-                        @Html.DisplayTextFor(model => model.CreatedBy)
+                @if (Model.RequestID != 0)
+                {
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.Status)
+                        <div class="controls">
+                            @Html.DropDownListFor(m => m.Status, (IEnumerable<SelectListItem>)ViewData["StatusList"])
+                        </div>
                     </div>
-                </div>
-
-                <div class="control-group">
-                    @Html.LabelFor(model => model.CompletionTime)
-                    <div class="controls">
-                        @Html.HiddenFor(m => m.CompletionTime)
-                        @Html.DisplayTextFor(model => model.CompletionTime)
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    @Html.LabelFor(model => model.ClosedBy)
-                    <div class="controls">
-                        @Html.HiddenFor(m => m.ClosedBy)
-                        @Html.DisplayTextFor(model => model.ClosedBy)
-                    </div>
-                </div>
+                }
             </div>
-        }
-    </div>
 
-    <hr />
-
-    <div class="row">
-        <div class="span6">
-            <h4>Caller</h4>
             @if (Model.RequestID != 0)
             {
-                @Html.HiddenFor(m => m.CallerID)
+                <div class="span6">
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.CreationTime)
+                        <div class="controls">
+                            @Html.HiddenFor(m => m.CreationTime)
+                            @Html.DisplayTextFor(model => model.CreationTime)
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.CreatedBy)
+                        <div class="controls">
+                            @Html.HiddenFor(m => m.CreatedBy)
+                            @Html.DisplayTextFor(model => model.CreatedBy)
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.CompletionTime)
+                        <div class="controls">
+                            @Html.HiddenFor(m => m.CompletionTime)
+                            @Html.DisplayTextFor(model => model.CompletionTime)
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.ClosedBy)
+                        <div class="controls">
+                            @Html.HiddenFor(m => m.ClosedBy)
+                            @Html.DisplayTextFor(model => model.ClosedBy)
+                        </div>
+                    </div>
+                </div>
             }
+        </div>
 
-            <div class="control-group">
-                @Html.LabelFor(m => m.CallerFirstName)
-                <div class="controls">
-                    @Html.TextBoxFor(m => m.CallerFirstName, new { id = "caller-first" })
-                    <div class="span5">
-                        @Html.ValidationMessageFor(m => m.CallerFirstName)
+        <hr />
+
+        <div class="row">
+            <div class="span6">
+                <h4>Caller</h4>
+                @if (Model.RequestID != 0)
+                {
+                    @Html.HiddenFor(m => m.CallerID)
+                }
+
+                <div class="control-group">
+                    @Html.LabelFor(m => m.CallerFirstName)
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.CallerFirstName, new { id = "caller-first" })
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.CallerFirstName)
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="control-group">
+                    @Html.LabelFor(m => m.CallerLastName)
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.CallerLastName, new { id = "caller-last" })
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.CallerLastName)
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="control-group">
+                    @Html.LabelFor(m => m.CallerEmail)
+                    <div class="controls">
+                        @Html.EditorFor(m => m.CallerEmail)
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.CallerEmail)
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="control-group">
+                    @Html.LabelFor(m => m.CallerPhoneNumber)
+                    <div class="controls">
+                        @Html.EditorFor(m => m.CallerPhoneNumber)
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.CallerPhoneNumber)
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="control-group">
+                    @Html.LabelFor(m => m.CallerRegionStringID)
+                    <div class="controls">
+                        @Html.DropDownListFor(m => m.CallerRegionStringID, (IEnumerable<SelectListItem>)ViewData["RegionList"])
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.CallerRegionStringID)
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <br />
+            <div class="span6">
+                <h4>Patient</h4>
+                @if (Model.RequestID != 0)
+                {
+                    @Html.HiddenFor(m => m.PatientID)
+                }
 
-            <div class="control-group">
-                @Html.LabelFor(m => m.CallerLastName)
-                <div class="controls">
-                    @Html.TextBoxFor(m => m.CallerLastName, new { id = "caller-last" })
-                    <div class="span5">
-                        @Html.ValidationMessageFor(m => m.CallerLastName)
+                <div class="control-group">
+                    @Html.LabelFor(m => m.PatientFirstName)
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.PatientFirstName, new { id = "patient-first" })
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.PatientFirstName)
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <br />
+                <br />
 
-            <div class="control-group">
-                @Html.LabelFor(m => m.CallerEmail)
-                <div class="controls">
-                    @Html.EditorFor(m => m.CallerEmail)
-                    <div class="span5">
-                        @Html.ValidationMessageFor(m => m.CallerEmail)
+                <div class="control-group">
+                    @Html.LabelFor(m => m.PatientLastName)
+                    <div class="controls">
+                        @Html.TextBoxFor(m => m.PatientLastName, new { id = "patient-last" })
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.PatientLastName)
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <br />
+                <br />
 
-            <div class="control-group">
-                @Html.LabelFor(m => m.CallerPhoneNumber)
-                <div class="controls">
-                    @Html.EditorFor(m => m.CallerPhoneNumber)
-                    <div class="span5">
-                        @Html.ValidationMessageFor(m => m.CallerPhoneNumber)
+                <div class="control-group">
+                    @Html.LabelFor(m => m.PatientAgencyID)
+                    <div class="controls">
+                        @Html.EditorFor(m => m.PatientAgencyID)
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.PatientAgencyID)
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <br />
+                <br />
 
-            <div class="control-group">
-                @Html.LabelFor(m => m.CallerRegionStringID)
-                <div class="controls">
-                    @Html.DropDownListFor(m => m.CallerRegionStringID, (IEnumerable<SelectListItem>)ViewData["RegionList"])
-                    <div class="span5">
-                        @Html.ValidationMessageFor(m => m.CallerRegionStringID)
+                <div class="control-group">
+                    @Html.LabelFor(m => m.PatientGender)
+                    <div class="controls">
+                        @Html.DropDownListFor(m => m.PatientGender, (IEnumerable<SelectListItem>)ViewData["GenderList"])
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.PatientGender)
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="control-group">
+                    @Html.LabelFor(m => m.PatientAge)
+                    <div class="controls">
+                        @Html.EditorFor(m => m.PatientAge)
+                        <div class="span5">
+                            @Html.ValidationMessageFor(m => m.PatientAge)
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="span6">
-            <h4>Patient</h4>
-            @if (Model.RequestID != 0)
-            {
-                @Html.HiddenFor(m => m.PatientID)
-            }
+        <hr />
 
-            <div class="control-group">
-                @Html.LabelFor(m => m.PatientFirstName)
-                <div class="controls">
-                    @Html.TextBoxFor(m => m.PatientFirstName, new { id = "patient-first" })
-                    <div class="span5">
-                        @Html.ValidationMessageFor(m => m.PatientFirstName)
-                    </div>
-                </div>
-            </div>
+        <h3>Questions</h3>
 
-            <br />
-
-            <div class="control-group">
-                @Html.LabelFor(m => m.PatientLastName)
-                <div class="controls">
-                    @Html.TextBoxFor(m => m.PatientLastName, new { id = "patient-last" })
-                    <div class="span5">
-                        @Html.ValidationMessageFor(m => m.PatientLastName)
-                    </div>
-                </div>
-            </div>
-
-            <br />
-
-            <div class="control-group">
-                @Html.LabelFor(m => m.PatientAgencyID)
-                <div class="controls">
-                    @Html.EditorFor(m => m.PatientAgencyID)
-                    <div class="span5">
-                        @Html.ValidationMessageFor(m => m.PatientAgencyID)
-                    </div>
-                </div>
-            </div>
-
-            <br />
-
-            <div class="control-group">
-                @Html.LabelFor(m => m.PatientGender)
-                <div class="controls">
-                    @Html.DropDownListFor(m => m.PatientGender, (IEnumerable<SelectListItem>)ViewData["GenderList"])
-                    <div class="span5">
-                        @Html.ValidationMessageFor(m => m.PatientGender)
-                    </div>
-                </div>
-            </div>
-
-            <br />
-
-            <div class="control-group">
-                @Html.LabelFor(m => m.PatientAge)
-                <div class="controls">
-                    @Html.EditorFor(m => m.PatientAge)
-                    <div class="span5">
-                        @Html.ValidationMessageFor(m => m.PatientAge)
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <hr />
-
-    <h3>Questions</h3>
-
-    @if (Model.Questions == null || Model.Questions.Count == 0)
-    {
-        <p>None.</p>
-    }
-
-    <ul id="questionList" style="list-style-type: none">
-        @if (Model.Questions != null)
+        @if (Model.Questions == null || Model.Questions.Count == 0)
         {
-            foreach (QuestionViewModel qv in Model.Questions)
-            {
-                Html.RenderPartial("QuestionEntry", qv);
-            }
+            <p>None.</p>
         }
-    </ul>
 
-    @Html.HiddenFor(m => m.QuestionCount)
+        <ul id="questionList" style="list-style-type: none">
+            @if (Model.Questions != null)
+            {
+                foreach (QuestionViewModel qv in Model.Questions)
+                {
+                    Html.RenderPartial("QuestionEntry", qv);
+                }
+            }
+        </ul>
 
-    @Html.ValidationSummary(true)
+        @Html.HiddenFor(m => m.QuestionCount)
 
-    <hr />
+        @Html.ValidationSummary(true)
 
-    <div class="row">
-        <div class="span12">
-            <a href="javascript:void(0);" onclick="viewModel.addNewQuestion();" class="btn btn-large btn-success">Add New Question</a>
-            <button name="Action" type="submit" value="Save" class="btn btn-large btn-primary">@RenderSection("SubmitButtonName")</button>
+        <hr />
+
+        <div class="row">
+            <div class="span12">
+                <a href="javascript:void(0);" onclick="viewModel.addNewQuestion();" class="btn btn-large btn-success">Add New Question</a>
+                <button name="Action" type="submit" value="Save" class="btn btn-large btn-primary">@RenderSection("SubmitButtonName")</button>
+            </div>
         </div>
-    </div>
 
-</fieldset>
+    </fieldset>
 }
 
 
 @section Scripts {
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
-    <script src="@Url.Content("~/Scripts/jQuery.tmpl.min.js")" type="text/javascript"></script>
     @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/jquerytmpl")
+    @Scripts.Render("~/bundles/jquery-tmpl")
     @Styles.Render("~/Content/themes/base/css")
     <script type="text/javascript"> if (!window.console) console = { log: function () { } }; </script>
 
