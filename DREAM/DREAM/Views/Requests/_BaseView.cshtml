@@ -18,8 +18,6 @@
 {
     @Html.AntiForgeryToken()
 
-    <fieldset>
-
         <div class="row">
             <div class="span6">
                 @if (Model.RequestID != 0)
@@ -27,7 +25,10 @@
                     <div class="control-group">
                         @Html.LabelFor(model => model.RequestID)
                         <div class="controls">
-                            @Html.HiddenFor(m => m.RequestID)
+                            @if(!ViewBag.ReadOnly)
+                            {
+                                @Html.HiddenFor(m => m.RequestID)
+                            }
                             @Html.DisplayTextFor(model => model.RequestID)
                         </div>
                     </div>
@@ -36,7 +37,14 @@
                 <div class="control-group">
                     @Html.LabelFor(model => model.RequesterTypeStringID)
                     <div class="controls">
-                        @Html.DropDownListFor(m => m.RequesterTypeStringID, (IEnumerable<SelectListItem>)ViewData["RequesterTypeList"], new { id = "req-type" })
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.RequesterTypeStringID)
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.RequesterTypeStringID, (IEnumerable<SelectListItem>)ViewData["RequesterTypeList"], new { id = "req-type" })
+                        }
                     </div>
                 </div>
 
@@ -45,7 +53,7 @@
                     <div class="control-group">
                         @Html.LabelFor(model => model.Status)
                         <div class="controls">
-                            @Html.DropDownListFor(m => m.Status, (IEnumerable<SelectListItem>)ViewData["StatusList"])
+                            @Html.DisplayFor(m => m.Status)
                         </div>
                     </div>
                 }
@@ -57,7 +65,10 @@
                     <div class="control-group">
                         @Html.LabelFor(model => model.CreationTime)
                         <div class="controls">
-                            @Html.HiddenFor(m => m.CreationTime)
+                            @if (!ViewBag.ReadOnly)
+                            {
+                                @Html.HiddenFor(m => m.CreationTime)
+                            }
                             @Html.DisplayTextFor(model => model.CreationTime)
                         </div>
                     </div>
@@ -65,7 +76,10 @@
                     <div class="control-group">
                         @Html.LabelFor(model => model.CreatedBy)
                         <div class="controls">
-                            @Html.HiddenFor(m => m.CreatedBy)
+                            @if (!ViewBag.ReadOnly)
+                            {
+                                @Html.HiddenFor(m => m.CreatedBy)
+                            }
                             @Html.DisplayTextFor(model => model.CreatedBy)
                         </div>
                     </div>
@@ -73,7 +87,10 @@
                     <div class="control-group">
                         @Html.LabelFor(model => model.CompletionTime)
                         <div class="controls">
-                            @Html.HiddenFor(m => m.CompletionTime)
+                            @if (!ViewBag.ReadOnly)
+                            {
+                                @Html.HiddenFor(m => m.CompletionTime)
+                            }
                             @Html.DisplayTextFor(model => model.CompletionTime)
                         </div>
                     </div>
@@ -81,7 +98,10 @@
                     <div class="control-group">
                         @Html.LabelFor(model => model.ClosedBy)
                         <div class="controls">
-                            @Html.HiddenFor(m => m.ClosedBy)
+                            @if (!ViewBag.ReadOnly)
+                            {
+                                @Html.HiddenFor(m => m.ClosedBy)
+                            }
                             @Html.DisplayTextFor(model => model.ClosedBy)
                         </div>
                     </div>
@@ -102,10 +122,17 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.CallerFirstName)
                     <div class="controls">
-                        @Html.TextBoxFor(m => m.CallerFirstName, new { id = "caller-first" })
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.CallerFirstName)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.CallerFirstName)
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.CallerFirstName, new { id = "caller-first" })
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.CallerFirstName)
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -114,10 +141,17 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.CallerLastName)
                     <div class="controls">
-                        @Html.TextBoxFor(m => m.CallerLastName, new { id = "caller-last" })
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.CallerLastName)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.CallerLastName)
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.CallerLastName, new { id = "caller-last" })
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.CallerLastName)
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -126,10 +160,17 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.CallerEmail)
                     <div class="controls">
-                        @Html.EditorFor(m => m.CallerEmail)
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.CallerEmail)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.CallerEmail)
+                        }
+                        else
+                        {
+                            @Html.EditorFor(m => m.CallerEmail)
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.CallerEmail)
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -138,10 +179,17 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.CallerPhoneNumber)
                     <div class="controls">
-                        @Html.EditorFor(m => m.CallerPhoneNumber)
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.CallerPhoneNumber)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.CallerPhoneNumber)
+                        }
+                        else
+                        {
+                            @Html.EditorFor(m => m.CallerPhoneNumber)
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.CallerPhoneNumber)
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -150,17 +198,24 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.CallerRegionStringID)
                     <div class="controls">
-                        @Html.DropDownListFor(m => m.CallerRegionStringID, (IEnumerable<SelectListItem>)ViewData["RegionList"])
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.CallerRegionStringID)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.CallerRegionStringID)
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.CallerRegionStringID, (IEnumerable<SelectListItem>)ViewData["RegionList"])
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.CallerRegionStringID)
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
 
             <div class="span6">
                 <h4>Patient</h4>
-                @if (Model.RequestID != 0)
+                @if (Model.RequestID != 0 && !ViewBag.ReadOnly)
                 {
                     @Html.HiddenFor(m => m.PatientID)
                 }
@@ -168,10 +223,17 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.PatientFirstName)
                     <div class="controls">
-                        @Html.TextBoxFor(m => m.PatientFirstName, new { id = "patient-first" })
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.PatientFirstName)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.PatientFirstName)
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.PatientFirstName, new { id = "patient-first" })
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.PatientFirstName)
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -180,10 +242,17 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.PatientLastName)
                     <div class="controls">
-                        @Html.TextBoxFor(m => m.PatientLastName, new { id = "patient-last" })
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.PatientLastName)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.PatientLastName)
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.PatientLastName, new { id = "patient-last" })
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.PatientLastName)
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -192,10 +261,17 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.PatientAgencyID)
                     <div class="controls">
-                        @Html.EditorFor(m => m.PatientAgencyID)
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.PatientAgencyID)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.PatientAgencyID)
+                        }
+                        else
+                        {
+                            @Html.EditorFor(m => m.PatientAgencyID)
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.PatientAgencyID)
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -204,10 +280,17 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.PatientGender)
                     <div class="controls">
-                        @Html.DropDownListFor(m => m.PatientGender, (IEnumerable<SelectListItem>)ViewData["GenderList"])
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.PatientGender)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.PatientGender)
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.PatientGender, (IEnumerable<SelectListItem>)ViewData["GenderList"])
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.PatientGender)
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -216,10 +299,17 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.PatientAge)
                     <div class="controls">
-                        @Html.EditorFor(m => m.PatientAge)
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.PatientAge)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.PatientAge)
+                        }
+                        else
+                        {
+                            @Html.EditorFor(m => m.PatientAge)
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.PatientAge)
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -229,12 +319,12 @@
 
         <h3>Questions</h3>
 
-        @if (Model.Questions == null || Model.Questions.Count == 0)
+        if (Model.Questions == null || Model.Questions.Count == 0)
         {
             <p id="noQuestions">None.</p>
         }
 
-        <ul id="questionList" style="list-style-type: none">
+        <ul id="questionList" style="list-style-type: none; margin-left: 0;">
             @if (Model.Questions != null)
             {
                 foreach (QuestionViewModel qv in Model.Questions)
@@ -252,12 +342,17 @@
 
         <div class="row">
             <div class="span12">
-                <a href="javascript:void(0);" onclick="viewModel.addNewQuestion();" class="btn btn-large btn-success">Add New Question</a>
-                <button name="Action" type="submit" value="Save" class="btn btn-large btn-primary">@RenderSection("SubmitButtonName")</button>
+                @if(!ViewBag.ReadOnly)
+                {
+                    <a href="javascript:void(0);" onclick="viewModel.addNewQuestion();" class="btn btn-large btn-success">Add New Question</a>
+                    <button name="Action" type="submit" value="Save" class="btn btn-large btn-primary">@RenderSection("SubmitButtonName")</button>
+                    if(Model.RequestID != 0 && Model.Status != "Closed")
+                    {
+                        <button name="Action" type="submit" value="Close" class="btn btn-large btn-primary">Close Request</button>
+                    }
+                }
             </div>
         </div>
-
-    </fieldset>
 }
 
 

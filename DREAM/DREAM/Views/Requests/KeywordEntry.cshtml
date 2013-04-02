@@ -4,11 +4,20 @@
 <li>
     @using (Html.BeginCollectionItem("Keywords"))
     {
-        @Html.HiddenFor(m => m.Delete)
-        <div class="input-append">
-            @Html.TextBoxFor(m => m.Keyword, new { @class = "keywordAutocomplete span3" })
-            <a href="javascript:void(0);" class="deleteKeyword btn btn-danger">x</a>
-            @Html.ValidationMessageFor(m => m.Keyword)
-        </div>
+        if(ViewBag.ReadOnly)
+        {
+            <div class="row">
+                @Html.DisplayFor(m => m.Keyword)
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(m => m.Delete)
+            <div class="input-append">
+                @Html.TextBoxFor(m => m.Keyword, new { @class = "keywordAutocomplete span3" })
+                <a href="javascript:void(0);" class="deleteKeyword btn btn-danger">x</a>
+                @Html.ValidationMessageFor(m => m.Keyword)
+            </div>
+        }
     }
 </li>

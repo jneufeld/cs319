@@ -255,7 +255,7 @@ namespace DREAM.Controllers
                 rv.MapToRequest(request);
                 rv.MapToRequestPatient(request);
 
-                if (request.CompletionTime == null && rv.Status == "Closed")
+                if (request.CompletionTime == null && rv.Action == "Close")
                 {
                     request.CompletionTime = DateTime.UtcNow;
                     request.ClosedBy = (Guid)Membership.GetUser().ProviderUserKey;
@@ -274,7 +274,7 @@ namespace DREAM.Controllers
                 db.SaveChanges();
 
                 UnlockRequest(request.ID);
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit", new { id = request.ID });
             }
 
             PopulateDropDownLists(request.CompletionTime != null);

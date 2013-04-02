@@ -8,8 +8,11 @@
             <div class="span12">
                 <h4>Question @Html.ValueFor(m => m.Index)</h4>
                 
-                @Html.HiddenFor(m => m.QuestionID)
-                @Html.HiddenFor(m => m.Delete)
+                @if(!ViewBag.ReadOnly)
+                {
+                    @Html.HiddenFor(m => m.QuestionID)
+                    @Html.HiddenFor(m => m.Delete)
+                }
             </div>
         </div>
 
@@ -18,7 +21,14 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.QuestionTypeStringID)
                     <div class="controls">
-                        @Html.DropDownListFor(m => m.QuestionTypeStringID, (IEnumerable<SelectListItem>)ViewData["QuestionTypeList"])
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.QuestionTypeStringID)
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.QuestionTypeStringID, (IEnumerable<SelectListItem>)ViewData["QuestionTypeList"])
+                        }
                     </div>
                 </div>
             </div>
@@ -26,7 +36,14 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.TumourGroupStringID)
                     <div class="controls">
-                        @Html.DropDownListFor(m => m.TumourGroupStringID, (IEnumerable<SelectListItem>)ViewData["TumourGroupList"])
+                        @if(ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.TumourGroupStringID)
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.TumourGroupStringID, (IEnumerable<SelectListItem>)ViewData["TumourGroupList"])
+                        }
                     </div>
                 </div>
             </div>
@@ -37,10 +54,17 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.QuestionText)
                     <div class="controls">
-                        @Html.TextAreaFor(m => m.QuestionText, new { @class = "span5", rows = "10" })
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.QuestionText)
-                        </div>
+                        @if(ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.QuestionText)
+                        }
+                        else
+                        {
+                            @Html.TextAreaFor(m => m.QuestionText, new { @class = "span5", rows = "10" })
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.QuestionText)
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -48,10 +72,17 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.Response)
                     <div class="controls">
-                        @Html.TextAreaFor(m => m.Response, new { @class = "span5", rows = "10" })
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.Response)
-                        </div>
+                        @if(ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.Response)
+                        }
+                        else
+                        {
+                            @Html.TextAreaFor(m => m.Response, new { @class = "span5", rows = "10" })
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.Response)
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -62,20 +93,34 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.SpecialNotes)
                     <div class="controls">
-                        @Html.TextAreaFor(m => m.SpecialNotes, new { @class = "span5", rows = "5" })
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.SpecialNotes)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.SpecialNotes)
+                        }
+                        else
+                        {
+                            @Html.TextAreaFor(m => m.SpecialNotes, new { @class = "span5", rows = "5" })
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.SpecialNotes)
+                            </div>
+                        }
                     </div>
                 </div>
 
                 <div class="control-group">
                     @Html.LabelFor(m => m.TimeTaken)
                     <div class="controls">
-                        @Html.EditorFor(m => m.TimeTaken)
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.TimeTaken)
-                        </div>
+                        @if (ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.TimeTaken)
+                        }
+                        else
+                        {
+                            @Html.EditorFor(m => m.TimeTaken)
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.TimeTaken)
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -83,27 +128,48 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.Severity)
                     <div class="controls">
-                        @Html.DropDownListFor(m => m.Severity, (IEnumerable<SelectListItem>)ViewData["SeverityList"])
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.Severity)
-                        </div>
+                        @if(ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.Severity)
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.Severity, (IEnumerable<SelectListItem>)ViewData["SeverityList"])
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.Severity)
+                            </div>
+                        }
                     </div>
                 </div>
 
                 <div class="control-group">
                     @Html.LabelFor(m => m.Probability)
                     <div class="controls">
-                        @Html.DropDownListFor(m => m.Probability, (IEnumerable<SelectListItem>)ViewData["ProbabilityList"])
-                        <div class="span5">
-                            @Html.ValidationMessageFor(m => m.Probability)
-                        </div>
+                        @if(ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.Probability)
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.Probability, (IEnumerable<SelectListItem>)ViewData["ProbabilityList"])
+                            <div class="span5">
+                                @Html.ValidationMessageFor(m => m.Probability)
+                            </div>
+                        }
                     </div>
                 </div>
 
                 <div class="control-group">
                     @Html.LabelFor(m => m.Impact)
                     <div class="controls">
-                        @Html.TextBoxFor(m => m.Impact, new { disabled = "disabled", @readonly = "readonly" })
+                        @if(ViewBag.ReadOnly)
+                        {
+                            @Html.DisplayFor(m => m.Impact)
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.Impact, new { disabled = "disabled", @readonly = "readonly" })
+                        }
                     </div>
                 </div>
             </div>
@@ -126,7 +192,10 @@
                             }
                         }
                     </ul>
-                    <a href="javascript:void(0);" class="addNewKeyword btn btn-success">Add Keyword</a>
+                    @if(!ViewBag.ReadOnly)
+                    {
+                        <a href="javascript:void(0);" class="addNewKeyword btn btn-success">Add Keyword</a>
+                    }
                 </div>
             </div>
 
@@ -145,7 +214,10 @@
                         }
                     }
                 </ul>
-                <a href="javascript:void(0);" class="addNewReference btn btn-success">Add Reference</a>
+                @if(!ViewBag.ReadOnly)
+                {
+                    <a href="javascript:void(0);" class="addNewReference btn btn-success">Add Reference</a>
+                }
             </div>
         </div>
 
