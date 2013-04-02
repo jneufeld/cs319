@@ -511,6 +511,7 @@ namespace DREAM.Controllers
                 }
                 if (req.Questions != null) 
                 {
+                    int qIndex = 0;
                     foreach (Question q in req.Questions)
                     {
                         wordDoc.MainDocumentPart.Document.Body.AppendChild(
@@ -523,7 +524,7 @@ namespace DREAM.Controllers
                         Bold bold1 = new Bold();
                         bold1.Val = OnOffValue.FromBoolean(true);
                         runProperties1.AppendChild(bold1);
-                        run1.AppendChild(new Text("Question" + q.ID.ToString()));
+                        run1.AppendChild(new Text("Question" + qIndex));
                         Run run3 = para1.AppendChild(new Run(new Text(" - Probability " + q.Probability.ToString() + ", Severity " + q.Severity.ToString())));
 
                         if (q.QuestionType != null)
@@ -594,7 +595,7 @@ namespace DREAM.Controllers
                             Bold bold = new Bold();
                             bold.Val = OnOffValue.FromBoolean(true);
                             runProperties.AppendChild(bold);
-                            run.AppendChild(new Text("Response" + q.ID.ToString()));
+                            run.AppendChild(new Text("Response" + qIndex));
                             wordDoc.MainDocumentPart.Document.Body.AppendChild(
                                 new Paragraph(
                                     new Run(
@@ -612,7 +613,7 @@ namespace DREAM.Controllers
                             Bold bold = new Bold();
                             bold.Val = OnOffValue.FromBoolean(true);
                             runProperties.AppendChild(bold);
-                            run.AppendChild(new Text("Special Notes" + q.ID.ToString()));
+                            run.AppendChild(new Text("Special Notes" + qIndex));
                             wordDoc.MainDocumentPart.Document.Body.AppendChild(
                                 new Paragraph(
                                     new Run(
@@ -644,6 +645,7 @@ namespace DREAM.Controllers
                                 }
                             }
                         }
+                        qIndex++;
                     }
                 }
 
