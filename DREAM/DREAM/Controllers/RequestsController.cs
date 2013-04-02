@@ -59,6 +59,11 @@ namespace DREAM.Controllers
             ViewBag.RequesterTypeList = BuildRequesterTypeDropdownList();
             ViewBag.RegionList = BuildRegionDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
+            ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
+            ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
+            ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
+            ViewBag.ProbabilityList = BuildProbabilityDropdownList();
+            ViewBag.SeverityList = BuildSeverityDropdownList();
             return View(rv);
         }
 
@@ -108,6 +113,9 @@ namespace DREAM.Controllers
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
                 db.SaveChanges();
 
+                addQuestions(request, rv);
+                db.SaveChanges();
+
                 return RedirectToAction("Edit", new RouteValueDictionary(new { Id = request.ID }));
             }
             else
@@ -118,6 +126,12 @@ namespace DREAM.Controllers
             ViewBag.RequesterTypeList = BuildRequesterTypeDropdownList();
             ViewBag.RegionList = BuildRegionDropdownList();
             ViewBag.GenderList = BuildGenderDropdownList();
+            ViewBag.QuestionTypeList = BuildQuestionTypeDropdownList();
+            ViewBag.TumourGroupList = BuildTumourGroupDropdownList();
+            ViewBag.ReferenceTypeList = BuildReferenceTypeDropdownList();
+            ViewBag.ProbabilityList = BuildProbabilityDropdownList();
+            ViewBag.SeverityList = BuildSeverityDropdownList();
+
 
             return View(rv);
         }
@@ -290,75 +304,8 @@ namespace DREAM.Controllers
                     db.Logs.Add(Log.Close(request, Membership.GetUser()));
                 }
 
-                if (rv.Questions == null)
-                    rv.Questions = new List<QuestionViewModel>();
-                foreach (var qv in rv.Questions)
-                {
-                    Question question = null;
-                    if (qv.QuestionID != 0 && qv.Delete == false)
-                    {
-                        question = request.Questions.SingleOrDefault(q => q.ID == qv.QuestionID);
-                    }
-                    else if (qv.QuestionID != 0 && qv.Delete == true)
-                    {
-                        // Delete question
-                    }
-                    else if (qv.QuestionID == 0 && qv.Delete == false)
-                    {
-                        question = db.Questions.Create();
-                        request.Questions.Add(question);
-                    }
-
-                    if (question == null)
-                        continue;
-
-                    qv.MapToQuestion(question);
-                    question.QuestionType = db.QuestionTypes.SingleOrDefault(qt => qt.ID == qv.QuestionTypeID);
-                    question.TumourGroup = db.TumourGroups.SingleOrDefault(tg => tg.ID == qv.TumourGroupID);
-
-                    question.Keywords.Clear();
-                    ISet<string> newKeywords = new HashSet<string>(qv.Keywords.Select(k => k.Keyword).ToArray());
-                    string[] keywordArray = newKeywords.ToArray();
-                    IEnumerable<Keyword> keywords = db.Keywords.Where(k => keywordArray.Contains(k.KeywordText));
-                    foreach (Keyword k in keywords)
-                    {
-                        newKeywords.Remove(k.KeywordText);
-                        question.Keywords.Add(k);
-                    }
-                    foreach (string s in newKeywords)
-                    {
-                        Keyword k = db.Keywords.Create();
-                        k.KeywordText = s;
-                        k.Enabled = true;
-                        question.Keywords.Add(k);
-                    }
-
-                    foreach (var refv in qv.References)
-                    {
-                        Reference reference = null;
-                        if (refv.ReferenceID != 0 && refv.Delete == false)
-                        {
-                            reference = question.References.SingleOrDefault(r => r.ID == refv.ReferenceID);
-                        }
-                        else if (refv.ReferenceID != 0 && refv.Delete == true)
-                        {
-                            reference = question.References.SingleOrDefault(r => r.ID == refv.ReferenceID);
-                            question.References.Remove(reference);
-                            db.References.Remove(reference);
-                        }
-                        else if (refv.ReferenceID == 0 && refv.Delete == false)
-                        {
-                            reference = db.References.Create();
-                            question.References.Add(reference);
-                        }
-
-                        if (reference != null)
-                        {
-                            refv.MapToReference(reference);
-                        }
-                    }
-                }
-
+                addQuestions(request, rv);
+                
                 request.Caller.Type = db.RequesterTypes.SingleOrDefault(rt => rt.ID == rv.RequesterTypeID);
                 request.Caller.Region = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID);
 
@@ -374,6 +321,78 @@ namespace DREAM.Controllers
 
             // TODO Add drop down lists to ViewBag
             return View(rv);
+        }
+
+        private void addQuestions(Request request, RequestViewModel rv)
+        {
+            if (rv.Questions == null)
+                rv.Questions = new List<QuestionViewModel>();
+            foreach (var qv in rv.Questions)
+            {
+                Question question = null;
+                if (qv.QuestionID != 0 && qv.Delete == false)
+                {
+                    question = request.Questions.SingleOrDefault(q => q.ID == qv.QuestionID);
+                }
+                else if (qv.QuestionID != 0 && qv.Delete == true)
+                {
+                    // Delete question
+                }
+                else if (qv.QuestionID == 0 && qv.Delete == false)
+                {
+                    question = db.Questions.Create();
+                    request.Questions.Add(question);
+                }
+
+                if (question == null)
+                    continue;
+
+                qv.MapToQuestion(question);
+                question.QuestionType = db.QuestionTypes.SingleOrDefault(qt => qt.ID == qv.QuestionTypeID);
+                question.TumourGroup = db.TumourGroups.SingleOrDefault(tg => tg.ID == qv.TumourGroupID);
+
+                question.Keywords.Clear();
+                ISet<string> newKeywords = new HashSet<string>(qv.Keywords.Select(k => k.Keyword).ToArray());
+                string[] keywordArray = newKeywords.ToArray();
+                IEnumerable<Keyword> keywords = db.Keywords.Where(k => keywordArray.Contains(k.KeywordText));
+                foreach (Keyword k in keywords)
+                {
+                    newKeywords.Remove(k.KeywordText);
+                    question.Keywords.Add(k);
+                }
+                foreach (string s in newKeywords)
+                {
+                    Keyword k = db.Keywords.Create();
+                    k.KeywordText = s;
+                    k.Enabled = true;
+                    question.Keywords.Add(k);
+                }
+
+                foreach (var refv in qv.References)
+                {
+                    Reference reference = null;
+                    if (refv.ReferenceID != 0 && refv.Delete == false)
+                    {
+                        reference = question.References.SingleOrDefault(r => r.ID == refv.ReferenceID);
+                    }
+                    else if (refv.ReferenceID != 0 && refv.Delete == true)
+                    {
+                        reference = question.References.SingleOrDefault(r => r.ID == refv.ReferenceID);
+                        question.References.Remove(reference);
+                        db.References.Remove(reference);
+                    }
+                    else if (refv.ReferenceID == 0 && refv.Delete == false)
+                    {
+                        reference = db.References.Create();
+                        question.References.Add(reference);
+                    }
+
+                    if (reference != null)
+                    {
+                        refv.MapToReference(reference);
+                    }
+                }
+            }
         }
 
         //
