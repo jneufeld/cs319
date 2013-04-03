@@ -99,6 +99,7 @@
         $prob.trigger('change');
         $severity.change(handler);
     },
+
     renewRequestLock: function () {
         var id = $("input[name=RequestID]:hidden").val();
         $.ajax({
@@ -116,18 +117,20 @@
 };
 
 $("body").on("click", ".addNewKeyword", function () {
-    var $keywordList = $(this).siblings(".keywordValues");
-    var keywordIndex = $(this).siblings("input[type='hidden']").val();
-    var prefix = "Questions[" + keywordIndex + "].";
+    var $qi = $(this).closest(".questionItem");
+    var questionIdx = $qi.find("input[name$='Questions.Index']:hidden").val();
+    var prefix = "Questions[" + questionIdx + "].";
+    var $keywordList = $qi.find(".keywordList");
     viewModel.addNewKeyword($keywordList, prefix);
     return false;
 });
 
 $("body").on("click", ".addNewReference", function () {
-    var $referenceList = $(this).siblings(".referenceValues");
-    var referenceIndex = $(this).siblings("input[type='hidden']").val();
-    var prefix = "Questions[" + referenceIndex + "].";
-    viewModel.addNewReference($referenceList, prefix);
+    var $qi = $(this).closest(".questionItem");
+    var questionIdx = $qi.find("input[name$='Questions.Index']:hidden").val();
+    var prefix = "Questions[" + questionIdx + "].";
+    var $referenceList = $qi.find(".referenceList");
+    viewModel.addNewKeyword($referenceList, prefix);
     return false;
 });
 

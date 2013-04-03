@@ -311,7 +311,7 @@ namespace DREAM.Controllers
                 question.TumourGroup = db.TumourGroups.SingleOrDefault(tg => tg.ID == qv.TumourGroupID);
 
                 question.Keywords.Clear();
-                ISet<string> newKeywords = new HashSet<string>(qv.Keywords.Select(k => k.Keyword).ToArray());
+                ISet<string> newKeywords = new HashSet<string>(qv.Keywords.Where(k => !k.Delete).Select(k => k.Keyword).ToArray());
                 string[] keywordArray = newKeywords.ToArray();
                 IEnumerable<Keyword> keywords = db.Keywords.Where(k => keywordArray.Contains(k.KeywordText));
                 foreach (Keyword k in keywords)
