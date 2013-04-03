@@ -26,6 +26,7 @@ namespace DREAM.Controllers
             ViewBag.ActionList = BuildActionDropdownList();
             ViewBag.UsersList = BuildUserDropdownList();
             lfm.filter();
+            ViewBag.LogAdminActive = true;
             return View(lfm);
         }
 
@@ -34,6 +35,7 @@ namespace DREAM.Controllers
         {
             ViewBag.ActionList = BuildActionDropdownList();
             ViewBag.UsersList = BuildUserDropdownList();
+            ViewBag.LogAdminActive = true;
 
             if (button.Equals("Filter"))
             {

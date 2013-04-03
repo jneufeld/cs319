@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Users";
+    Layout = "~/Views/Home/_BaseAdmin.cshtml";
 }
 
 <h2>Users</h2>
@@ -14,8 +15,7 @@
         <th>Username</th>
         <th>Email Address</th>
         <th>Enabled</th>
-        <th>Is Logged On</th>
-        <th></th>
+        <th>&nbsp;</th>
     </tr>
 
 @foreach (MembershipUser user in Model)
@@ -29,9 +29,6 @@
         </td>
         <td>
             @Html.DisplayFor(u => user.IsApproved)
-        </td>
-        <td>
-            @Html.DisplayFor(u => user.IsOnline)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { username = user.UserName })

@@ -2,38 +2,29 @@
 
 @{
     ViewBag.Title = "Edit";
+    Layout = "~/Views/Home/_BaseAdmin.cshtml";
 }
 
 <h2>Edit Keyword</h2>
 
-<html>
-    <body>
-    @using (Html.BeginForm()) {
+<fieldset>
+    <legend>@Html.DisplayFor(d => Model.KeywordText)</legend>
+
+    @using (Html.BeginForm("Edit", "KeywordAdmin", FormMethod.Post, new { @class = "form-horizontal" })) {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
-            <fieldset>
-                <legend>@Html.DisplayFor(d => Model.KeywordText)</legend>
-                @Html.HiddenFor(d => Model.ID)
+        @Html.HiddenFor(d => Model.ID)
 
-                <table border="0">
-                    <tr>
-                        <td> Modify the keyword to: </td>
-                        <td>
-                            @Html.EditorFor(d=>Model.KeywordText)
-                            @Html.ValidationMessageFor(d=>Model.KeywordText)
-                        </td>
-                    </tr>
-                </table>
+        <div class="control-group">
+            @Html.LabelFor(d => d.KeywordText, "Modify the keyword to:", new { @class = "control-label" })
 
-                <p>
-                    <input type="submit" value="Edit Keyword" />
-                </p>
-        </fieldset>
-        }
+            <div class="controls">
+                @Html.EditorFor(d=>Model.KeywordText)
+                @Html.ValidationMessageFor(d=>Model.KeywordText)
+            </div>
+        </div>
 
-         @Html.ActionLink("Cancel", "Index", new { page= 1 })
-
-    </body>
-</html>
-
-
+         @Html.ActionLink("Cancel", "Index", new { page = 1 }, new { @class = "btn btn-inverse" })
+        <input type="submit" class="btn" value="Save Keyword" />
+    }
+</fieldset>

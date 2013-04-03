@@ -7,7 +7,7 @@ using System.Web.Security;
 
 namespace DREAM.Models
 {
-    public class EditUserModel
+    public class UserModel
     {
         [Required]
         public string UserName { get; set; }
@@ -24,9 +24,9 @@ namespace DREAM.Models
         [Required]
         public bool Enabled { get; set; }
 
-        public EditUserModel() { }
+        public UserModel() { }
 
-        public EditUserModel(MembershipUser user)
+        public UserModel(MembershipUser user)
         {
             UserName = user.UserName;
             FirstName = "First Name";

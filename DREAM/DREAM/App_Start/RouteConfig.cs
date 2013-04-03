@@ -31,6 +31,11 @@ namespace DREAM
                 defaults: new { controller = "Requests", action = "Search" }
             );
             routes.MapRoute(
+                name: "DropDownAdmin",
+                url: "Admin/{dropDownClass}/{action}/{id}",
+                defaults: new { controller = "DropDownAdmin", action = "Index", id = UrlParameter.Optional }
+            );
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

@@ -30,6 +30,7 @@ namespace DREAM.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            addAdminVariables(dropDownClass);
             return View(dropDowns);
         }
 
@@ -46,6 +47,7 @@ namespace DREAM.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            addAdminVariables(dropDownClass);
             return View(m);
         }
 
@@ -84,6 +86,7 @@ namespace DREAM.Controllers
             else
             {
                 ModelState.AddModelError("", "ModelState is not valid");
+                addAdminVariables(dropDownClass);
                 return View(m);
             }
         }
@@ -104,6 +107,7 @@ namespace DREAM.Controllers
             m.ID = dropDownId;
             m.Code = dropDownCode;
             m.FullName = dropDownFullName;
+            addAdminVariables(dropDownClass);
             return View(m);
         }
 
@@ -117,6 +121,7 @@ namespace DREAM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(DropDown model, string dropDownClass)
         {
+            addAdminVariables(dropDownClass);
             if (model.Code == null || model.FullName == null)
             {
                 DropDown m = getDropDownType(dropDownClass);
@@ -162,6 +167,7 @@ namespace DREAM.Controllers
             m.ID = dropDownId;
             m.Code = dropDownCode;
             m.FullName = dropDownFullName;
+            addAdminVariables(dropDownClass);
             return View(m);
         }
 
@@ -220,6 +226,25 @@ namespace DREAM.Controllers
                     return new Region();
             }
             return null;
+        }
+
+        private void addAdminVariables(string dropDownClass)
+        {
+            switch (dropDownClass)
+            {
+                case "RequesterType":
+                    ViewBag.ActiveDropDownAdminClass = "Requester Type";
+                    break;
+                case "QuestionType":
+                    ViewBag.ActiveDropDownAdminClass = "Question Type";
+                    break;
+                case "TumourGroup":
+                    ViewBag.ActiveDropDownAdminClass = "Tumour Group";
+                    break;
+                case "Region":
+                    ViewBag.ActiveDropDownAdminClass = "Region";
+                    break;
+            }
         }
     }
 }

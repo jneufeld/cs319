@@ -1,20 +1,22 @@
 ﻿@model System.Data.Entity.DbSet
 
 @{
-    ViewBag.Title = "View";
+    ViewBag.Title = ViewBag.ActiveDropDownAdminClass + "s";
+    Layout = "~/Views/Home/_BaseAdmin.cshtml";
+    string addNewLinkText = "Add New " + ViewBag.ActiveDropDownAdminClass;
 }
 
 <div class="row">
-    <div class="span12">
-        <h2>View</h2>
-        @Html.ActionLink("Add New Type", "Add", new { dropDownClass = Model.ElementType.Name }, new { @class = "btn btn-primary span2" })
+    <div class="span9">
+        <h2>@ViewBag.Title</h2>
+        @Html.ActionLink(addNewLinkText, "Add", new { dropDownClass = Model.ElementType.Name }, new { @class = "btn btn-primary" })
     </div>
 </div>
 
 <hr />
 
 <div class="row">
-    <div class="span12">
+    <div class="span9">
         <table class="table table-striped"> <tr> <th>Code</th> <th>Full Value</th> <th></th> <th></th> </tr>  @if (Model == null) { <tr> <td> NoValues </td> <td> NoValues </td> <td> NoValues </td> <td> NoValues </td> </tr> } else 
         {
             foreach (DREAM.Models.DropDown dp in Model)
@@ -52,7 +54,7 @@
     </tr>
     <tr>
             <td>
-                @Html.ActionLink("Add New Type", "Add", new { dropDownClass = Model.ElementType.Name }, new { @class = "btn btn-primary span2" })
+                @Html.ActionLink(addNewLinkText, "Add", new { dropDownClass = Model.ElementType.Name }, new { @class = "btn btn-primary" })
             </td>
     </tr>
 </table>

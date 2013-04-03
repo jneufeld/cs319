@@ -6,25 +6,10 @@ using System.Web;
 
 namespace DREAM.Models
 {
-    public class RegisterUserModel
+    public class RegisterUserModel : UserModel
     {
         [Required]
-        public string UserName { get; set; }
-
-        [Required]
-        public string FirstName { get; set; }
-
-        [Required]
-        public string LastName { get; set; }
-
-        [Required]
-        public string Email { get; set; }
-
-        [Required]
         public string Password { get; set; }
-
-        [Required]
-        public bool Enabled { get; set; }
 
         [Required]
         public string ConfirmPassword { get; set; }

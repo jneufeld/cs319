@@ -11,7 +11,6 @@
 
     </head>
     <body>
-
         <div class="navbar navbar-static-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -58,11 +57,12 @@
                             @if(isDISpecialist || isViewer) {
                                 <div>
                                     @using(Html.BeginForm("Search", "Requests", FormMethod.Post, new { id = "menu-search", @class = "form-search pull-right" })) {
-                                        @Html.TextBox("Query", "", new { @class = "search-input-disabled", placeholder = "Enter Keywords" })
+                                        @Html.TextBox("Query", "", new { @class = "search-query", placeholder = "Enter Keywords" })
                                         <button type="submit" class="btn">Search Requests</button>
                                     }
                                 </div>
                             }
+                        </div>
                     </div>
                 </div>
             </div>

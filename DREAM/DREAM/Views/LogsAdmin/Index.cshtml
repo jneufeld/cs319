@@ -4,6 +4,7 @@
 
 @{
     ViewBag.Title = "Administrator Logs";
+    Layout = "~/Views/Home/_BaseAdmin.cshtml";
 }
 
 <h2>Administrator Logs</h2>
@@ -147,7 +148,7 @@
     <p>No results found!</p>
 }
 
-@section Scripts {
+@section ExtraScripts {
     <script src="@Url.Content("~/Scripts/jQuery.tmpl.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>
     <link href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" rel="stylesheet" type="text/css" />

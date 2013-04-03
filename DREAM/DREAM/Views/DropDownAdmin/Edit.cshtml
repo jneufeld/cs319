@@ -1,11 +1,11 @@
 ﻿@model DREAM.Models.DropDown
 
 @{
-    ViewBag.Title = "Edit ";
+    ViewBag.Title = "Edit " + ViewBag.ActiveDropDownAdminClass;
+    Layout = "~/Views/Home/_BaseAdmin.cshtml";
 }
 
-<h2>Edit</h2>
-
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()

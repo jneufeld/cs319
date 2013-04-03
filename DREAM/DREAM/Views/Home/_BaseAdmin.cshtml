@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Admin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="span3">
+        <h2>Admin</h2>
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li
+                    @if(ViewBag.UsersAdminActive != null && ViewBag.UsersAdminActive){
+                        @:class="active"
+                     }
+                >
+                    @Html.ActionLink("Users", "Index", "UsersAdmin")
+                </li>
+                <li
+                    @if (ViewBag.ActiveDropDownAdminClass != null && ViewBag.ActiveDropDownAdminClass == "Requester Type")
+                    {
+                        @:class="active"
+                    }
+                >
+                     @Html.ActionLink("Requester Types", "Index", "DropDownAdmin", new { dropDownClass = "RequesterType"}, "")
+                </li>
+                <li
+                    @if (ViewBag.ActiveDropDownAdminClass != null && ViewBag.ActiveDropDownAdminClass == "Region")
+                    {
+                        @:class="active"
+                    }
+                >
+                    @Html.ActionLink("Regions", "Index", "DropDownAdmin", new { dropDownClass = "Region" }, "")
+                </li>
+                <li
+                    @if (ViewBag.ActiveDropDownAdminClass != null && ViewBag.ActiveDropDownAdminClass == "Tumour Group")
+                    {
+                        @:class="active"
+                    }
+                >
+                     @Html.ActionLink("Tumour Groups", "Index", "DropDownAdmin", new { dropDownClass = "TumourGroup" }, "")
+                </li>
+                <li
+                    @if (ViewBag.ActiveDropDownAdminClass != null && ViewBag.ActiveDropDownAdminClass == "Question Type")
+                    {
+                        @:class="active"
+                    }
+                >
+                      @Html.ActionLink("Question Types", "Index", "DropDownAdmin", new { dropDownClass = "QuestionType" }, "")
+                </li>
+                <li
+                    @if (ViewBag.KeywordAdminActive != null && ViewBag.KeywordAdminActive)
+                    {
+                        @:class="active"
+                    }
+                >
+                     @Html.ActionLink("Keywords", "Index", "KeywordsAdmin")
+                </li>
+                <li
+                    @if (ViewBag.LogAdminActive != null && ViewBag.LogAdminActive)
+                    {
+                        @:class="active"
+                    }
+                >
+                    @Html.ActionLink("Logs", "Index", "LogsAdmin")
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="span9">
+        @RenderBody()
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .sidebar-nav
+        {
+            padding: 9px 0;
+        }
+    </style>
+}
+
+@section Scripts {
+    @RenderSection("ExtraScripts", false)
+}

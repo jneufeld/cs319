@@ -1,17 +1,18 @@
 ﻿@model DREAM.Models.DropDown
 
 @{
-    ViewBag.Title = "Disable/Enable";
+    if(Model.Enabled)
+    {
+        ViewBag.Title = "Disable " + ViewBag.ActiveDropDownAdminClass;
+    }
+    else
+    {
+        ViewBag.Title = "Enable " + ViewBag.ActiveDropDownAdminClass;
+    }
+    Layout = "~/Views/Home/_BaseAdmin.cshtml";
 }
 
-    @if (Model.Enabled) 
-    {
-        <h2>Disable</h2>  
-    }
-    else 
-    {
-        <h2>Enable</h2>
-    }
+<h2>@ViewBag.Title</h2>  
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()

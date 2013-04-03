@@ -17,6 +17,7 @@ namespace DREAM.Controllers
         public ActionResult Index()
         {
             MembershipUserCollection users = Membership.GetAllUsers();
+            ViewBag.UsersAdminActive = true;
             return View(users);
         }
 
@@ -25,6 +26,7 @@ namespace DREAM.Controllers
         {
             populateAssignedGroups();
             populateAssignedRoles();
+            ViewBag.UsersAdminActive = true;
             return View(new RegisterUserModel());
         }
 
@@ -72,6 +74,7 @@ namespace DREAM.Controllers
 
             populateAssignedGroups(selectedGroups:selectedGroups);
             populateAssignedRoles(selectedRoles:selectedRoles);
+            ViewBag.UsersAdminActive = true;
             return View(model);
         }
 
@@ -79,15 +82,16 @@ namespace DREAM.Controllers
         public ActionResult Edit(string username)
         {
             MembershipUser user = Membership.GetUser(username);
-            EditUserModel model = new EditUserModel(user);
+            UserModel model = new UserModel(user);
 
             populateAssignedGroups(user);
             populateAssignedRoles(user);
+            ViewBag.UsersAdminActive = true;
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult Edit(EditUserModel model, int[] selectedGroups, string[] selectedRoles)
+        public ActionResult Edit(UserModel model, int[] selectedGroups, string[] selectedRoles)
         {
             if (ModelState.IsValid)
             {
@@ -121,6 +125,7 @@ namespace DREAM.Controllers
 
             populateAssignedGroups(selectedGroups:selectedGroups);
             populateAssignedRoles(selectedRoles:selectedRoles);
+            ViewBag.UsersAdminActive = true;
             return View(model);
         }
 

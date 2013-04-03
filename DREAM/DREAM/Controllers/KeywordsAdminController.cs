@@ -23,6 +23,7 @@ namespace DREAM.Controllers
         public ActionResult Index(int page = 1) {
            DbSet keywords = db.Keywords;
 
+            ViewBag.KeywordAdminActive = true;
             return View(keywords);  
         }
 
@@ -38,6 +39,7 @@ namespace DREAM.Controllers
                 ModelState.AddModelError("", "The keyword cannot be found.");
             }
 
+            ViewBag.KeywordAdminActive = true;
             return View(keyword); 
         }
 
@@ -109,6 +111,7 @@ namespace DREAM.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Keyword model){
+            ViewBag.KeywordAdminActive = true;
             if (ModelState.IsValid)
             {
                 if (model.KeywordText != null)
