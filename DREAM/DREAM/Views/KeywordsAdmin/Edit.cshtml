@@ -10,7 +10,7 @@
 <fieldset>
     <legend>@Html.DisplayFor(d => Model.KeywordText)</legend>
 
-    @using (Html.BeginForm("Edit", "KeywordAdmin", FormMethod.Post, new { @class = "form-horizontal" })) {
+    @using (Html.BeginForm("Edit", "KeywordsAdmin", FormMethod.Post, new { @class = "form-horizontal" })) {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
         @Html.HiddenFor(d => Model.ID)
