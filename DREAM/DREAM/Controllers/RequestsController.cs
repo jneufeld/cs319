@@ -53,7 +53,7 @@ namespace DREAM.Controllers
         // GET: /Requests/Add
 
         [HttpGet]
-        [Authorize(Roles=Role.DI_SPECIALIST)]
+        [Authorize(Roles = Role.DI_SPECIALIST)]
         public ActionResult Add()
         {
             Request request = new Request();
@@ -99,7 +99,7 @@ namespace DREAM.Controllers
 
                 request.CreationTime = DateTime.UtcNow;
                 request.CompletionTime = null;
-                request.CreatedBy = (Guid) Membership.GetUser().ProviderUserKey;
+                request.CreatedBy = (Guid)Membership.GetUser().ProviderUserKey;
                 request.ClosedBy = Guid.Empty;
 
                 // TODO Probably wrap this whole thing in a transaction
@@ -164,7 +164,7 @@ namespace DREAM.Controllers
         // TODO Rename to View - seems redundant to have Requests/ViewRequest/5
         // ^ Don't do that, terrible, terrible, terrible things will happen.
         [HttpGet]
-        [Authorize(Roles=Role.DI_SPECIALIST + ", " + Role.VIEWER)]
+        [Authorize(Roles = Role.DI_SPECIALIST + ", " + Role.VIEWER)]
         public ActionResult ViewRequest(int id = 0)
         {
             Request request = FindRequest(id);
@@ -263,7 +263,7 @@ namespace DREAM.Controllers
                 }
 
                 addQuestions(request, rv);
-                
+
                 request.Caller.Type = db.RequesterTypes.SingleOrDefault(rt => rt.ID == rv.RequesterTypeID);
                 request.Caller.Region = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID);
 
@@ -436,17 +436,15 @@ namespace DREAM.Controllers
 
                 Regex regexText1 = new Regex("REQUESTID GOES HERE");
                 docText = regexText1.Replace(docText, req.ID.ToString());
-                
+
                 Regex regexText2 = new Regex("REQUEST TYPE GOES HERE");
-                if (req.Caller.Type != null)
+                if (req.Caller.Type != null && req.Caller.Type != null && req.Caller.Type.FullName != null)
                     docText = regexText2.Replace(docText, req.Caller.Type.FullName);
                 else docText = regexText2.Replace(docText, "none");
 
                 Regex regexText3 = new Regex("CALLERFIRSTNAME GOES HERE");
                 if (req.Caller != null && req.Caller.FirstName != null)
                     docText = regexText3.Replace(docText, req.Caller.FirstName);
-                else if (req.Caller == null) 
-                    docText = regexText3.Replace(docText, "No caller data.");
                 else docText = regexText3.Replace(docText, "");
 
                 Regex regexText4 = new Regex("CALLERLASTNAME GOES HERE");
@@ -471,10 +469,8 @@ namespace DREAM.Controllers
 
                 Regex regexText8 = new Regex("PATIENTFIRSTNAME GOES HERE");
                 if (req.Patient != null && req.Patient.FirstName != null)
-                    docText = regexText8.Replace(docText, "Patient " + req.Patient.FirstName);
-                else if (req.Patient == null)
-                    docText = regexText3.Replace(docText, "No patient data.");
-                else docText = regexText3.Replace(docText, "");
+                    docText = regexText8.Replace(docText, req.Patient.FirstName);
+                else docText = regexText8.Replace(docText, "");
 
                 Regex regexText9 = new Regex("PATIENTLASTNAME GOES HERE");
                 if (req.Patient != null && req.Patient.LastName != null)
@@ -482,8 +478,10 @@ namespace DREAM.Controllers
                 else docText = regexText9.Replace(docText, "");
 
                 Regex regexText10 = new Regex("PATIENTAGENCYID GOES HERE");
-                if (req.Patient != null)
-                    docText = regexText10.Replace(docText, req.Patient.AgencyID.ToString());
+                if (req.Patient == null || (req.Patient.FirstName == null && req.Patient.LastName == null && req.Patient.AgencyID == null && req.Patient.Gender != 1 && req.Patient.Gender != 2 && req.Patient.Age <= 0))
+                    docText = regexText10.Replace(docText, "No patient data");
+                else if (req.Patient != null && req.Patient.AgencyID != null)
+                    docText = regexText10.Replace(docText, "Agency ID " + req.Patient.AgencyID.ToString());
                 else docText = regexText10.Replace(docText, "");
 
                 Regex regexText11 = new Regex("PATIENTGENDER GOES HERE");
@@ -499,12 +497,12 @@ namespace DREAM.Controllers
                 if (req.Patient != null && req.Patient.Age > 0)
                     docText = regexText12.Replace(docText, req.Patient.Age.ToString());
                 else docText = regexText12.Replace(docText, "");
-                
+
                 using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
                 {
                     sw.Write(docText);
                 }
-                if (req.Questions != null) 
+                if (req.Questions != null)
                 {
                     int qIndex = 0;
                     foreach (Question q in req.Questions)
@@ -872,4 +870,3 @@ namespace DREAM.Controllers
         #endregion
     }
 }
-﻿
