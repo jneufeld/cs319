@@ -8,6 +8,9 @@ namespace DREAM
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
+            // By default, the ignore list is set to ignore minified files. Clear it to fix this.
+            bundles.IgnoreList.Clear();
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js", "~/Scripts/jquery-migrate-1.1.1.js"));
 
@@ -26,7 +29,7 @@ namespace DREAM
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css", "~/Content/PagedList.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/Site.css", "~/Content/PagedList.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",

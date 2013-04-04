@@ -1,0 +1,9 @@
+﻿@model DREAM.Models.MsgViewModel
+
+<li>
+    <div class="alert alert-block @Model.AlertClass">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">@Model.Title</h4>
+        @Model.Message
+    </div>
+</li>

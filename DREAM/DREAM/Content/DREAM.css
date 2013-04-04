@@ -29,3 +29,37 @@
 {
     margin-top: 0;
 }
+
+/* styles for validation helpers */
+.field-validation-error
+{
+    color: #E80C17;
+    font-weight: bold;
+}
+
+.field-validation-valid
+{
+    display: none;
+}
+
+input.input-validation-error
+{
+    border: 1px solid #E80C17;
+}
+
+input[type="checkbox"].input-validation-error
+{
+    border: 0 none;
+}
+
+.validation-summary-errors
+{
+    color: #E80C17;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+label
+{
+    font-weight: 600;
+}

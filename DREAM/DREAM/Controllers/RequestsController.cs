@@ -24,7 +24,7 @@ namespace DREAM.Controllers
     {
         private DREAMContext db = new DREAMContext();
 
-        private TimeSpan LockDuration = TimeSpan.FromSeconds(120);
+        private TimeSpan LockDuration = TimeSpan.FromSeconds(60);
 
         //private SearchIndex SearchIndex = new SearchIndex();
 
@@ -110,7 +110,7 @@ namespace DREAM.Controllers
                 //SearchIndex.AddOrUpdateIndex(request);
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
 
-                addQuestions(request, rv);
+                AddQuestions(request, rv);
 
                 db.SaveChanges();
 
@@ -165,15 +165,28 @@ namespace DREAM.Controllers
         // ^ Don't do that, terrible, terrible, terrible things will happen.
         [HttpGet]
         [Authorize(Roles = Role.DI_SPECIALIST + ", " + Role.VIEWER)]
-        public ActionResult ViewRequest(int id = 0)
+        public ActionResult ViewRequest(int id = 0, string errorMsg = "")
         {
             Request request = FindRequest(id);
-            PopulateDropDownLists(request.CompletionTime != null);
 
             RequestViewModel rv = RequestViewModel.CreateFromRequest(request);
 
             db.Logs.Add(Log.View(request, Membership.GetUser()));
             db.SaveChanges();
+
+            if (!String.IsNullOrWhiteSpace(errorMsg))
+            {
+                MsgViewModel msg = new MsgViewModel()
+                {
+                    MsgType = MsgType.Error,
+                    Title = "Error",
+                    Message = errorMsg,
+                };
+                ViewBag.Messages = new List<MsgViewModel>(new[] { msg });
+            }
+
+            PopulateDropDownLists(request.CompletionTime != null);
+
             return View(rv);
         }
 
@@ -210,11 +223,11 @@ namespace DREAM.Controllers
                 return HttpNotFound();
             }
 
-            Guid lockingUser;
-            bool success = TryLockRequest(id, out lockingUser);
-            if (!success)
+            Guid? lockingUser;
+            bool locked = IsRequestLocked(id, out lockingUser);
+            if (locked)
             {
-                ViewBag.LockedBy = Membership.GetUser(lockingUser).UserName;
+                ViewBag.LockedBy = FindUsernameFromID(lockingUser ?? Guid.Empty);
                 return View("RequestLocked");
             }
 
@@ -246,7 +259,7 @@ namespace DREAM.Controllers
             bool success = TryLockRequest(request.ID, out lockingUser);
             if (!success)
             {
-                ViewBag.LockedBy = Membership.GetUser(lockingUser).UserName;
+                ViewBag.LockedBy = FindUsernameFromID(lockingUser);
                 return View("RequestLocked");
             }
 
@@ -262,7 +275,7 @@ namespace DREAM.Controllers
                     db.Logs.Add(Log.Close(request, Membership.GetUser()));
                 }
 
-                addQuestions(request, rv);
+                AddQuestions(request, rv);
 
                 request.Caller.Type = db.RequesterTypes.SingleOrDefault(rt => rt.ID == rv.RequesterTypeID);
                 request.Caller.Region = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID);
@@ -282,7 +295,7 @@ namespace DREAM.Controllers
             return View(rv);
         }
 
-        private void addQuestions(Request request, RequestViewModel rv)
+        private void AddQuestions(Request request, RequestViewModel rv)
         {
             if (rv.Questions == null)
                 rv.Questions = new List<QuestionViewModel>();
@@ -361,12 +374,20 @@ namespace DREAM.Controllers
             int id;
             bool parse = Int32.TryParse(requestId, out id);
             if (!parse)
-                new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             bool success = TryLockRequest(id, out lockingUser);
-            if (!success)
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            if (success)
+            {
+                var result = new { Status = "OK", Timeout = LockDuration.TotalSeconds - 10 };
+                return Json(result);
+            }
             else
-                return new HttpStatusCodeResult(HttpStatusCode.OK);
+            {
+                var errorMsg = "Request lock has been lost";
+                var result = new { Status = "ERR", ErrorMsg = errorMsg };
+                return Json(result);
+            }
         }
 
         //
@@ -389,10 +410,11 @@ namespace DREAM.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {
+            // Shouldn't be able to delete requests ever
             Request request = db.Requests.Find(id);
-            db.Requests.Remove(request);
+            request.Enabled = false;
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Search");
         }
 
         protected override void Dispose(bool disposing)
@@ -672,7 +694,7 @@ namespace DREAM.Controllers
                 if (requestLock != null)
                 {
                     MembershipUser currentUser = Membership.GetUser();
-                    if (requestLock.UserID != (Guid)currentUser.ProviderUserKey && requestLock.ExpireTime > DateTime.UtcNow)
+                    if (requestLock.UserID != (Guid)currentUser.ProviderUserKey && DateTime.UtcNow < requestLock.ExpireTime)
                     {
                         lockingUser = requestLock.UserID;
                         return false;
@@ -703,10 +725,30 @@ namespace DREAM.Controllers
         {
             Lock requestLock = db.Locks.SingleOrDefault(l => l.ID == requestID);
 
-            db.Locks.Remove(requestLock);
-            db.SaveChanges();
+            if (requestLock != null)
+            {
+                db.Locks.Remove(requestLock);
+                db.SaveChanges();
+            }
 
             return true;
+        }
+
+        private bool IsRequestLocked(int requestID, out Guid? lockingUser)
+        {
+            Lock requestLock = db.Locks.SingleOrDefault(l => l.ID == requestID);
+
+            MembershipUser currentUser = Membership.GetUser();
+
+            if (requestLock == null)
+            {
+                lockingUser = null;
+                return false;
+            }
+
+            lockingUser = requestLock.UserID;
+            return requestLock.UserID != (Guid)currentUser.ProviderUserKey &&
+                   DateTime.UtcNow < requestLock.ExpireTime;
         }
 
         #region DropDown Lists
@@ -812,47 +854,6 @@ namespace DREAM.Controllers
         }
         #endregion
 
-        // Check if the given request is currently locked, returning true or false.
-        //
-        // Arguments:
-        //      request   -- The current Request object the user is viewing.
-        //      isEditing -- Set of the operation is editing the Request itself.
-        //
-        // Returns:
-        //      True if the given Request is currently locked, else false.
-        private bool isLocked(Request request, bool isEditing = false)
-        {
-            DREAM.Models.Lock requestLock = findRequestLock(request.ID);
-            MembershipUser lockingUser = getUserFromLock(requestLock);
-            MembershipUser currentUser = Membership.GetUser();
-
-            return requestLock != null && currentUser.UserName != lockingUser.UserName;
-        }
-
-        // Find and return the Lock for the given request. If there is no Lock, null is returned.
-        //
-        // Arguments:
-        //      requestID -- The ID (primary key) of the request.
-        //
-        // Returns:
-        //      The Lock holding the given Request or null if there is no lock.
-        private Lock findRequestLock(int requestID)
-        {
-            return db.Locks.SingleOrDefault(l => l.ID == requestID);
-        }
-
-        // Find and return the MembershipUser associated with a Lock.
-        //
-        // Arguments:
-        //      requestLock -- The Lock to find the user object from (may be null).
-        //
-        // Returns:
-        //      The MembershipUser object of the user holding the Lock or null.
-        private MembershipUser getUserFromLock(DREAM.Models.Lock requestLock)
-        {
-            return requestLock != null ? Membership.GetUser(requestLock.UserID) : null;
-        }
-
         // Find and return the username belonging to the given user ID.
         //
         // Arguments:
@@ -864,7 +865,7 @@ namespace DREAM.Controllers
         {
             MembershipUser user = Membership.GetUser(userID);
 
-            return user != null ? user.UserName : null;
+            return user != null ? user.UserName : "";
         }
 
         #endregion

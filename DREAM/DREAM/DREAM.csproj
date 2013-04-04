@@ -236,6 +236,7 @@
     <Compile Include="Models\AssignedGroupModel.cs" />
     <Compile Include="Models\AssignedRoleModel.cs" />
     <Compile Include="Models\Caller.cs" />
+    <Compile Include="Models\MsgViewModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\ExternalLogin.cs" />
     <Compile Include="Models\Group.cs" />
@@ -450,6 +451,7 @@
     <Content Include="Views\Requests\_BaseView.cshtml" />
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\UsersAdmin\_Base.cshtml" />
+    <Content Include="Views\Requests\MsgView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -104,10 +104,18 @@
             contentType: "application/json; charset=utf-8",
             data: "{ \"requestId\": \"" + id + "\" }",
             success: function (msg) {
-                //console.log(id + " " + msg);
+                //console.log(msg);
+                var timeout = parseInt(msg.Timeout);
+                if (msg.Status == 'OK' && !isNaN(timeout)) {
+                    setTimeout(viewModel.renewRequestLock, timeout * 1000);
+                }
+                else {
+                    var errorMsg = encodeURIComponent(msg.ErrorMsg);
+                    window.location.href = "/Requests/ViewRequest/" + id + "?errorMsg=" + errorMsg;
+                }
             },
             error: function (error) {
-                //console.log(error);
+                setTimeout(viewModel.renewRequestLock, 30 * 1000);
             }
         });
     }
