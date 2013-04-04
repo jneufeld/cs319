@@ -1,4 +1,5 @@
 ﻿@model DREAM.Models.ChartValueModel
+@using DREAM.Models
 @using DREAM.Helpers
 
 <li>
@@ -7,22 +8,23 @@
         <div class="row">
             <div class="span3">
                 @Html.LabelFor(model => model.Name)
-                @Html.EditorFor(model => model.Name)
+                @Html.EditorFor(model => model.Name, new { @class = "span3" })
                 @Html.ValidationMessageFor(model => model.Name)
             </div>
 
             <div class="span3">
                 @Html.LabelFor(model => model.PropertyName)
                 @Html.DropDownListFor(model => model.PropertyName, (IEnumerable<SelectListItem>)(
-                    new List<SelectListItem>()
-                    ), new Dictionary<string, object>{ {"class","propertySelector"} })
+                        ViewData["chart"] != null && ((ChartModel)ViewData["chart"]).ObjectType == typeof(Request) ? ViewData["RequestPropertiesList"]:
+                        ViewData["chart"] != null && ((ChartModel)ViewData["chart"]).ObjectType == typeof(Question) ? ViewData["QuestionPropertiesList"]:
+                        new List<SelectListItem>()
+                    ), new { @class = "propertySelector span3" })
                 @Html.ValidationMessageFor(model => model.PropertyName)
             </div>
 
             <div class="span3">
                 @Html.LabelFor(model => model.Function)
-                @Html.DropDownListFor(model => model.Function, (IEnumerable<SelectListItem>)ViewData["StatFunctionList"],
-                    new Dictionary<string, object>{ {"class", "statFunctionSelector"} })
+                @Html.DropDownListFor(model => model.Function, (IEnumerable<SelectListItem>)ViewData["StatFunctionList"], new { @class = "statFunctionSelector span3"})
                 @Html.ValidationMessageFor(model => model.Function)
             </div>
         </div>

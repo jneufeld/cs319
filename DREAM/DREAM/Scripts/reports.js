@@ -1,10 +1,10 @@
 ﻿var viewModel = {
     addNewChart: function () {
-        $("#charts").append($("#chartTemplate").tmpl({ Charts_index: viewModel._generateGuid(), Values_index: viewModel._generateGuid() }));
+        return $("#charts").append($("#chartTemplate").tmpl({ Charts_index: viewModel._generateGuid(), Values_index: viewModel._generateGuid() }));
     },
 
     addNewValue: function ($valuesList, prefix) {
-        $valuesList.append($("#valueTemplate").tmpl({ prefix: prefix, Values_index: viewModel._generateGuid() }));
+        return $valuesList.append($("#valueTemplate").tmpl({ prefix: prefix, Values_index: viewModel._generateGuid() }));
     },
 
     _generateGuid: function () {
@@ -25,9 +25,16 @@ $("body").on("click", ".addNewValue", function () {
     var $valueList = $(".chartValues", $chartItem);
     var chartIndex = $("input[name='Charts.Index']", $chartItem).val();
     var prefix = "Charts[" + chartIndex + "].";
-    viewModel.addNewValue($valueList, prefix);
+
+    var $newValueItem = viewModel.addNewValue($valueList, prefix);
+    var $propertyDropDown = $(".propertySelector", $newValueItem);
+    var objectType = $(".objectTypeSelector", $newValueItem.parentsUntil("ul", "li")).val();
+
+    setPropertyDropDownOptions($propertyDropDown, objectType);
+
     return false;
 });
+
 $("body").on("focus", "input.date", function () {
     if (!$(this).hasClass("hasDatepicker")) {
         $(this).datepicker();
@@ -36,30 +43,46 @@ $("body").on("focus", "input.date", function () {
 });
 
 $("body").on("change", ".objectTypeSelector", function () {
-    var $propertyDropDowns = $(this).parent().siblings(".chartValues").children().children(".propertySelector");
-    var $stratificationDropDown = $(this).siblings(".stratificationSelector");
-    $propertyDropDowns.empty();
-    $stratificationDropDown.empty();
+    var $chartItem = $(this).parentsUntil("ul", "li");
+    var $propertyDropDowns = $(".chartValues .propertySelector", $chartItem);
+    var $stratificationDropDown = $(".stratificationSelector", $chartItem);
+    var objectType = $(this).val();
 
-    switch($(this).val()) {
+    setPropertyDropDownOptions($propertyDropDowns, objectType);
+    setStratificationDropDown($stratificationDropDown, objectType);
+});
+
+function setPropertyDropDownOptions($propertyDropDowns, objectType) {
+    $propertyDropDowns.empty();
+    switch(objectType) {
         case "Request":
-            $.each(requestPropertyOptions, function(i, option) {
+            $.each(requestPropertyOptions, function (i, option) {
                 $propertyDropDowns.append($("<option></option>").attr("value", option.Value).text(option.Text));
-            });
-            $.each(requestStratificationOptions, function(i, option) {
-                $stratificationDropDown.append($("<option></option>").attr("value", option.Value).text(option.Text));
             });
             break;
         case "Question":
             $.each(questionPropertyOptions, function(i, option) {
                 $propertyDropDowns.append($("<option></option>").attr("value", option.Value).text(option.Text));
             });
+            break;
+    }
+}
+
+function setStratificationDropDown($stratificationDropDown, objectType) {
+    $stratificationDropDown.empty();
+    switch(objectType) {
+        case "Request":
+            $.each(requestStratificationOptions, function(i, option) {
+                $stratificationDropDown.append($("<option></option>").attr("value", option.Value).text(option.Text));
+            });
+            break;
+        case "Question":
             $.each(questionStratificationOptions, function(i, option) {
                 $stratificationDropDown.append($("<option></option>").attr("value", option.Value).text(option.Text));
             });
             break;
     }
-});
+}
 
 $("body").on("change", ".propertySelector", function() {
     var $objectTypeSelector = $(this).parents(".chartValues").siblings("span").children(".objectTypeSelector");

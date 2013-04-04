@@ -78,5 +78,7 @@
         var questionStatFunctionMap = @Html.Raw(ViewData["QuestionStatFunctionMap"]);
     </script>
 
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/Scripts/reports.js")
+    @Scripts.Render("~/Scripts/bootstrapFormValidation.js")
 }

@@ -32,16 +32,16 @@
                 @Html.DropDownListFor(model => model.TimeRange, (IEnumerable<SelectListItem>)ViewData["TimeRangeList"], new { @class = "span2" })
                 @Html.ValidationMessageFor(model => model.TimeRange)
             </div>
+        </div>
 
+        <div class="row">
             <div class="span2">
                 @Html.LabelFor(model => model.Granularity)
 
                 @Html.DropDownListFor(model => model.Granularity, (IEnumerable<SelectListItem>)ViewData["TimeRangeList"], new { @class = "span2" })
                 @Html.ValidationMessageFor(model => model.Granularity)
             </div>
-        </div>
 
-        <div class="row">
             <div class="span2">
                 @Html.LabelFor(model => model.ChartType)
 
@@ -79,15 +79,19 @@
 
         <div class="offset1">
             <ul class="chartValues" style="list-style-type: none">
+                @{
+        ViewDataDictionary extraDict = new ViewDataDictionary(ViewData);
+        extraDict.Add("chart", Model);
+                }
                 @if (Model == null || Model.Values == null || Model.Values.Count == 0)
                 {
-                    @Html.Partial("ChartValueModel", null);
+                    @Html.Partial("ChartValueModel", null, extraDict);
                 }
                 else
                 {
                     foreach (DREAM.Models.ChartValueModel value in Model.Values)
                     {
-                        @Html.Partial("ChartValueModel", value);
+                        @Html.Partial("ChartValueModel", value, extraDict);
                     }
                 }
             </ul>
