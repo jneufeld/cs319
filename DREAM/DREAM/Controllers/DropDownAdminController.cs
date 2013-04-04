@@ -104,6 +104,10 @@ namespace DREAM.Controllers
         {
             DbSet dropDowns;
             DropDown m = getDropDownType(dropDownClass);
+            if (m == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             dropDowns = getDropDowns(dropDownClass);
             m = (DropDown)dropDowns.Find(dropDownId);
             addAdminVariables(dropDownClass);
@@ -120,6 +124,10 @@ namespace DREAM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(DropDown model, string dropDownClass)
         {
+            if (dropDownClass == null || (dropDownClass != "RequesterType" && dropDownClass != "QuestionType" && dropDownClass != "TumourGroup" && dropDownClass != "Region"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             addAdminVariables(dropDownClass);
             if (model.Code == null || model.FullName == null)
             {
@@ -136,6 +144,10 @@ namespace DREAM.Controllers
                 DropDown dropDown = new DropDown();
                 dropDowns = getDropDowns(dropDownClass);
                 dropDown = (DropDown)dropDowns.Find(model.ID);
+                if (model.Code == null || model.Code == "" || model.FullName == null || model.FullName == "")
+                {
+                    return View(model);
+                }
                 dropDown.Code = model.Code;
                 dropDown.FullName = model.FullName;
                 db.SaveChanges();

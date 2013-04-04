@@ -120,28 +120,28 @@ namespace DREAM.Tests.Controllers
         [TestMethod]
         public void regionAddTest()
         {
-            ViewResult result = (ViewResult)dDAdminController.Index("Region");
+            ViewResult result = (ViewResult)dDAdminController.Add("Region");
             Assert.IsNotNull(result.Model);
         }
 
         [TestMethod]
         public void requesterTypeAddTest()
         {
-            ViewResult result = (ViewResult)dDAdminController.Index("RequesterType");
+            ViewResult result = (ViewResult)dDAdminController.Add("RequesterType");
             Assert.IsNotNull(result.Model);
         }
 
         [TestMethod]
         public void questionTypeAddTest()
         {
-            ViewResult result = (ViewResult)dDAdminController.Index("QuestionType");
+            ViewResult result = (ViewResult)dDAdminController.Add("QuestionType");
             Assert.IsNotNull(result.Model);
         }
 
         [TestMethod]
         public void tumourGroupAddTest()
         {
-            ViewResult result = (ViewResult)dDAdminController.Index("TumourGroup");
+            ViewResult result = (ViewResult)dDAdminController.Add("TumourGroup");
             Assert.IsNotNull(result.Model);
         }
         
@@ -180,6 +180,8 @@ namespace DREAM.Tests.Controllers
             m.Enabled = true;
             ActionResult result = dDAdminController.Add(m, "Region");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            //Region justAdded = db.Regions.Last();
+           // Assert.IsTrue(justAdded.Code.Equals("TST") && justAdded.FullName.Equals("RegionAddLogicTest") && justAdded.Enabled);
         }
        
         [TestMethod]
@@ -214,124 +216,123 @@ namespace DREAM.Tests.Controllers
             ActionResult result = dDAdminController.Add(m, "TumourGroup");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-        /*
+        
         [TestMethod]
         public void nullEditTest()
         {
             ActionResult result = dDAdminController.Edit(0, null);
-            //db.Regions;
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
         
         [TestMethod]
-        public void emptyAddTest()
+        public void emptyEditTest()
         {
-            ActionResult result = dDAdminController.Add("");
+            ActionResult result = dDAdminController.Edit(0, "");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-
+        
         [TestMethod]
-        public void wrongAddTest()
+        public void wrongEditTest()
         {
-            ActionResult result = dDAdminController.Add("Bubba");
+            ActionResult result = dDAdminController.Edit(0, "Bubba");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-
+        
         [TestMethod]
-        public void regionAddTest()
+        public void regionEditTest()
         {
-            ViewResult result = (ViewResult)dDAdminController.Index("Region");
+            ViewResult result = (ViewResult)dDAdminController.Edit(1, "Region");
             Assert.IsNotNull(result.Model);
         }
 
         [TestMethod]
-        public void requesterTypeAddTest()
+        public void requesterTypeEditTest()
         {
-            ViewResult result = (ViewResult)dDAdminController.Index("RequesterType");
+            ViewResult result = (ViewResult)dDAdminController.Edit(1, "RequesterType");
             Assert.IsNotNull(result.Model);
         }
 
         [TestMethod]
-        public void questionTypeAddTest()
+        public void questionTypeEditTest()
         {
-            ViewResult result = (ViewResult)dDAdminController.Index("QuestionType");
+            ViewResult result = (ViewResult)dDAdminController.Edit(1, "QuestionType");
             Assert.IsNotNull(result.Model);
         }
 
         [TestMethod]
-        public void tumourGroupAddTest()
+        public void tumourGroupEditTest()
         {
-            ViewResult result = (ViewResult)dDAdminController.Index("TumourGroup");
+            ViewResult result = (ViewResult)dDAdminController.Edit(1, "TumourGroup");
             Assert.IsNotNull(result.Model);
         }
         
         [TestMethod]
-        public void nullAddLogicTest()
+        public void nullEditLogicTest()
         {
             DropDown m = new DropDown();
-            ActionResult result = dDAdminController.Add(m, null);
+            ActionResult result = dDAdminController.Edit(m, null);
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
       
         [TestMethod]
-        public void emptyAddLogicTest()
+        public void emptyEditLogicTest()
         {
             Region m = new Region();
             m.Code = "";
             m.FullName = "";
-            ViewResult result = (ViewResult)dDAdminController.Add(m, "Region");
+            ViewResult result = (ViewResult)dDAdminController.Edit(m, "Region");
             Assert.AreEqual("System.Web.Mvc.ViewResult", result.GetType().FullName);
         }
         
         [TestMethod]
-        public void wrongAddLogicTest()
+        public void wrongEditLogicTest()
         {
             DropDown m = new DropDown();
-            ActionResult result = dDAdminController.Add(m, "Bubba");
+            ActionResult result = dDAdminController.Edit(m, "Bubba");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-        
+        /*
         [TestMethod]
-        public void regionAddLogicTest()
+        public void regionEditLogicTest()
         {
             Region m = new Region();
             m.Code = "TST";
             m.FullName = "RegionAddLogicTest";
             m.Enabled = true;
-            ActionResult result = dDAdminController.Add(m, "Region");
+            ActionResult result = dDAdminController.Edit(m, "Region");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
        
         [TestMethod]
-        public void requesterTypeAddLogicTest()
+        public void requesterTypeEditLogicTest()
         {
             RequesterType m = new RequesterType();
             m.Code = "TST";
             m.FullName = "RequesterTypeAddLogicTest";
             m.Enabled = true;
-            ActionResult result = dDAdminController.Add(m, "RequesterType");
+            ActionResult result = dDAdminController.Edit(m, "RequesterType");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
         [TestMethod]
-        public void questionTypeAddLogicTest()
+        public void questionTypeEditLogicTest()
         {
             QuestionType m = new QuestionType();
             m.Code = "TST";
             m.FullName = "QuestionTypeAddLogicTest";
             m.Enabled = true;
-            ActionResult result = dDAdminController.Add(m, "QuestionType");
+            ActionResult result = dDAdminController.Edit(m, "QuestionType");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
         [TestMethod]
-        public void tumourGroupAddLogicTest()
+        public void tumourGroupEditLogicTest()
         {
             TumourGroup m = new TumourGroup();
             m.Code = "TST";
             m.FullName = "TumourGroupAddLogicTest";
             m.Enabled = true;
-            ActionResult result = dDAdminController.Add(m, "TumourGroup");
+            ActionResult result = dDAdminController.Edit(m, "TumourGroup");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
         */
