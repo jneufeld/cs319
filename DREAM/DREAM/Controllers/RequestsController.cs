@@ -438,7 +438,7 @@ namespace DREAM.Controllers
                 docText = regexText1.Replace(docText, req.ID.ToString());
 
                 Regex regexText2 = new Regex("REQUEST TYPE GOES HERE");
-                if (req.Caller.Type != null && req.Caller.Type != null && req.Caller.Type.FullName != null)
+                if (req.Caller != null && req.Caller.Type != null && req.Caller.Type.FullName != null)
                     docText = regexText2.Replace(docText, req.Caller.Type.FullName);
                 else docText = regexText2.Replace(docText, "none");
 
