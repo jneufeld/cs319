@@ -100,13 +100,12 @@ namespace DREAM.Controllers
         /// <param name="dropDownClass"> The drop down menu of the element to be edited </param>
         /// <returns>The view for editing an element from a given drop down </returns>
         [HttpGet]
-        public ActionResult Edit(int dropDownId, string dropDownCode, string dropDownFullName, bool enabled, string dropDownClass)
+        public ActionResult Edit(int dropDownId, string dropDownClass)
         {
+            DbSet dropDowns;
             DropDown m = getDropDownType(dropDownClass);
-            m.Enabled = enabled;
-            m.ID = dropDownId;
-            m.Code = dropDownCode;
-            m.FullName = dropDownFullName;
+            dropDowns = getDropDowns(dropDownClass);
+            m = (DropDown)dropDowns.Find(dropDownId);
             addAdminVariables(dropDownClass);
             return View(m);
         }
@@ -160,13 +159,12 @@ namespace DREAM.Controllers
         /// <param name="dropDownClass"> The drop down menu of the element to be deleted </param>
         /// <returns>The view for deleting an element from a given drop down </returns>
         [HttpGet]
-        public ActionResult Delete(int dropDownId, string dropDownCode, string dropDownFullName, bool enabled, string dropDownClass)
+        public ActionResult Delete(int dropDownId, bool enabled, string dropDownClass)
         {
+            DbSet dropDowns;
             DropDown m = getDropDownType(dropDownClass);
-            m.Enabled = enabled;
-            m.ID = dropDownId;
-            m.Code = dropDownCode;
-            m.FullName = dropDownFullName;
+            dropDowns = getDropDowns(dropDownClass);
+            m = (DropDown)dropDowns.Find(dropDownId);
             addAdminVariables(dropDownClass);
             return View(m);
         }
