@@ -32,7 +32,7 @@ namespace DREAM.Controllers
                 .Include(r => r.Caller.Type)
                 .Include(r => r.Caller.Region)
                 .ToList()
-                .Select(r => CreateCustomRequestViewModel(r))
+                .Select(r => RequestViewModel.CreateFromRequest(r))
                 .ToList();
 
             hv.RecentRequests = db.Requests
@@ -43,7 +43,7 @@ namespace DREAM.Controllers
                 .Include(r => r.Caller.Type)
                 .Include(r => r.Caller.Region)
                 .ToList()
-                .Select(r => CreateCustomRequestViewModel(r))
+                .Select(r => RequestViewModel.CreateFromRequest(r))
                 .ToList();
 
             ViewBag.Message = "Home Page";
@@ -77,15 +77,6 @@ namespace DREAM.Controllers
                    User.IsInRole(Role.REPORTER) ||
                    User.IsInRole(Role.DI_SPECIALIST) ||
                    User.IsInRole(Role.VIEWER);
-        }
-
-        private RequestViewModel CreateCustomRequestViewModel(Request r)
-        {
-            RequestViewModel rv = RequestViewModel.CreateFromRequest(r);
-            // Slightly hacky, but it'll do for now
-            rv.RequesterTypeStringID = db.RequesterTypes.SingleOrDefault(rt => rt.ID == rv.RequesterTypeID).FullName;
-            rv.CallerRegionStringID = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID).FullName;
-            return rv;
         }
 
         public ActionResult PageNotFound(String errorPath)

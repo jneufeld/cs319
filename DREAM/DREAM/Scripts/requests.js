@@ -59,8 +59,6 @@
         $(node).click(function () {
             var par = $(this).closest("li");
             var deleted = par.find("input[name$=Delete]:hidden");
-            console.log(par);
-            console.log(deleted);
             deleted.val('True');
             par.hide(0.5);
         });
@@ -90,7 +88,6 @@
             var severity = $severity.val();
             var $impact = questionItem.find("input[name$=Impact]");
             var impact = viewModel.computeImpact(severity, prob);
-            console.log(prob);
             $impact.val(impact);
         }
         var $prob = questionItem.find("select[name$=Probability]");
@@ -130,7 +127,7 @@ $("body").on("click", ".addNewReference", function () {
     var questionIdx = $qi.find("input[name$='Questions.Index']:hidden").val();
     var prefix = "Questions[" + questionIdx + "].";
     var $referenceList = $qi.find(".referenceList");
-    viewModel.addNewKeyword($referenceList, prefix);
+    viewModel.addNewReference($referenceList, prefix);
     return false;
 });
 

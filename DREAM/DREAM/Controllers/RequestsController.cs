@@ -728,9 +728,9 @@ namespace DREAM.Controllers
         {
             List<SelectListItem> genders = new List<SelectListItem>();
 
-            genders.Add(new SelectListItem { Text = "Unknown", Value = Gender.UNKNOWN.ToString() });
-            genders.Add(new SelectListItem { Text = "Male", Value = Gender.MALE.ToString() });
-            genders.Add(new SelectListItem { Text = "Female", Value = Gender.FEMALE.ToString() });
+            genders.Add(new SelectListItem { Text = "Unknown", Value = Gender.Unknown.ToString() });
+            genders.Add(new SelectListItem { Text = "Male", Value = Gender.Male.ToString() });
+            genders.Add(new SelectListItem { Text = "Female", Value = Gender.Female.ToString() });
 
             return genders;
         }
@@ -739,10 +739,10 @@ namespace DREAM.Controllers
         {
             List<SelectListItem> refTypes = new List<SelectListItem>();
 
-            refTypes.Add(new SelectListItem { Text = "Text", Value = ReferenceType.TEXT.ToString() });
+            refTypes.Add(new SelectListItem { Text = "Text", Value = ReferenceType.Text.ToString() });
             refTypes.Add(new SelectListItem { Text = "URL", Value = ReferenceType.URL.ToString() });
-            refTypes.Add(new SelectListItem { Text = "Request", Value = ReferenceType.REQUEST.ToString() });
-            refTypes.Add(new SelectListItem { Text = "File", Value = ReferenceType.FILE.ToString() });
+            refTypes.Add(new SelectListItem { Text = "Request", Value = ReferenceType.Request.ToString() });
+            refTypes.Add(new SelectListItem { Text = "File", Value = ReferenceType.File.ToString() });
 
             return refTypes;
         }

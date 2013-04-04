@@ -123,7 +123,7 @@ namespace DREAM.Reports
                         Age = rand.Next(100),
                         AgencyID = rand.Next(100000).ToString(),
                         FirstName = getRandomValueFromFile("firstnames.txt"),
-                        Gender = (int)Gender.UNKNOWN,
+                        Gender = (int)Gender.Unknown,
                         LastName = getRandomValueFromFile("lastnames.txt"),
                     },
                     Enabled = true,

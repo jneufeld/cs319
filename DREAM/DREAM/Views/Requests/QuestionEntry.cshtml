@@ -21,14 +21,8 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.QuestionTypeStringID)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.QuestionTypeStringID)
-                        }
-                        else
-                        {
-                            @Html.DropDownListFor(m => m.QuestionTypeStringID, (IEnumerable<SelectListItem>)ViewData["QuestionTypeList"])
-                        }
+                        @Html.ControlDropDownFor((bool)ViewBag.ReadOnly, m => m.QuestionTypeString, m => m.QuestionTypeStringID,
+                                                 (IEnumerable<SelectListItem>)ViewData["QuestionTypeList"])
                     </div>
                 </div>
             </div>
@@ -36,14 +30,8 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.TumourGroupStringID)
                     <div class="controls">
-                        @if(ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.TumourGroupStringID)
-                        }
-                        else
-                        {
-                            @Html.DropDownListFor(m => m.TumourGroupStringID, (IEnumerable<SelectListItem>)ViewData["TumourGroupList"])
-                        }
+                        @Html.ControlDropDownFor((bool)ViewBag.ReadOnly, m => m.TumourGroupString, m => m.TumourGroupStringID,
+                                                 (IEnumerable<SelectListItem>)ViewData["QuestionTypeList"])
                     </div>
                 </div>
             </div>
@@ -54,17 +42,7 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.QuestionText)
                     <div class="controls">
-                        @if(ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.QuestionText)
-                        }
-                        else
-                        {
-                            @Html.TextAreaFor(m => m.QuestionText, new { @class = "span5", rows = "10" })
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.QuestionText)
-                            </div>
-                        }
+                        @Html.ControlAreaFor((bool)ViewBag.ReadOnly, m => m.QuestionText, new { @class = "span5", rows = "10" })
                     </div>
                 </div>
             </div>
@@ -72,17 +50,7 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.Response)
                     <div class="controls">
-                        @if(ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.Response)
-                        }
-                        else
-                        {
-                            @Html.TextAreaFor(m => m.Response, new { @class = "span5", rows = "10" })
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.Response)
-                            </div>
-                        }
+                        @Html.ControlAreaFor((bool)ViewBag.ReadOnly, m => m.Response, new { @class = "span5", rows = "10" })
                     </div>
                 </div>
             </div>
@@ -93,34 +61,14 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.SpecialNotes)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.SpecialNotes)
-                        }
-                        else
-                        {
-                            @Html.TextAreaFor(m => m.SpecialNotes, new { @class = "span5", rows = "5" })
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.SpecialNotes)
-                            </div>
-                        }
+                        @Html.ControlAreaFor((bool)ViewBag.ReadOnly, m => m.SpecialNotes, new { @class = "span5", rows = "5" })
                     </div>
                 </div>
 
                 <div class="control-group">
                     @Html.LabelFor(m => m.TimeTaken)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.TimeTaken)
-                        }
-                        else
-                        {
-                            @Html.EditorFor(m => m.TimeTaken)
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.TimeTaken)
-                            </div>
-                        }
+                        @Html.ControlFor((bool)ViewBag.ReadOnly, m => m.TimeTaken)
                     </div>
                 </div>
             </div>
@@ -128,48 +76,23 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.Severity)
                     <div class="controls">
-                        @if(ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.Severity)
-                        }
-                        else
-                        {
-                            @Html.DropDownListFor(m => m.Severity, (IEnumerable<SelectListItem>)ViewData["SeverityList"])
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.Severity)
-                            </div>
-                        }
+                        @Html.ControlDropDownFor((bool)ViewBag.ReadOnly, m => m.Severity, m => m.Severity,
+                                                 (IEnumerable<SelectListItem>)ViewData["SeverityList"])
                     </div>
                 </div>
 
                 <div class="control-group">
                     @Html.LabelFor(m => m.Probability)
                     <div class="controls">
-                        @if(ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.Probability)
-                        }
-                        else
-                        {
-                            @Html.DropDownListFor(m => m.Probability, (IEnumerable<SelectListItem>)ViewData["ProbabilityList"])
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.Probability)
-                            </div>
-                        }
+                        @Html.ControlDropDownFor((bool)ViewBag.ReadOnly, m => m.Probability, m => m.Probability,
+                                                 (IEnumerable<SelectListItem>)ViewData["ProbabilityList"])
                     </div>
                 </div>
 
                 <div class="control-group">
                     @Html.LabelFor(m => m.Impact)
                     <div class="controls">
-                        @if(ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.Impact)
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(m => m.Impact, new { disabled = "disabled", @readonly = "readonly" })
-                        }
+                        @Html.ControlFor((bool)ViewBag.ReadOnly, m => m.Impact, new { disabled = "disabled", @readonly = "readonly" })
                     </div>
                 </div>
             </div>
@@ -179,7 +102,7 @@
             <div class="span6">
                 <div class="control-group">
                     <b>Keywords</b>
-                    <ul class="keywordValues" style="list-style-type: none">
+                    <ul class="keywordList" style="list-style-type: none">
                         @if (Model == null || Model.Keywords == null || Model.Keywords.Count == 0)
                         {
                             @Html.Partial("KeywordEntry", new DREAM.Models.KeywordViewModel())
@@ -201,7 +124,7 @@
 
             <div class="span6">
                 <b>References</b>
-                <ul class="referenceValues" style="list-style-type: none">
+                <ul class="referenceList" style="list-style-type: none">
                     @if (Model == null || Model.References == null || Model.References.Count == 0)
                     {
                         @Html.Partial("ReferenceEntry", new DREAM.Models.ReferenceViewModel())

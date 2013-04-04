@@ -76,8 +76,8 @@ namespace DREAM.Models
 
         public int PatientID { get; set; }
 
-        [Display(Name = "Agency ID")]
         [Digits]
+        [Display(Name = "Agency ID")]
         public string PatientAgencyID { get; set; }
 
         [Display(Name = "First Name")]
@@ -89,6 +89,7 @@ namespace DREAM.Models
         [Display(Name = "Gender")]
         public string PatientGender { get; set; }
 
+        [Range(0, 200)]
         [Display(Name = "Age")]
         public int PatientAge { get; set; }
 

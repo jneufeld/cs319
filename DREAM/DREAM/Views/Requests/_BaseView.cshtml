@@ -37,14 +37,8 @@
                 <div class="control-group">
                     @Html.LabelFor(model => model.RequesterTypeStringID)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.RequesterTypeStringID)
-                        }
-                        else
-                        {
-                            @Html.DropDownListFor(m => m.RequesterTypeStringID, (IEnumerable<SelectListItem>)ViewData["RequesterTypeList"], new { id = "req-type" })
-                        }
+                        @Html.ControlDropDownFor((bool)ViewBag.ReadOnly, m => m.RequesterTypeString, m => m.RequesterTypeStringID,
+                                                 (IEnumerable<SelectListItem>)ViewData["RequesterTypeList"], new { id = "req-type" })
                     </div>
                 </div>
 
@@ -122,17 +116,7 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.CallerFirstName)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.CallerFirstName)
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(m => m.CallerFirstName, new { id = "caller-first" })
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.CallerFirstName)
-                            </div>
-                        }
+                        @Html.ControlFor((bool)ViewBag.ReadOnly, m => m.CallerFirstName, new { id = "caller-first" })
                     </div>
                 </div>
 
@@ -141,17 +125,7 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.CallerLastName)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.CallerLastName)
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(m => m.CallerLastName, new { id = "caller-last" })
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.CallerLastName)
-                            </div>
-                        }
+                        @Html.ControlFor((bool)ViewBag.ReadOnly, m => m.CallerLastName, new { id = "caller-last" })
                     </div>
                 </div>
 
@@ -160,17 +134,7 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.CallerEmail)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.CallerEmail)
-                        }
-                        else
-                        {
-                            @Html.EditorFor(m => m.CallerEmail)
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.CallerEmail)
-                            </div>
-                        }
+                        @Html.ControlFor((bool)ViewBag.ReadOnly, m => m.CallerEmail)
                     </div>
                 </div>
 
@@ -179,17 +143,7 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.CallerPhoneNumber)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.CallerPhoneNumber)
-                        }
-                        else
-                        {
-                            @Html.EditorFor(m => m.CallerPhoneNumber)
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.CallerPhoneNumber)
-                            </div>
-                        }
+                        @Html.ControlFor((bool)ViewBag.ReadOnly, m => m.CallerPhoneNumber)
                     </div>
                 </div>
 
@@ -198,17 +152,8 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.CallerRegionStringID)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.CallerRegionStringID)
-                        }
-                        else
-                        {
-                            @Html.DropDownListFor(m => m.CallerRegionStringID, (IEnumerable<SelectListItem>)ViewData["RegionList"])
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.CallerRegionStringID)
-                            </div>
-                        }
+                        @Html.ControlDropDownFor((bool)ViewBag.ReadOnly, m => m.CallerRegionString, m => m.CallerRegionStringID,
+                                                 (IEnumerable<SelectListItem>)ViewData["RegionList"])
                     </div>
                 </div>
             </div>
@@ -223,17 +168,7 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.PatientFirstName)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.PatientFirstName)
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(m => m.PatientFirstName, new { id = "patient-first" })
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.PatientFirstName)
-                            </div>
-                        }
+                        @Html.ControlFor((bool)ViewBag.ReadOnly, m => m.PatientFirstName, new { id = "patient-first" })
                     </div>
                 </div>
 
@@ -242,17 +177,7 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.PatientLastName)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.PatientLastName)
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(m => m.PatientLastName, new { id = "patient-last" })
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.PatientLastName)
-                            </div>
-                        }
+                        @Html.ControlFor((bool)ViewBag.ReadOnly, m => m.PatientLastName, new { id = "patient-last" })
                     </div>
                 </div>
 
@@ -261,17 +186,7 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.PatientAgencyID)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.PatientAgencyID)
-                        }
-                        else
-                        {
-                            @Html.EditorFor(m => m.PatientAgencyID)
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.PatientAgencyID)
-                            </div>
-                        }
+                        @Html.ControlFor((bool)ViewBag.ReadOnly, m => m.PatientAgencyID)
                     </div>
                 </div>
 
@@ -280,17 +195,8 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.PatientGender)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.PatientGender)
-                        }
-                        else
-                        {
-                            @Html.DropDownListFor(m => m.PatientGender, (IEnumerable<SelectListItem>)ViewData["GenderList"])
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.PatientGender)
-                            </div>
-                        }
+                        @Html.ControlDropDownFor((bool)ViewBag.ReadOnly, m => m.PatientGender, m => m.PatientGender,
+                                                 (IEnumerable<SelectListItem>)ViewData["GenderList"])
                     </div>
                 </div>
 
@@ -299,17 +205,7 @@
                 <div class="control-group">
                     @Html.LabelFor(m => m.PatientAge)
                     <div class="controls">
-                        @if (ViewBag.ReadOnly)
-                        {
-                            @Html.DisplayFor(m => m.PatientAge)
-                        }
-                        else
-                        {
-                            @Html.EditorFor(m => m.PatientAge)
-                            <div class="span5">
-                                @Html.ValidationMessageFor(m => m.PatientAge)
-                            </div>
-                        }
+                        @Html.ControlFor((bool)ViewBag.ReadOnly, m => m.PatientAge)
                     </div>
                 </div>
             </div>

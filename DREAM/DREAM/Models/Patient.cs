@@ -10,9 +10,9 @@ namespace DREAM.Models
 {
     public enum Gender
     {
-        UNKNOWN = 0,
-        MALE,
-        FEMALE,
+        Unknown = 0,
+        Male,
+        Female,
     }
 
     public class Patient

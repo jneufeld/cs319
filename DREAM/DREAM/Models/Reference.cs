@@ -10,10 +10,10 @@ namespace DREAM.Models
 {
     public enum ReferenceType
     {
-        TEXT,
+        Text,
         URL,
-        FILE,
-        REQUEST,
+        File,
+        Request,
     }
 
     public class Reference

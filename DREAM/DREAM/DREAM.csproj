@@ -225,6 +225,7 @@
     </Compile>
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
     <Compile Include="Helpers\CollectionEditingHtmlExtensions.cs" />
+    <Compile Include="Helpers\ConditionalEditorTemplates.cs" />
     <Compile Include="Helpers\TimeRangeStepper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AutoMapperConfiguration.cs" />

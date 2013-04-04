@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using DataAnnotationsExtensions;
 
 namespace DREAM.Models
 {
@@ -32,6 +33,8 @@ namespace DREAM.Models
         [Display(Name = "Question")]
         public string QuestionText { get; set; }
 
+        [Min(1)]
+        [Required]
         [Display(Name = "Time Taken")]
         public int TimeTaken { get; set; }
 
@@ -61,6 +64,9 @@ namespace DREAM.Models
             set { QuestionTypeStringID = value.ToString(); }
         }
 
+        [Display(Name = "Question Type")]
+        public string QuestionTypeString { get; set; }
+
         [Display(Name = "Tumour Group")]
         public string TumourGroupStringID { get; set; }
         public int TumourGroupID
@@ -71,6 +77,9 @@ namespace DREAM.Models
             }
             set { TumourGroupStringID = value.ToString(); }
         }
+
+        [Display(Name = "Tumour Group")]
+        public string TumourGroupString { get; set; }
 
         public IList<KeywordViewModel> Keywords { get; set; }
 
@@ -90,7 +99,9 @@ namespace DREAM.Models
                 Severity = ((Severity)q.Severity).ToString(),
                 SpecialNotes = q.SpecialNotes,
                 QuestionTypeID = q.QuestionType != null ? q.QuestionType.ID : 0,
+                QuestionTypeString = q.QuestionType != null ? q.QuestionType.FullName : "",
                 TumourGroupID = q.TumourGroup != null ? q.TumourGroup.ID : 0,
+                TumourGroupString = q.TumourGroup != null ? q.TumourGroup.FullName : "",
                 Keywords = new List<KeywordViewModel>(q.Keywords.Select(k => KeywordViewModel.CreateFromKeyword(k))),
                 References = new List<ReferenceViewModel>(q.References.Select(r => ReferenceViewModel.CreateFromReference(r))),
             };
@@ -117,6 +128,13 @@ namespace DREAM.Models
 
     public class KeywordViewModel
     {
+        public KeywordViewModel()
+        {
+            Delete = false;
+        }
+
+        [Required]
+        [Display(Name = "Keyword")]
         public string Keyword { get; set; }
 
         public bool Delete { get; set; }
@@ -133,13 +151,20 @@ namespace DREAM.Models
 
     public class ReferenceViewModel
     {
+        public ReferenceViewModel()
+        {
+            Delete = false;
+        }
+
         public int ReferenceID { get; set; }
 
         public bool Delete { get; set; }
 
-        [Display(Name = "Text")]
+        [Required]
+        [Display(Name = "Reference")]
         public string Text { get; set; }
 
+        [Required]
         [Display(Name = "Reference Type")]
         public string ReferenceType { get; set; }
 
