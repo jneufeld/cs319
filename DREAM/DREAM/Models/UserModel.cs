@@ -10,12 +10,15 @@ namespace DREAM.Models
     public class UserModel
     {
         [Required]
+        [Display(Name="User Name")]
         public string UserName { get; set; }
 
         [Required]
+        [Display(Name="First Name")]
         public string FirstName { get; set; }
 
         [Required]
+        [Display(Name="Last Name")]
         public string LastName { get; set; }
 
         [Required]

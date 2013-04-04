@@ -6,47 +6,54 @@
 
 @using DREAM.Helpers
 
-<hgroup class="title">
+<div class="row">
     <h1>@ViewBag.Title</h1>
-</hgroup>
+</div>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
-    <fieldset>
-        <legend>Report</legend>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => Model.Name)
+    <div class="row">
+        <div class="control-group">
+            @Html.LabelFor(model => Model.Name, new { @class = "control-label" })
+          
+            <div class="controls">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
         </div>
-      
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Name)
-            @Html.ValidationMessageFor(model => model.Name)
-        </div>
+    </div>
 
-        <h2>Charts</h2>
-        <a href="javascript:void(0);" onclick="viewModel.addNewChart();">Add another</a>
-        <ul id="charts" style="list-style-type: none">
-            @if(Model == null || Model.Charts == null || Model.Charts.Count == 0)
-            {
-                @Html.Partial("ChartModel", null)
-            }
-            else
-            {
-                foreach(DREAM.Models.ChartModel chart in Model.Charts)
+    <div class="row">
+        <h4>
+            Charts
+            <a href="javascript:void(0);" onclick="viewModel.addNewChart();"><i class="icon-plus-sign"></i></a>
+        </h4>
+    </div>
+
+    <div class="offset1">
+        <div class="row">
+            <ul id="charts" style="list-style-type: none">
+                @if(Model == null || Model.Charts == null || Model.Charts.Count == 0)
                 {
-                    @Html.Partial("ChartModel", chart)
+                    @Html.Partial("ChartModel", null)
                 }
-            }
-        </ul>
+                else
+                {
+                    foreach(DREAM.Models.ChartModel chart in Model.Charts)
+                    {
+                        @Html.Partial("ChartModel", chart)
+                    }
+                }
+            </ul>
+        </div>
+    </div>
 
-        <p>
-            <input type="submit" value="Generate" />
-        </p>
-    </fieldset>
+    <div class="row form-actions">
+        <input class="btn" type="submit" value="Generate" />
+    </div>
 }
 
 @section Scripts {
@@ -62,24 +69,6 @@
     </script>
 
     <script type="text/javascript">
-        var viewModel = {
-            addNewChart: function () {
-                $("#charts").append($("#chartTemplate").tmpl({ Charts_index: viewModel._generateGuid(), Values_index: viewModel._generateGuid() }));
-            },
-
-            addNewValue: function ($valuesList, prefix) {
-                $valuesList.append($("#valueTemplate").tmpl({ prefix: prefix, Values_index: viewModel._generateGuid() }));
-            },
-
-            _generateGuid: function () {
-                // Source: http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/105074#105074
-                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                    return v.toString(16);
-                });
-            }
-        };
-
         var requestPropertyOptions = @Html.Raw(ViewData["RequestPropertyOptions"]);
         var requestStratificationOptions = @Html.Raw(ViewData["RequestStratificationOptions"]);
         var requestStatFunctionMap = @Html.Raw(ViewData["RequestStatFunctionMap"]);
@@ -87,85 +76,7 @@
         var questionPropertyOptions = @Html.Raw(ViewData["QuestionPropertyOptions"]);
         var questionStratificationOptions = @Html.Raw(ViewData["QuestionStratificationOptions"]);
         var questionStatFunctionMap = @Html.Raw(ViewData["QuestionStatFunctionMap"]);
-
-        $.datepicker.setDefaults({
-            dateFormat: "M dd yy"
-        });
-
-        $("body").on("click", ".addNewValue", function () {
-            var $valueList = $(this).siblings(".chartValues");
-            var chartIndex = $(this).siblings("input[type='hidden']").val();
-            var prefix = "Charts[" + chartIndex + "].";
-            viewModel.addNewValue($valueList, prefix);
-            return false;
-        });
-        $("body").on("focus", "input[type='datetime']", function () {
-            if (!$(this).hasClass("hasDatepicker")) {
-                $(this).datepicker();
-                $(this).datepicker("show");
-            }
-        });
-
-        $("body").on("change", ".objectTypeSelector", function () {
-            var $propertyDropDowns = $(this).parent().siblings(".chartValues").children().children(".propertySelector");
-            var $stratificationDropDown = $(this).siblings(".stratificationSelector");
-            $propertyDropDowns.empty();
-            $stratificationDropDown.empty();
-
-            switch($(this).val()) {
-                case "Request":
-                    $.each(requestPropertyOptions, function(i, option) {
-                        $propertyDropDowns.append($("<option></option>").attr("value", option.Value).text(option.Text));
-                    });
-                    $.each(requestStratificationOptions, function(i, option) {
-                        $stratificationDropDown.append($("<option></option>").attr("value", option.Value).text(option.Text));
-                    });
-                    break;
-                case "Question":
-                    $.each(questionPropertyOptions, function(i, option) {
-                        $propertyDropDowns.append($("<option></option>").attr("value", option.Value).text(option.Text));
-                    });
-                    $.each(questionStratificationOptions, function(i, option) {
-                        $stratificationDropDown.append($("<option></option>").attr("value", option.Value).text(option.Text));
-                    });
-                    break;
-            }
-        });
-
-        $("body").on("change", ".propertySelector", function() {
-            var $objectTypeSelector = $(this).parents(".chartValues").siblings("span").children(".objectTypeSelector");
-            var $statFunctionSelector = $(this).siblings(".statFunctionSelector");
-            var statFunction = $statFunctionSelector.val();
-            var $newOption;
-
-            $statFunctionSelector.empty();
-
-            switch($objectTypeSelector.val()) {
-                case "Request":
-                    $.each(requestStatFunctionMap[$(this).val()], function(i, option) {
-                        $newOption = $("<option></option>").attr("value", option.Value).text(option.Text)
-                        if(option.Value == statFunction)
-                            $newOption.attr("selected", "selected");
-                        $statFunctionSelector.append($newOption);
-                    });
-                    break;
-                case "Question":
-                    $.each(questionStatFunctionMap[$(this).val()], function(i, option) {
-                        $newOption = $("<option></option>").attr("value", option.Value).text(option.Text)
-                        if(option.Value == statFunction)
-                            $newOption.attr("selected", "selected");
-                        $statFunctionSelector.append($newOption);
-                    });
-                    break;
-            }
-        });
-
-        $("body").on("change", ".statFunctionSelector", function() {
-            var $propertySelector = $(this).siblings(".propertySelector");
-            var $valNameSelector = $(this).siblings("input[type='text']");
-            if($propertySelector.val() && $(this).val() && $valNameSelector.val() == "") {
-                $valNameSelector.val($(this).val() + " " + $propertySelector.val());
-            }
-        });
     </script>
+
+    @Scripts.Render("~/Scripts/reports.js")
 }

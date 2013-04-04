@@ -13,6 +13,7 @@ namespace DREAM.Models
         public string Name { get; set; }
 
         [Required]
+        [Display(Name="Property")]
         public string PropertyName { get; set; }
 
         [Required]

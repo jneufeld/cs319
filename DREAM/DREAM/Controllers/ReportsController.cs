@@ -53,7 +53,6 @@ namespace DREAM.Controllers
                                                     .Include(r => r.Questions.Select(q => q.QuestionType))
                                                     .Include(r => r.Questions.Select(q => q.TumourGroup))
                                                     .OrderBy(r => r.CreationTime));
-                    //OrderBy(request => request.CreationTime).AsEnumerable());
                     dumpRawData(package, db.Questions.Include(q => q.Request)
                                                      .Include(q => q.QuestionType)
                                                      .Include(q => q.TumourGroup)

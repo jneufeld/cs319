@@ -12,6 +12,7 @@ namespace DREAM.Models
         public string Password { get; set; }
 
         [Required]
+        [Display(Name="Password Confirmation")]
         public string ConfirmPassword { get; set; }
 
         public RegisterUserModel()

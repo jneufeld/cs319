@@ -206,6 +206,7 @@
     <Compile Include="Attributes\ChartableAttribute.cs" />
     <Compile Include="Attributes\ReportableAttribute.cs" />
     <Compile Include="Attributes\StratifiableAttribute.cs" />
+    <Content Include="Scripts\reports.js" />
     <Content Include="Scripts\requests.js" />
     <Content Include="Content\DREAM.css" />
     <Compile Include="Controllers\AutocompleteController.cs" />

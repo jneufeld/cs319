@@ -12,15 +12,18 @@ namespace DREAM.Models
     {
         [Required]
         [RegularExpression("(Request|Question)")]
+        [Display(Name="Report Type")]
         public string ObjectTypeName { get; set; }
 
         [Required]
         public string Name { get; set; }
 
         [Required]
+        [Display(Name="Time Range")]
         public TimeRange TimeRange { get; set; }
 
         [Required]
+        [Display(Name="Start Date")]
         public DateTime StartDate { get; set; }
 
         [Required]
@@ -30,11 +33,20 @@ namespace DREAM.Models
         public TimeRange Granularity { get; set; }
 
         [Required]
+        [Display(Name="Chart Type")]
         public eChartType ChartType { get; set; }
 
         public string Stratification { get; set; }
 
         public IList<ChartValueModel> Values { get; set; }
+
+        public ChartModel()
+        {
+            TimeRange = TimeRange.YEAR;
+            Granularity = TimeRange.MONTH;
+            Comparison = TimeRange.NONE;
+            ChartType = eChartType.Line;
+        }
 
         public MemberInfo GetStratificationMemberFor(Type type)
         {

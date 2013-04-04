@@ -4,19 +4,27 @@
 <li>
     @using (Html.BeginCollectionItem("Values"))
     {
-        @Html.LabelFor(model => model.Name)
-        @Html.EditorFor(model => model.Name)
-        @Html.ValidationMessageFor(model => model.Name)
+        <div class="row">
+            <div class="span3">
+                @Html.LabelFor(model => model.Name)
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
 
-        @Html.LabelFor(model => model.PropertyName)
-        @Html.DropDownListFor(model => model.PropertyName, (IEnumerable<SelectListItem>)(
-            new List<SelectListItem>()
-            ), new Dictionary<string, object>{ {"class","propertySelector"} })
-        @Html.ValidationMessageFor(model => model.PropertyName)
+            <div class="span3">
+                @Html.LabelFor(model => model.PropertyName)
+                @Html.DropDownListFor(model => model.PropertyName, (IEnumerable<SelectListItem>)(
+                    new List<SelectListItem>()
+                    ), new Dictionary<string, object>{ {"class","propertySelector"} })
+                @Html.ValidationMessageFor(model => model.PropertyName)
+            </div>
 
-        @Html.LabelFor(model => model.Function)
-        @Html.DropDownListFor(model => model.Function, (IEnumerable<SelectListItem>)ViewData["StatFunctionList"],
-            new Dictionary<string, object>{ {"class", "statFunctionSelector"} })
-        @Html.ValidationMessageFor(model => model.Function)
+            <div class="span3">
+                @Html.LabelFor(model => model.Function)
+                @Html.DropDownListFor(model => model.Function, (IEnumerable<SelectListItem>)ViewData["StatFunctionList"],
+                    new Dictionary<string, object>{ {"class", "statFunctionSelector"} })
+                @Html.ValidationMessageFor(model => model.Function)
+            </div>
+        </div>
     }
 </li>
