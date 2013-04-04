@@ -42,10 +42,10 @@
                 @Html.ValidationMessageFor(model => model.Granularity)
             </div>
 
-            <div class="span2">
+            <div class="span3">
                 @Html.LabelFor(model => model.ChartType)
 
-                @Html.DropDownListFor(model => model.ChartType, (IEnumerable<SelectListItem>)ViewData["ChartTypeList"], new { @class = "span2" })
+                @Html.DropDownListFor(model => model.ChartType, (IEnumerable<SelectListItem>)ViewData["ChartTypeList"], new { @class = "span3" })
                 @Html.ValidationMessageFor(model => model.ChartType)
             </div>
 
@@ -59,11 +59,21 @@
             <div class="span3">
                 @Html.LabelFor(model => model.Stratification)
 
-                @Html.DropDownListFor(model => model.Stratification, (IEnumerable<SelectListItem>)(
-                    Model != null && Model.ObjectTypeName == "Request" ? ViewData["RequestStratificationList"] :
-                    Model != null && Model.ObjectTypeName == "Question" ? ViewData["QuestionStratificationList"] :
-                    new List<SelectListItem>()
-                    ), new { @class = "stratificationSelector span3" })
+                @if (Model != null && Model.ObjectTypeName == "Request")
+                {
+                    @Html.DropDownListFor(model => model.Stratification, (IEnumerable<SelectListItem>) ViewData["RequestStratificationList"],
+                        new { @class = "stratificationSelector span3" })
+                }
+                else if (Model != null && Model.ObjectTypeName == "Question")
+                {
+                    @Html.DropDownListFor(model => model.Stratification, (IEnumerable<SelectListItem>) ViewData["QuestionStratificationList"],
+                        new { @class = "stratificationSelector span3" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Stratification, (IEnumerable<SelectListItem>)new List<SelectListItem>(),
+                        new { @class = "stratificationSelector span3", disabled = "" })
+                }
                 @Html.ValidationMessageFor(model => model.Stratification)
             </div>
         </div>

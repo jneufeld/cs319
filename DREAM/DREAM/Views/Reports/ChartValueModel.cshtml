@@ -14,17 +14,36 @@
 
             <div class="span3">
                 @Html.LabelFor(model => model.PropertyName)
-                @Html.DropDownListFor(model => model.PropertyName, (IEnumerable<SelectListItem>)(
-                        ViewData["chart"] != null && ((ChartModel)ViewData["chart"]).ObjectType == typeof(Request) ? ViewData["RequestPropertiesList"]:
-                        ViewData["chart"] != null && ((ChartModel)ViewData["chart"]).ObjectType == typeof(Question) ? ViewData["QuestionPropertiesList"]:
-                        new List<SelectListItem>()
-                    ), new { @class = "propertySelector span3" })
+                @if (ViewData["chart"] != null && ((ChartModel)ViewData["chart"]).ObjectType == typeof(Request))
+                {
+                    @Html.DropDownListFor(model => model.PropertyName, (IEnumerable<SelectListItem>) ViewData["RequestPropertiesList"],
+                        new { @class = "propertySelector span3" })
+                }
+                else if (ViewData["chart"] != null && ((ChartModel)ViewData["chart"]).ObjectType == typeof(Question))
+                {
+                    @Html.DropDownListFor(model => model.PropertyName, (IEnumerable<SelectListItem>) ViewData["QuestionPropertiesList"],
+                        new { @class = "propertySelector span3" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.PropertyName, (IEnumerable<SelectListItem>) new List<SelectListItem>(),
+                        new { @class = "propertySelector span3", disabled = "" })
+                }
                 @Html.ValidationMessageFor(model => model.PropertyName)
             </div>
 
             <div class="span3">
                 @Html.LabelFor(model => model.Function)
-                @Html.DropDownListFor(model => model.Function, (IEnumerable<SelectListItem>)ViewData["StatFunctionList"], new { @class = "statFunctionSelector span3"})
+                @if(Model != null && Model.PropertyName != null)
+                {
+                    @Html.DropDownListFor(model => model.Function, (IEnumerable<SelectListItem>)ViewData["StatFunctionList"],
+                        new { @class = "statFunctionSelector span3"})
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Function, (IEnumerable<SelectListItem>)new List<SelectListItem>(),
+                        new { @class = "statFunctionSelector span3", disabled = ""})
+                }
                 @Html.ValidationMessageFor(model => model.Function)
             </div>
         </div>

@@ -1,10 +1,12 @@
 ﻿var viewModel = {
     addNewChart: function () {
-        return $("#charts").append($("#chartTemplate").tmpl({ Charts_index: viewModel._generateGuid(), Values_index: viewModel._generateGuid() }));
+        $("#charts").append($("#chartTemplate").tmpl({ Charts_index: viewModel._generateGuid(), Values_index: viewModel._generateGuid() }));
     },
 
     addNewValue: function ($valuesList, prefix) {
-        return $valuesList.append($("#valueTemplate").tmpl({ prefix: prefix, Values_index: viewModel._generateGuid() }));
+        var $newValueItem = $("#valueTemplate").tmpl({ prefix: prefix, Values_index: viewModel._generateGuid() });
+        $valuesList.append($newValueItem);
+        return $newValueItem;
     },
 
     _generateGuid: function () {
@@ -28,7 +30,7 @@ $("body").on("click", ".addNewValue", function () {
 
     var $newValueItem = viewModel.addNewValue($valueList, prefix);
     var $propertyDropDown = $(".propertySelector", $newValueItem);
-    var objectType = $(".objectTypeSelector", $newValueItem.parentsUntil("ul", "li")).val();
+    var objectType = $(".objectTypeSelector", $newValueItem.parentsUntil("#charts", "li")).val();
 
     setPropertyDropDownOptions($propertyDropDown, objectType);
 
@@ -53,7 +55,12 @@ $("body").on("change", ".objectTypeSelector", function () {
 });
 
 function setPropertyDropDownOptions($propertyDropDowns, objectType) {
-    $propertyDropDowns.empty();
+    var $listItem = $propertyDropDowns.closest("li");
+    var $statFunctionDropDown = $(".statFunctionSelector", $listItem);
+
+    $propertyDropDowns.empty().attr("disabled", null);
+    $statFunctionDropDown.empty().attr("disabled", "");
+
     switch(objectType) {
         case "Request":
             $.each(requestPropertyOptions, function (i, option) {
@@ -69,7 +76,7 @@ function setPropertyDropDownOptions($propertyDropDowns, objectType) {
 }
 
 function setStratificationDropDown($stratificationDropDown, objectType) {
-    $stratificationDropDown.empty();
+    $stratificationDropDown.empty().attr("disabled", null);
     switch(objectType) {
         case "Request":
             $.each(requestStratificationOptions, function(i, option) {
@@ -84,17 +91,19 @@ function setStratificationDropDown($stratificationDropDown, objectType) {
     }
 }
 
-$("body").on("change", ".propertySelector", function() {
-    var $objectTypeSelector = $(this).parents(".chartValues").siblings("span").children(".objectTypeSelector");
-    var $statFunctionSelector = $(this).siblings(".statFunctionSelector");
+$("body").on("change", ".propertySelector", function () {
+    var $chartItem = $(this).parentsUntil("#charts", "li");
+    var $objectTypeSelector = $(".objectTypeSelector", $chartItem);
+    var $valueItem = $(this).closest("li");
+    var $statFunctionSelector = $(".statFunctionSelector", $valueItem);
     var statFunction = $statFunctionSelector.val();
     var $newOption;
 
-    $statFunctionSelector.empty();
+    $statFunctionSelector.empty().attr("disabled", null);
 
     switch($objectTypeSelector.val()) {
         case "Request":
-            $.each(requestStatFunctionMap[$(this).val()], function(i, option) {
+            $.each(requestStatFunctionMap[$(this).val()], function (i, option) {
                 $newOption = $("<option></option>").attr("value", option.Value).text(option.Text)
                 if(option.Value == statFunction)
                     $newOption.attr("selected", "selected");
@@ -113,8 +122,9 @@ $("body").on("change", ".propertySelector", function() {
 });
 
 $("body").on("change", ".statFunctionSelector", function() {
-    var $propertySelector = $(this).siblings(".propertySelector");
-    var $valNameSelector = $(this).siblings("input[type='text']");
+    var $valueItem = $(this).closest("li");
+    var $propertySelector = $(".propertySelector", $valueItem);
+    var $valNameSelector = $("input[type='text']", $valueItem);
     if($propertySelector.val() && $(this).val() && $valNameSelector.val() == "") {
         $valNameSelector.val($(this).val() + " " + $propertySelector.val());
     }

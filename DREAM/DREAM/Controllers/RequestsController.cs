@@ -433,10 +433,12 @@ namespace DREAM.Controllers
         public ActionResult Export(int reqId)
         {
             Request request = FindRequest(reqId);
+            /*
             if (isLocked(request))
             {
                 return View();
             }
+            */
 
             MemoryStream ms = ExportDoc(Server.MapPath(@"~/") + "/Templates/Export_Report.docx", request);
             return File(ms.ToArray(), "application/ms-word", "Request" + reqId + ".docx");
