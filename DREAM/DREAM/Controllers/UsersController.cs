@@ -205,7 +205,7 @@ namespace DREAM.Controllers
                         rVDictionary.Add("email", passwordResetRequestModel.Email);
                         rVDictionary.Add("success", true);
                         rVDictionary.Add("statusMessage", "Password Reset Successfully");
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Home", rVDictionary);
                     }
                     catch
                     {
