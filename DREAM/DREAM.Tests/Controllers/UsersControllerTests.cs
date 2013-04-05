@@ -138,6 +138,10 @@ namespace DREAM.Tests.Controllers
                 Assert.AreEqual(1, 1);
             }    
         }
+
+        /// <summary>
+        /// Tests ResetPassword successfully resets a password given an email that exists in the system
+        /// </summary>
         [TestMethod]
         public void TestResetPassword()
         {
@@ -145,6 +149,18 @@ namespace DREAM.Tests.Controllers
             prrModel.Email = "user1@example.com";
             RedirectToRouteResult result = (RedirectToRouteResult)usersController.ResetPassword(prrModel);
             Assert.IsTrue(result.RouteValues.ContainsValue("Password Reset Successfully"));
+        }
+
+        /// <summary>
+        /// Tests ResetPassword fails to reset a password given an email that does not exist in the system
+        /// </summary>
+        [TestMethod]
+        public void TestResetPasswordFail()
+        {
+            PasswordResetRequestModel prrModel = new PasswordResetRequestModel();
+            prrModel.Email = "user1bademail@example.com";
+            RedirectToRouteResult result = (RedirectToRouteResult)usersController.ResetPassword(prrModel);
+            Assert.IsTrue(result.RouteValues.ContainsValue("There is no registered user in DREAM with that email."));
         }
     }
 }
