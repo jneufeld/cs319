@@ -143,20 +143,30 @@ namespace DREAM.Controllers
         public ActionResult Search(SearchViewModel search)
         {
             ISet<Request> requests = new HashSet<Request>();
-            // Split based on whitespace
-            string[] keywords = search.Query.Split(null);
-            /*IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Contains(k.KeywordText))
-                .Include(k => k.AssociatedQuestions.Select(c => c.Request)).ToList();*/
-            IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Any(keyword => k.KeywordText.Contains(keyword)))
-                .Include(k => k.AssociatedQuestions.Select(c => c.Request)).ToList();
-            foreach (var k in matched)
+            
+            if (search.Query != null)
             {
-                List<int> ints = k.AssociatedQuestions.Select(q => q.Request.ID).ToList();
-                requests.UnionWith(ints.Select(id => FindRequest(id)));
+                string[] keywords = search.Query.Split(null);
+
+                /*IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Contains(k.KeywordText))
+                    .Include(k => k.AssociatedQuestions.Select(c => c.Request)).ToList();*/
+
+                IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Any(keyword => k.KeywordText.Contains(keyword)))
+                    .Include(k => k.AssociatedQuestions.Select(c => c.Request)).ToList();
+                foreach (var k in matched)
+                {
+                    List<int> ints = k.AssociatedQuestions.Select(q => q.Request.ID).ToList();
+                    requests.UnionWith(ints.Select(id => FindRequest(id)));
+                }
+                //IEnumerable<Request> requests = db.Requests.Where(request => request.Patient.FirstName.Equals(search.Query));
+                search.Results = new List<RequestViewModel>(requests.Select(r => RequestViewModel.CreateFromRequest(r)));
+                search.Executed = true;
             }
-            //IEnumerable<Request> requests = db.Requests.Where(request => request.Patient.FirstName.Equals(search.Query));
-            search.Results = new List<RequestViewModel>(requests.Select(r => RequestViewModel.CreateFromRequest(r)));
-            search.Executed = true;
+            else
+            {
+                search.Results = null;
+                search.Executed = false;
+            }
             return View(search);
         }
 
@@ -167,7 +177,7 @@ namespace DREAM.Controllers
         // ^ Don't do that, terrible, terrible, terrible things will happen.
         [HttpGet]
         [Authorize(Roles = Role.DI_SPECIALIST + ", " + Role.VIEWER)]
-        public ActionResult ViewRequest(int id = 0, string errorMsg = "")
+        public ActionResult ViewRequest(int id = 0, string errorMsg = "", string successMsg = "")
         {
             Request request = FindRequest(id);
 
@@ -175,6 +185,8 @@ namespace DREAM.Controllers
 
             db.Logs.Add(Log.View(request, Membership.GetUser()));
             db.SaveChanges();
+
+            var messages = new List<MsgViewModel>();
 
             if (!String.IsNullOrWhiteSpace(errorMsg))
             {
@@ -184,8 +196,21 @@ namespace DREAM.Controllers
                     Title = "Error",
                     Message = errorMsg,
                 };
-                ViewBag.Messages = new List<MsgViewModel>(new[] { msg });
+                messages.Add(msg);
             }
+
+            if (!String.IsNullOrWhiteSpace(successMsg))
+            {
+                MsgViewModel msg = new MsgViewModel()
+                {
+                    MsgType = MsgType.Success,
+                    Title = "Success",
+                    Message = successMsg,
+                };
+                messages.Add(msg);
+            }
+
+            ViewBag.Messages = messages;
 
             PopulateDropDownLists(request.CompletionTime != null);
 
@@ -289,7 +314,7 @@ namespace DREAM.Controllers
                 db.SaveChanges();
 
                 UnlockRequest(request.ID);
-                return RedirectToAction("Edit", new { id = request.ID });
+                return RedirectToAction("ViewRequest", new { id = request.ID, successMsg = "Request has been saved" });
             }
 
             PopulateDropDownLists(request.CompletionTime != null);
@@ -386,7 +411,7 @@ namespace DREAM.Controllers
             }
             else
             {
-                var errorMsg = "Request lock has been lost";
+                var errorMsg = "Request lock has been lost; request locked by " + FindUsernameFromID(lockingUser);
                 var result = new { Status = "ERR", ErrorMsg = errorMsg };
                 return Json(result);
             }

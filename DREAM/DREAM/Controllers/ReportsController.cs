@@ -42,8 +42,6 @@ namespace DREAM.Controllers
         {
             if (ModelState.IsValid)
             {
-                TestData.Initialize();
-
                 using (ExcelPackage package = new ExcelPackage())
                 {
                     dumpRawData(package, db.Requests.Include(r => r.Caller)
