@@ -175,6 +175,10 @@ namespace DREAM.Controllers
         {
             DbSet dropDowns;
             DropDown m = getDropDownType(dropDownClass);
+            if (m == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             dropDowns = getDropDowns(dropDownClass);
             m = (DropDown)dropDowns.Find(dropDownId);
             addAdminVariables(dropDownClass);
@@ -194,6 +198,10 @@ namespace DREAM.Controllers
             DbSet dropDowns;
             DropDown dropDown = new DropDown();
             dropDowns = getDropDowns(dropDownClass);
+            if (dropDowns == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             dropDown = (DropDown)dropDowns.Find(dropDownId);
             dropDown.Enabled = !dropDown.Enabled;
             db.SaveChanges();

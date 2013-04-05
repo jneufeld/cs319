@@ -297,51 +297,181 @@ namespace DREAM.Tests.Controllers
             ActionResult result = dDAdminController.Edit(m, "Bubba");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-        /*
+
         [TestMethod]
         public void regionEditLogicTest()
         {
-            Region m = new Region();
-            m.Code = "TST";
-            m.FullName = "RegionAddLogicTest";
-            m.Enabled = true;
-            ActionResult result = dDAdminController.Edit(m, "Region");
+            Region last = db.Regions.ToArray().Last();
+            last.Code = "TSTEdit";
+            last.FullName = "RegionAddLogicTestEdit";
+            ActionResult result = dDAdminController.Edit(last, "Region");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            DREAMContext db2 = new DREAMContext();
+            Region justChanged = db2.Regions.Find(last.ID);
+            Assert.IsTrue(justChanged.Code.Equals("TSTEdit") && justChanged.FullName.Equals("RegionAddLogicTestEdit"));
         }
-       
+
         [TestMethod]
         public void requesterTypeEditLogicTest()
         {
-            RequesterType m = new RequesterType();
-            m.Code = "TST";
-            m.FullName = "RequesterTypeAddLogicTest";
-            m.Enabled = true;
-            ActionResult result = dDAdminController.Edit(m, "RequesterType");
+            RequesterType last = db.RequesterTypes.ToArray().Last();
+            last.Code = "TSTEdit";
+            last.FullName = "RequesterTypeAddLogicTestEdit";
+            ActionResult result = dDAdminController.Edit(last, "RequesterType");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            DREAMContext db2 = new DREAMContext();
+            RequesterType justChanged = db2.RequesterTypes.Find(last.ID);
+            Assert.IsTrue(justChanged.Code.Equals("TSTEdit") && justChanged.FullName.Equals("RequesterTypeAddLogicTestEdit"));
         }
 
         [TestMethod]
         public void questionTypeEditLogicTest()
         {
-            QuestionType m = new QuestionType();
-            m.Code = "TST";
-            m.FullName = "QuestionTypeAddLogicTest";
-            m.Enabled = true;
-            ActionResult result = dDAdminController.Edit(m, "QuestionType");
+            QuestionType last = db.QuestionTypes.ToArray().Last();
+            last.Code = "TSTEdit";
+            last.FullName = "QuestionTypeAddLogicTestEdit";
+            ActionResult result = dDAdminController.Edit(last, "QuestionType");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            DREAMContext db2 = new DREAMContext();
+            QuestionType justChanged = db2.QuestionTypes.Find(last.ID);
+            Assert.IsTrue(justChanged.Code.Equals("TSTEdit") && justChanged.FullName.Equals("QuestionTypeAddLogicTestEdit"));
         }
 
         [TestMethod]
         public void tumourGroupEditLogicTest()
         {
-            TumourGroup m = new TumourGroup();
-            m.Code = "TST";
-            m.FullName = "TumourGroupAddLogicTest";
-            m.Enabled = true;
-            ActionResult result = dDAdminController.Edit(m, "TumourGroup");
+            TumourGroup last = db.TumourGroups.ToArray().Last();
+            last.Code = "TSTEdit";
+            last.FullName = "TumourGroupAddLogicTestEdit";
+            ActionResult result = dDAdminController.Edit(last, "TumourGroup");
+            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            DREAMContext db2 = new DREAMContext();
+            TumourGroup justChanged = db2.TumourGroups.Find(last.ID);
+            Assert.IsTrue(justChanged.Code.Equals("TSTEdit") && justChanged.FullName.Equals("TumourGroupAddLogicTestEdit"));
+        }
+
+        [TestMethod]
+        public void nullDeleteTest()
+        {
+            ActionResult result = dDAdminController.Delete(0, true, null);
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-        */
+
+        [TestMethod]
+        public void emptyDeleteTest()
+        {
+            ActionResult result = dDAdminController.Delete(0, true, "");
+            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+        }
+
+        [TestMethod]
+        public void wrongDeleteTest()
+        {
+            ActionResult result = dDAdminController.Delete(0, true, "Bubba");
+            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+        }
+
+        [TestMethod]
+        public void regionDeleteTest()
+        {
+            ViewResult result = (ViewResult)dDAdminController.Delete(1, true, "Region");
+            Assert.IsNotNull(result.Model);
+        }
+
+        [TestMethod]
+        public void requesterTypeDeleteTest()
+        {
+            ViewResult result = (ViewResult)dDAdminController.Delete(1, true, "RequesterType");
+            Assert.IsNotNull(result.Model);
+        }
+
+        [TestMethod]
+        public void questionTypeDeleteTest()
+        {
+            ViewResult result = (ViewResult)dDAdminController.Delete(1, true, "QuestionType");
+            Assert.IsNotNull(result.Model);
+        }
+
+        [TestMethod]
+        public void tumourGroupDeleteTest()
+        {
+            ViewResult result = (ViewResult)dDAdminController.Delete(1, true, "TumourGroup");
+            Assert.IsNotNull(result.Model);
+        }
+
+        [TestMethod]
+        public void nullDeleteLogicTest()
+        {
+            DropDown m = new DropDown();
+            ActionResult result = dDAdminController.Delete(0, null);
+            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+        }
+
+        [TestMethod]
+        public void emptyDeleteLogicTest()
+        {
+            Region m = new Region();
+            m.Code = "";
+            m.FullName = "";
+            ActionResult result = dDAdminController.Delete(0, "");
+            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+        }
+
+        [TestMethod]
+        public void wrongDeleteLogicTest()
+        {
+            DropDown m = new DropDown();
+            ActionResult result = dDAdminController.Delete(0, "Bubba");
+            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+        }
+
+        [TestMethod]
+        public void regionDeleteLogicTest()
+        {
+            Region last = db.Regions.ToArray().Last();
+            bool original = last.Enabled;
+            ActionResult result = dDAdminController.Delete(last.ID, "Region");
+            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            DREAMContext db2 = new DREAMContext();
+            Region lastChanged = db2.Regions.Find(last.ID);
+            Assert.IsTrue(!original == lastChanged.Enabled);
+        }
+
+        [TestMethod]
+        public void requesterTypeDeleteLogicTest()
+        {
+            RequesterType last = db.RequesterTypes.ToArray().Last();
+            bool original = last.Enabled;
+            ActionResult result = dDAdminController.Delete(last.ID, "RequesterType");
+            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            DREAMContext db2 = new DREAMContext();
+            RequesterType lastChanged = db2.RequesterTypes.Find(last.ID);
+            Assert.IsTrue(!original == lastChanged.Enabled);
+        }
+
+        [TestMethod]
+        public void questionTypeDeleteLogicTest()
+        {
+            QuestionType last = db.QuestionTypes.ToArray().Last();
+            bool original = last.Enabled;
+            ActionResult result = dDAdminController.Delete(last.ID, "QuestionType");
+            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            DREAMContext db2 = new DREAMContext();
+            QuestionType lastChanged = db2.QuestionTypes.Find(last.ID);
+            Assert.IsTrue(!original == lastChanged.Enabled);
+        }
+
+        [TestMethod]
+        public void tumourGroupDeleteLogicTest()
+        {
+            TumourGroup last = db.TumourGroups.ToArray().Last();
+            bool original = last.Enabled;
+            ActionResult result = dDAdminController.Delete(last.ID, "TumourGroup");
+            Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            DREAMContext db2 = new DREAMContext();
+            TumourGroup lastChanged = db2.TumourGroups.Find(last.ID);
+            Assert.IsTrue(!original == lastChanged.Enabled);
+        }
 
     }
 }
