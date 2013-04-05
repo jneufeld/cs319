@@ -48,29 +48,28 @@ namespace DREAM.Controllers
         /// <returns> The keyword with the keyword text of value keywordText(parameter) </returns>
         private Keyword findKeywordFromText(String keywordText)
         {
-            DbSet<Keyword> allKeywords = db.Keywords;
             Keyword keywordToReturn = null;
-            bool foundKeyword = false;
-            String keywordTextLowerCase = keywordText;
-            if (keywordText != null ) keywordTextLowerCase = keywordText.ToLower();
 
-            foreach (Keyword k in allKeywords)
+            if (keywordText != null && keywordText.Trim() != null)
             {
-                String curKeywordLowerCase = k.KeywordText;
-                if (k.KeywordText != null) curKeywordLowerCase = k.KeywordText.ToLower();
+                DbSet<Keyword> allKeywords = db.Keywords;
+                bool foundKeyword = false;
+                String keywordTextLowerCase = keywordText.ToLower();
 
-                if (curKeywordLowerCase == null)
+                foreach (Keyword k in allKeywords)
                 {
-                    if (keywordTextLowerCase == null && !foundKeyword)
+                    String curKeywordLowerCase = "";
+
+                    if (k.KeywordText != null && k.KeywordText.Trim() != null && !foundKeyword)
                     {
-                        keywordToReturn = k;
-                        foundKeyword = true;
+                        curKeywordLowerCase = k.KeywordText.ToLower();
+
+                        if (curKeywordLowerCase.Equals(keywordTextLowerCase)) 
+                        {
+                            keywordToReturn = k;
+                            foundKeyword = true;
+                        }
                     }
-                }
-                else if (curKeywordLowerCase.Equals(keywordTextLowerCase) && !foundKeyword)
-                {
-                    keywordToReturn = k;
-                    foundKeyword = true;
                 }
             }
 
