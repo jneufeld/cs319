@@ -16,12 +16,12 @@
             <li>
                 @using (Html.BeginForm("LogOff", "Users", FormMethod.Post, new { id = "logoutForm" })) {
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="btn">Log out</button>
+                    <button type="submit" class="btn">Log Out</button>
                 }
             </li>
         </ul>
     </li>
 
 } else {
-    <li>@Html.ActionLink("Log in", "Login", "Users", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    <li>@Html.ActionLink("Log In", "Login", "Users", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
 }
