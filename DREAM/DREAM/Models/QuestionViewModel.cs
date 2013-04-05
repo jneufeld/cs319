@@ -134,6 +134,7 @@ namespace DREAM.Models
         }
 
         [Required]
+        [RegularExpression(@"^[\S]*$", ErrorMessage = "No whitespace allowed in keywords")]
         [Display(Name = "Keyword")]
         public string Keyword { get; set; }
 

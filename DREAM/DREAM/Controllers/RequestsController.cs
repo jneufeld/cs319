@@ -167,7 +167,7 @@ namespace DREAM.Controllers
         // ^ Don't do that, terrible, terrible, terrible things will happen.
         [HttpGet]
         [Authorize(Roles = Role.DI_SPECIALIST + ", " + Role.VIEWER)]
-        public ActionResult ViewRequest(int id = 0, string errorMsg = "")
+        public ActionResult ViewRequest(int id = 0, string errorMsg = "", string successMsg = "")
         {
             Request request = FindRequest(id);
 
@@ -175,6 +175,8 @@ namespace DREAM.Controllers
 
             db.Logs.Add(Log.View(request, Membership.GetUser()));
             db.SaveChanges();
+
+            var messages = new List<MsgViewModel>();
 
             if (!String.IsNullOrWhiteSpace(errorMsg))
             {
@@ -184,8 +186,21 @@ namespace DREAM.Controllers
                     Title = "Error",
                     Message = errorMsg,
                 };
-                ViewBag.Messages = new List<MsgViewModel>(new[] { msg });
+                messages.Add(msg);
             }
+
+            if (!String.IsNullOrWhiteSpace(successMsg))
+            {
+                MsgViewModel msg = new MsgViewModel()
+                {
+                    MsgType = MsgType.Success,
+                    Title = "Success",
+                    Message = successMsg,
+                };
+                messages.Add(msg);
+            }
+
+            ViewBag.Messages = messages;
 
             PopulateDropDownLists(request.CompletionTime != null);
 
@@ -289,7 +304,7 @@ namespace DREAM.Controllers
                 db.SaveChanges();
 
                 UnlockRequest(request.ID);
-                return RedirectToAction("Edit", new { id = request.ID });
+                return RedirectToAction("ViewRequest", new { id = request.ID, successMsg = "Request has been saved" });
             }
 
             PopulateDropDownLists(request.CompletionTime != null);
@@ -386,7 +401,7 @@ namespace DREAM.Controllers
             }
             else
             {
-                var errorMsg = "Request lock has been lost";
+                var errorMsg = "Request lock has been lost; request locked by " + FindUsernameFromID(lockingUser);
                 var result = new { Status = "ERR", ErrorMsg = errorMsg };
                 return Json(result);
             }
