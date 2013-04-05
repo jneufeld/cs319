@@ -22,17 +22,16 @@ namespace DREAM.Tests.Controllers
             MembershipUserCollection users = (MembershipUserCollection)result.Model;
             Assert.IsNotNull(users);
         }
-        /*
+
         /// <summary>
-        /// Tests Registering a user without a user name will fail
+        /// Tests Registering a user code
         /// </summary>
         [TestMethod]
         public void TestRegisterWithoutUserName()
         {
-            ViewResult result = (ViewResult)usersAdminController.Index();
-            MembershipUserCollection users = (MembershipUserCollection)result.Model;
-            Assert.IsNotNull(users);
+            Membership.DeleteUser("TestUser1");
+            MembershipUser user = Membership.CreateUser("TestUser1", "Password1!", "user1@example.com");
+            Assert.IsNotNull(user);
         }
-        */
     }
 }
