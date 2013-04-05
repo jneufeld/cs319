@@ -148,9 +148,6 @@ namespace DREAM.Controllers
             {
                 string[] keywords = search.Query.Split(null);
 
-                /*IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Contains(k.KeywordText))
-                    .Include(k => k.AssociatedQuestions.Select(c => c.Request)).ToList();*/
-
                 IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Any(keyword => k.KeywordText.Contains(keyword)))
                     .Include(k => k.AssociatedQuestions.Select(c => c.Request)).ToList();
                 foreach (var k in matched)
@@ -158,7 +155,10 @@ namespace DREAM.Controllers
                     List<int> ints = k.AssociatedQuestions.Select(q => q.Request.ID).ToList();
                     requests.UnionWith(ints.Select(id => FindRequest(id)));
                 }
-                //IEnumerable<Request> requests = db.Requests.Where(request => request.Patient.FirstName.Equals(search.Query));
+                if (User.IsInRole(Role.VIEWER) && !User.IsInRole(Role.DI_SPECIALIST))
+                {
+                    requests = new HashSet<Request>(requests.Where(r => r.CompletionTime != null));
+                }
                 search.Results = new List<RequestViewModel>(requests.Select(r => RequestViewModel.CreateFromRequest(r)));
                 search.Executed = true;
             }

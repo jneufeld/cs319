@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using DREAM.Models;
+
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -31,10 +33,10 @@
                             <div class="nav-collapse collapse" id="main-menu">
                                 <ul class="nav pull-right" id="menu">
                                     @{
-                                        bool isAdmin = User.IsInRole("Admin");
-                                        bool isDISpecialist = User.IsInRole("DI Specialist");
-                                        bool isViewer = User.IsInRole("Viewer");
-                                        bool isReporter = User.IsInRole("Reporter");
+                                        bool isAdmin = User.IsInRole(Role.ADMIN);
+                                        bool isDISpecialist = User.IsInRole(Role.DI_SPECIALIST);
+                                        bool isViewer = User.IsInRole(Role.VIEWER);
+                                        bool isReporter = User.IsInRole(Role.REPORTER);
                                         
                                         if(isDISpecialist) 
                                         {

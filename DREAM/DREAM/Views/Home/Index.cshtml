@@ -16,52 +16,55 @@
 </head>
 <body>
     <div>
-        <h4>Open requests </h4>
-        <table id="requests-open" class="display">
-            <thead>
-                <tr>
-                    <th>ID </th>
-                    <th>Requester Type </th>
-                    <th>Created By </th>
-                    <th>Status </th>
-                    <th>Creation Time </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
+        @if (User.IsInRole(Role.DI_SPECIALIST))
+        {
+            <h4>Open requests </h4>
+            <table id="requests-open" class="display">
+                <thead>
+                    <tr>
+                        <th>ID </th>
+                        <th>Requester Type </th>
+                        <th>Created By </th>
+                        <th>Status </th>
+                        <th>Creation Time </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
 
-            @if (Model == null || Model.OpenRequests.Count == 0)
-            {
-                <tr>
-                    <td>No open requests </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            }
-            else
-            {
-                for (int i = 0; i < Model.OpenRequests.Count; i++)
-                {
-                <tr>
-                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequestID)</td>
-                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequesterTypeString)</td>
-                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].CreatedBy)</td>
-                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].Status)</td>
-                    <td>@Html.DisplayFor(d => Model.OpenRequests[i].CreationTime)</td>
-                    <td>
-                        @Html.ActionLink("View", "ViewRequest", "Requests", new { id = Model.OpenRequests[i].RequestID }, null) |
+                    @if (Model == null || Model.OpenRequests.Count == 0)
+                    {
+                        <tr>
+                            <td>No open requests </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        for (int i = 0; i < Model.OpenRequests.Count; i++)
+                        {
+                        <tr>
+                            <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequestID)</td>
+                            <td>@Html.DisplayFor(d => Model.OpenRequests[i].RequesterTypeString)</td>
+                            <td>@Html.DisplayFor(d => Model.OpenRequests[i].CreatedBy)</td>
+                            <td>@Html.DisplayFor(d => Model.OpenRequests[i].Status)</td>
+                            <td>@Html.DisplayFor(d => Model.OpenRequests[i].CreationTime)</td>
+                            <td>
+                                @Html.ActionLink("View", "ViewRequest", "Requests", new { id = Model.OpenRequests[i].RequestID }, null) |
                         @Html.ActionLink("Edit", "Edit", "Requests", new { id = Model.OpenRequests[i].RequestID }, null)
-                    </td>
-                </tr>
+                            </td>
+                        </tr>
                  
-                }
-            }
+                        }
+                    }
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        }
 
         <h4>Recently created requests </h4>
         <table id="requests-recent" class="display">
@@ -77,35 +80,35 @@
             </thead>
             <tbody>
 
-            @if (Model == null || Model.RecentRequests.Count == 0)
-            {
-                <tr>
-                    <td>No recent requests </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            }
-            else
-            {
-                for (int i = 0; i < Model.RecentRequests.Count; i++)
+                @if (Model == null || Model.RecentRequests.Count == 0)
                 {
-                <tr>
-                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].RequestID)</td>
-                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].RequesterTypeString)</td>
-                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].CreatedBy)</td>
-                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].Status)</td>
-                    <td>@Html.DisplayFor(d => Model.RecentRequests[i].CreationTime)</td>
-                    <td>
-                        @Html.ActionLink("View", "ViewRequest", "Requests", new { id = Model.RecentRequests[i].RequestID }, null) |
-                        @Html.ActionLink("Edit", "Edit", "Requests", new { id = Model.RecentRequests[i].RequestID }, null)
-                    </td>
-                </tr>
-                 
+                    <tr>
+                        <td>No recent requests </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 }
-            }
+                else
+                {
+                    for (int i = 0; i < Model.RecentRequests.Count; i++)
+                    {
+                    <tr>
+                        <td>@Html.DisplayFor(d => Model.RecentRequests[i].RequestID)</td>
+                        <td>@Html.DisplayFor(d => Model.RecentRequests[i].RequesterTypeString)</td>
+                        <td>@Html.DisplayFor(d => Model.RecentRequests[i].CreatedBy)</td>
+                        <td>@Html.DisplayFor(d => Model.RecentRequests[i].Status)</td>
+                        <td>@Html.DisplayFor(d => Model.RecentRequests[i].CreationTime)</td>
+                        <td>
+                            @Html.ActionLink("View", "ViewRequest", "Requests", new { id = Model.RecentRequests[i].RequestID }, null) |
+                        @Html.ActionLink("Edit", "Edit", "Requests", new { id = Model.RecentRequests[i].RequestID }, null)
+                        </td>
+                    </tr>
+                 
+                    }
+                }
 
             </tbody>
         </table>
