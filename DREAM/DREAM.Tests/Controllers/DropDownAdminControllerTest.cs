@@ -180,8 +180,8 @@ namespace DREAM.Tests.Controllers
             m.Enabled = true;
             ActionResult result = dDAdminController.Add(m, "Region");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
-            //Region justAdded = db.Regions.Last();
-           // Assert.IsTrue(justAdded.Code.Equals("TST") && justAdded.FullName.Equals("RegionAddLogicTest") && justAdded.Enabled);
+            Region justAdded = db.Regions.ToArray().Last();
+            Assert.IsTrue(justAdded.Code.Equals("TST") && justAdded.FullName.Equals("RegionAddLogicTest") && justAdded.Enabled);
         }
        
         [TestMethod]
@@ -193,6 +193,8 @@ namespace DREAM.Tests.Controllers
             m.Enabled = true;
             ActionResult result = dDAdminController.Add(m, "RequesterType");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            RequesterType justAdded = db.RequesterTypes.ToArray().Last();
+            Assert.IsTrue(justAdded.Code.Equals("TST") && justAdded.FullName.Equals("RequesterTypeAddLogicTest") && justAdded.Enabled);
         }
 
         [TestMethod]
@@ -204,6 +206,8 @@ namespace DREAM.Tests.Controllers
             m.Enabled = true;
             ActionResult result = dDAdminController.Add(m, "QuestionType");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            QuestionType justAdded = db.QuestionTypes.ToArray().Last();
+            Assert.IsTrue(justAdded.Code.Equals("TST") && justAdded.FullName.Equals("QuestionTypeAddLogicTest") && justAdded.Enabled);
         }
 
         [TestMethod]
@@ -215,6 +219,8 @@ namespace DREAM.Tests.Controllers
             m.Enabled = true;
             ActionResult result = dDAdminController.Add(m, "TumourGroup");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
+            TumourGroup justAdded = db.TumourGroups.ToArray().Last();
+            Assert.IsTrue(justAdded.Code.Equals("TST") && justAdded.FullName.Equals("TumourGroupAddLogicTest") && justAdded.Enabled);
         }
         
         [TestMethod]
