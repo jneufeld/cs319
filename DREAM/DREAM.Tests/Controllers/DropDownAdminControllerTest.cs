@@ -14,7 +14,11 @@ namespace DREAM.Tests.Controllers
     {
         private DropDownAdminController dDAdminController = new DropDownAdminController();
         private DREAMContext db = new DREAMContext();
-
+        
+        /// <summary>
+        /// Checks that the Index method when given a null parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void nullIndexTest()
         {
@@ -22,6 +26,10 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks that the Index method when given an empty string follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void emptyIndexTest()
         {
@@ -29,6 +37,11 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks that the Index method when given a dropDown class that does not exist
+        /// follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void wrongIndexTest()
         {
@@ -36,6 +49,10 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks the Index method returns a Region dropDown model which has dropDown
+        /// elements that are valid (no attributes are null)
+        /// </summary>
         [TestMethod]
         public void regionIndexTest()
         {
@@ -51,6 +68,10 @@ namespace DREAM.Tests.Controllers
             }
         }
 
+        /// <summary>
+        /// Checks the Index method returns a RequesterType dropDown model which has dropDown
+        /// elements that are valid (no attributes are null)
+        /// </summary>
         [TestMethod]
         public void requesterTypeIndexTest()
         {
@@ -66,6 +87,10 @@ namespace DREAM.Tests.Controllers
             }
         }
 
+        /// <summary>
+        /// Checks the Index method returns a QuestionType dropDown model which has dropDown
+        /// elements that are valid (no attributes are null)
+        /// </summary>
         [TestMethod]
         public void questionTypeIndexTest()
         {
@@ -81,6 +106,10 @@ namespace DREAM.Tests.Controllers
             }
         }
 
+        /// <summary>
+        /// Checks the Index method returns a TumourGroup dropDown model which has dropDown
+        /// elements that are valid (no attributes are null)
+        /// </summary>
         [TestMethod]
         public void tumourGroupIndexTest()
         {
@@ -96,6 +125,10 @@ namespace DREAM.Tests.Controllers
             }
         }
 
+        /// <summary>
+        /// Checks that the Add method when given a null parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void nullAddTest()
         {
@@ -103,6 +136,10 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks that the Add method when given an empty string parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void emptyAddTest()
         {
@@ -110,6 +147,10 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks that the Add method when given a wrong dropDown class follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void wrongAddTest()
         {
@@ -117,6 +158,10 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks the Add method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the Region DropDown class
+        /// </summary>
         [TestMethod]
         public void regionAddTest()
         {
@@ -124,6 +169,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        /// Checks the Add method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the RequesterType DropDown class
+        /// </summary>
         [TestMethod]
         public void requesterTypeAddTest()
         {
@@ -131,6 +180,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        /// Checks the Add method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the QuestionType DropDown class
+        /// </summary>
         [TestMethod]
         public void questionTypeAddTest()
         {
@@ -138,13 +191,21 @@ namespace DREAM.Tests.Controllers
             Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        /// Checks the Add method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the TumourGroup DropDown class
+        /// </summary>
         [TestMethod]
         public void tumourGroupAddTest()
         {
             ViewResult result = (ViewResult)dDAdminController.Add("TumourGroup");
             Assert.IsNotNull(result.Model);
         }
-        
+
+        /// <summary>
+        /// Checks that the Add logic method when given a null parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void nullAddLogicTest()
         {
@@ -152,7 +213,11 @@ namespace DREAM.Tests.Controllers
             ActionResult result = dDAdminController.Add(m, null);
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-      
+
+        /// <summary>
+        /// Checks that the Add logic method when given an empty string parameter follows the correct path in the code,
+        /// identified by returning a ViewResult
+        /// </summary>
         [TestMethod]
         public void emptyAddLogicTest()
         {
@@ -162,7 +227,11 @@ namespace DREAM.Tests.Controllers
             ViewResult result = (ViewResult)dDAdminController.Add(m, "Region");
             Assert.AreEqual("System.Web.Mvc.ViewResult", result.GetType().FullName);
         }
-        
+
+        /// <summary>
+        /// Checks that the Add logic method when given a wrong DropDown class parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void wrongAddLogicTest()
         {
@@ -171,6 +240,10 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
         
+        /// <summary>
+        /// Checks the Add logic works correctly for a Region by adding a new element and checking that that element
+        /// matches the last element in the list (as Add adds an element to the end of the list)
+        /// </summary>
         [TestMethod]
         public void regionAddLogicTest()
         {
@@ -183,7 +256,11 @@ namespace DREAM.Tests.Controllers
             Region justAdded = db.Regions.ToArray().Last();
             Assert.IsTrue(justAdded.Code.Equals("TST") && justAdded.FullName.Equals("RegionAddLogicTest") && justAdded.Enabled);
         }
-       
+
+        /// <summary>
+        /// Checks the Add logic works correctly for a RequesterType by adding a new element and checking that that element
+        /// matches the last element in the list (as Add adds an element to the end of the list)
+        /// </summary>
         [TestMethod]
         public void requesterTypeAddLogicTest()
         {
@@ -197,6 +274,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsTrue(justAdded.Code.Equals("TST") && justAdded.FullName.Equals("RequesterTypeAddLogicTest") && justAdded.Enabled);
         }
 
+        /// <summary>
+        /// Checks the Add logic works correctly for a QuestionType by adding a new element and checking that that element
+        /// matches the last element in the list (as Add adds an element to the end of the list)
+        /// </summary>
         [TestMethod]
         public void questionTypeAddLogicTest()
         {
@@ -210,6 +291,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsTrue(justAdded.Code.Equals("TST") && justAdded.FullName.Equals("QuestionTypeAddLogicTest") && justAdded.Enabled);
         }
 
+        /// <summary>
+        /// Checks the Add logic works correctly for a TumourGroup by adding a new element and checking that that element
+        /// matches the last element in the list (as Add adds an element to the end of the list)
+        /// </summary>
         [TestMethod]
         public void tumourGroupAddLogicTest()
         {
@@ -222,28 +307,44 @@ namespace DREAM.Tests.Controllers
             TumourGroup justAdded = db.TumourGroups.ToArray().Last();
             Assert.IsTrue(justAdded.Code.Equals("TST") && justAdded.FullName.Equals("TumourGroupAddLogicTest") && justAdded.Enabled);
         }
-        
+
+        /// <summary>
+        /// Checks that the Edit method when given a null parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void nullEditTest()
         {
             ActionResult result = dDAdminController.Edit(0, null);
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-        
+
+        /// <summary>
+        /// Checks that the Edit method when given an empty string parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void emptyEditTest()
         {
             ActionResult result = dDAdminController.Edit(0, "");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-        
+
+        /// <summary>
+        /// Checks that the Edit method when given a wrong dropDown class follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void wrongEditTest()
         {
             ActionResult result = dDAdminController.Edit(0, "Bubba");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-        
+
+        /// <summary>
+        /// Checks the Edit method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the Region DropDown class
+        /// </summary>
         [TestMethod]
         public void regionEditTest()
         {
@@ -251,6 +352,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        /// Checks the Edit method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the RequesterType DropDown class
+        /// </summary>
         [TestMethod]
         public void requesterTypeEditTest()
         {
@@ -258,6 +363,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        /// Checks the Edit method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the QuestionType DropDown class
+        /// </summary>
         [TestMethod]
         public void questionTypeEditTest()
         {
@@ -265,13 +374,21 @@ namespace DREAM.Tests.Controllers
             Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        /// Checks the Edit method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the TumourGroup DropDown class
+        /// </summary>
         [TestMethod]
         public void tumourGroupEditTest()
         {
             ViewResult result = (ViewResult)dDAdminController.Edit(1, "TumourGroup");
             Assert.IsNotNull(result.Model);
         }
-        
+
+        /// <summary>
+        /// Checks that the Edit logic method when given a null parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void nullEditLogicTest()
         {
@@ -279,7 +396,11 @@ namespace DREAM.Tests.Controllers
             ActionResult result = dDAdminController.Edit(m, null);
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
-      
+
+        /// <summary>
+        /// Checks that the Edit logic method when given a model with empty string parameters follows the correct path in the code,
+        /// identified by returning a ViewResult
+        /// </summary>
         [TestMethod]
         public void emptyEditLogicTest()
         {
@@ -289,7 +410,11 @@ namespace DREAM.Tests.Controllers
             ViewResult result = (ViewResult)dDAdminController.Edit(m, "Region");
             Assert.AreEqual("System.Web.Mvc.ViewResult", result.GetType().FullName);
         }
-        
+
+        /// <summary>
+        /// Checks that the Edit logic method when given a wrong DropDown class parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void wrongEditLogicTest()
         {
@@ -298,6 +423,10 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks the Edit logic works correctly for a Region by editing the last element in the list
+        /// and checking that that element matches the last element in the new DREAMContext
+        /// </summary>
         [TestMethod]
         public void regionEditLogicTest()
         {
@@ -311,6 +440,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsTrue(justChanged.Code.Equals("TSTEdit") && justChanged.FullName.Equals("RegionAddLogicTestEdit"));
         }
 
+        /// <summary>
+        /// Checks the Edit logic works correctly for a RequesterType by editing the last element in the list
+        /// and checking that that element matches the last element in the new DREAMContext
+        /// </summary>
         [TestMethod]
         public void requesterTypeEditLogicTest()
         {
@@ -324,6 +457,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsTrue(justChanged.Code.Equals("TSTEdit") && justChanged.FullName.Equals("RequesterTypeAddLogicTestEdit"));
         }
 
+        /// <summary>
+        /// Checks the Edit logic works correctly for a QuestionType by editing the last element in the list
+        /// and checking that that element matches the last element in the new DREAMContext
+        /// </summary>
         [TestMethod]
         public void questionTypeEditLogicTest()
         {
@@ -337,6 +474,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsTrue(justChanged.Code.Equals("TSTEdit") && justChanged.FullName.Equals("QuestionTypeAddLogicTestEdit"));
         }
 
+        /// <summary>
+        /// Checks the Edit logic works correctly for a TumourGroup by editing the last element in the list
+        /// and checking that that element matches the last element in the new DREAMContext
+        /// </summary>
         [TestMethod]
         public void tumourGroupEditLogicTest()
         {
@@ -350,6 +491,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsTrue(justChanged.Code.Equals("TSTEdit") && justChanged.FullName.Equals("TumourGroupAddLogicTestEdit"));
         }
 
+        /// <summary>
+        /// Checks that the Delete method when given a null parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void nullDeleteTest()
         {
@@ -357,6 +502,10 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks that the Delete method when given an empty string parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void emptyDeleteTest()
         {
@@ -364,6 +513,10 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks that the Delete method when given a wrong dropDown class follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void wrongDeleteTest()
         {
@@ -371,6 +524,10 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks the Delete method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the Region DropDown class
+        /// </summary>
         [TestMethod]
         public void regionDeleteTest()
         {
@@ -378,6 +535,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        /// Checks the Delete method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the RequesterType DropDown class
+        /// </summary>
         [TestMethod]
         public void requesterTypeDeleteTest()
         {
@@ -385,6 +546,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        /// Checks the Delete method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the QuestionType DropDown class
+        /// </summary>
         [TestMethod]
         public void questionTypeDeleteTest()
         {
@@ -392,6 +557,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        /// Checks the Delete method follows the correct path in the code and returns a viewResult with a model 
+        /// that exists for the TumourGroup DropDown class
+        /// </summary>
         [TestMethod]
         public void tumourGroupDeleteTest()
         {
@@ -399,6 +568,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsNotNull(result.Model);
         }
 
+        /// <summary>
+        /// Checks that the Delete logic method when given a null parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void nullDeleteLogicTest()
         {
@@ -407,16 +580,21 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks that the Delete logic method when given an empty string parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void emptyDeleteLogicTest()
         {
-            Region m = new Region();
-            m.Code = "";
-            m.FullName = "";
             ActionResult result = dDAdminController.Delete(0, "");
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks that the Delete logic method when given a wrong DropDown class parameter follows the correct path in the code,
+        /// identified by returning a RedirectToRouteResult
+        /// </summary>
         [TestMethod]
         public void wrongDeleteLogicTest()
         {
@@ -425,6 +603,10 @@ namespace DREAM.Tests.Controllers
             Assert.AreEqual("System.Web.Mvc.RedirectToRouteResult", result.GetType().FullName);
         }
 
+        /// <summary>
+        /// Checks the Delete logic works correctly for a Region by switching the enabled field of the last element in the list
+        /// and checking that that element's enabled field matches the last element's enabled field in the new DREAMContext
+        /// </summary>
         [TestMethod]
         public void regionDeleteLogicTest()
         {
@@ -437,6 +619,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsTrue(!original == lastChanged.Enabled);
         }
 
+        /// <summary>
+        /// Checks the Delete logic works correctly for a RequesterType by switching the enabled field of the last element in the list
+        /// and checking that that element's enabled field matches the last element's enabled field in the new DREAMContext
+        /// </summary>
         [TestMethod]
         public void requesterTypeDeleteLogicTest()
         {
@@ -449,6 +635,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsTrue(!original == lastChanged.Enabled);
         }
 
+        /// <summary>
+        /// Checks the Delete logic works correctly for a QuestionType by switching the enabled field of the last element in the list
+        /// and checking that that element's enabled field matches the last element's enabled field in the new DREAMContext
+        /// </summary>
         [TestMethod]
         public void questionTypeDeleteLogicTest()
         {
@@ -461,6 +651,10 @@ namespace DREAM.Tests.Controllers
             Assert.IsTrue(!original == lastChanged.Enabled);
         }
 
+        /// <summary>
+        /// Checks the Delete logic works correctly for a TumourGroup by switching the enabled field of the last element in the list
+        /// and checking that that element's enabled field matches the last element's enabled field in the new DREAMContext
+        /// </summary>
         [TestMethod]
         public void tumourGroupDeleteLogicTest()
         {
