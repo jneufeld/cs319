@@ -72,19 +72,26 @@ namespace DREAM.Controllers
             return View();
         }
 
+        public ActionResult PageNotFound(String errorPath)
+        {
+            ViewBag.Message = "Sorry, the page you requested does not exist.";
+
+            return View();
+        }
+
+        public ActionResult InvalidPermissions(String errorPath)
+        {
+            ViewBag.Message = "You do not have permission to view this page.";
+
+            return View();
+        }
+
         private bool IsCurrentUserAuthorized()
         {
             return User.IsInRole(Role.ADMIN) ||
                    User.IsInRole(Role.REPORTER) ||
                    User.IsInRole(Role.DI_SPECIALIST) ||
                    User.IsInRole(Role.VIEWER);
-        }
-
-        public ActionResult PageNotFound(String errorPath)
-        {
-            ViewBag.Message = "Sorry, the page you requested does not exist.";
-
-            return View();
         }
     }
 }

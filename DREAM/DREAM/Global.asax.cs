@@ -10,6 +10,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Lucene.Net.Store;
 using DREAM.Models;
+using DREAM.Migrations;
 
 namespace DREAM
 {
@@ -28,11 +29,9 @@ namespace DREAM
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
 
-            Role.CreateRoles();
-
             var context = new DREAMContext();
             var initializeDomain = new CreateDatabaseIfNotExists<DREAMContext>();
-            var initializeMigrations = new MigrateDatabaseToLatestVersion<DREAMContext, DREAM.Migrations.Configuration>();
+            var initializeMigrations = new MigrateDatabaseToLatestVersion<DREAMContext, Configuration>();
 
             //initializeDomain.InitializeDatabase(context);
             //initializeMigrations.InitializeDatabase(context);
@@ -43,7 +42,7 @@ namespace DREAM
             //    sac.BuildAutoCompleteIndex(d, "Keywords");
             //}
 
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DREAMContext, DREAM.Migrations.Configuration>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DREAMContext, Configuration>());
 
 #if DEBUG && FALSE
             Database.SetInitializer(new DREAM.Models.DREAMContextInitializer());

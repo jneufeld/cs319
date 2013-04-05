@@ -8,11 +8,11 @@
 
 @section featured
 {
-    @if (ViewBag.Messages != null)
+    @if (ViewBag.Alerts != null)
     {
         <div class="row">
             <ul style="list-style-type: none; margin-top: 10px">
-                @foreach (var msg in (IList<MsgViewModel>)ViewBag.Messages)
+                @foreach (var msg in (IList<MsgViewModel>)ViewBag.Alerts)
                 {
                     Html.RenderPartial("MsgView", msg);
                 }

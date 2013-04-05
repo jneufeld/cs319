@@ -459,6 +459,7 @@
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\UsersAdmin\_Base.cshtml" />
     <Content Include="Views\Requests\MsgView.cshtml" />
+    <Content Include="Views\Home\InvalidPermissions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

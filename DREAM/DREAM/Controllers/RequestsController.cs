@@ -173,13 +173,16 @@ namespace DREAM.Controllers
         //
         // GET: /Requests/ViewRequest/5
 
-        // TODO Rename to View - seems redundant to have Requests/ViewRequest/5
-        // ^ Don't do that, terrible, terrible, terrible things will happen.
         [HttpGet]
         [Authorize(Roles = Role.DI_SPECIALIST + ", " + Role.VIEWER)]
         public ActionResult ViewRequest(int id = 0, string errorMsg = "", string successMsg = "")
         {
             Request request = FindRequest(id);
+
+            if (request.CompletionTime == null && User.IsInRole(Role.VIEWER) && !User.IsInRole(Role.DI_SPECIALIST))
+            {
+                return RedirectToAction("InvalidPermissions", "Home");
+            }
 
             RequestViewModel rv = RequestViewModel.CreateFromRequest(request);
 
@@ -210,7 +213,7 @@ namespace DREAM.Controllers
                 messages.Add(msg);
             }
 
-            ViewBag.Messages = messages;
+            ViewBag.Alerts = messages;
 
             PopulateDropDownLists(request.CompletionTime != null);
 
