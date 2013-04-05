@@ -34,6 +34,15 @@ namespace DREAM.Controllers
         [HttpPost]
         public ActionResult Register(RegisterUserModel model, int[] selectedGroups, string[] selectedRoles)
         {
+            if (selectedGroups == null)
+            {
+                ModelState.AddModelError("", "No groups selected for this user");
+            }
+            if (selectedRoles == null)
+            {
+                ModelState.AddModelError("", "No roles selected for this user");
+            }
+
             if (ModelState.IsValid)
             {
                 using (TransactionScope trans = new TransactionScope())
@@ -94,6 +103,15 @@ namespace DREAM.Controllers
         [HttpPost]
         public ActionResult Edit(UserModel model, int[] selectedGroups, string[] selectedRoles)
         {
+            if (selectedGroups == null)
+            {
+                ModelState.AddModelError("", "No groups selected for this user");
+            }
+            if (selectedRoles == null)
+            {
+                ModelState.AddModelError("", "No roles selected for this user");
+            }
+
             if (ModelState.IsValid)
             {
                 MembershipUser user = Membership.GetUser(model.UserName);
