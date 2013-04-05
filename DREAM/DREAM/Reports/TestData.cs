@@ -29,15 +29,18 @@ namespace DREAM.Reports
 
             using (StreamReader reader = new StreamReader(Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "bin", "Reports", "drugs.txt")))
             {
-                string keyword = reader.ReadLine();
-                if (db.Keywords.Where(kw => kw.KeywordText == keyword).Count() == 0)
+                while (!reader.EndOfStream)
                 {
-                    db.Keywords.Add(new Keyword
+                    string keyword = reader.ReadLine();
+                    if (db.Keywords.Where(kw => kw.KeywordText == keyword).Count() == 0)
                     {
-                        Enabled = true,
-                        KeywordText = keyword,
-                    });
-                    db.SaveChanges();
+                        db.Keywords.Add(new Keyword
+                        {
+                            Enabled = true,
+                            KeywordText = keyword,
+                        });
+                        db.SaveChanges();
+                    }
                 }
             }
 

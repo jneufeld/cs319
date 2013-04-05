@@ -22,7 +22,7 @@
                     @Html.LabelFor(m => m.QuestionTypeStringID)
                     <div class="controls">
                         @Html.ControlDropDownFor((bool)ViewBag.ReadOnly, m => m.QuestionTypeString, m => m.QuestionTypeStringID,
-                                                 (IEnumerable<SelectListItem>)ViewData["QuestionTypeList"])
+                                                 (IEnumerable<SelectListItem>)ViewData["QuestionTypeList"], new { @class = "span4" })
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                     @Html.LabelFor(m => m.TumourGroupStringID)
                     <div class="controls">
                         @Html.ControlDropDownFor((bool)ViewBag.ReadOnly, m => m.TumourGroupString, m => m.TumourGroupStringID,
-                                                 (IEnumerable<SelectListItem>)ViewData["QuestionTypeList"])
+                                                 (IEnumerable<SelectListItem>)ViewData["TumourGroupList"])
                     </div>
                 </div>
             </div>

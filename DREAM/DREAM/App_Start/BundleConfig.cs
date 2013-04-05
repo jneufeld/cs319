@@ -9,7 +9,7 @@ namespace DREAM
         public static void RegisterBundles(BundleCollection bundles)
         {
             // By default, the ignore list is set to ignore minified files. Clear it to fix this.
-            bundles.IgnoreList.Clear();
+            //bundles.IgnoreList.Clear();
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js", "~/Scripts/jquery-migrate-1.1.1.js"));

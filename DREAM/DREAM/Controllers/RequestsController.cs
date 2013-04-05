@@ -145,7 +145,9 @@ namespace DREAM.Controllers
             ISet<Request> requests = new HashSet<Request>();
             // Split based on whitespace
             string[] keywords = search.Query.Split(null);
-            IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Contains(k.KeywordText))
+            /*IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Contains(k.KeywordText))
+                .Include(k => k.AssociatedQuestions.Select(c => c.Request)).ToList();*/
+            IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Any(keyword => k.KeywordText.Contains(keyword)))
                 .Include(k => k.AssociatedQuestions.Select(c => c.Request)).ToList();
             foreach (var k in matched)
             {

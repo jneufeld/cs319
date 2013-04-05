@@ -31,33 +31,29 @@
         }
         else
         {
-            <table id="results">
-                <thead>
+            <table class="table table-striped" id="results">
+                <tr>
+                    <th>ID </th>
+                    <th>Requester Type </th>
+                    <th>Created By </th>
+                    <th>Status </th>
+                    <th>Creation Time </th>
+                    <th></th>
+                </tr>
+                @for (int i = 0; i < Model.Results.Count; i++)
+                {
                     <tr>
-                        <th>ID </th>
-                        <th>Requester Type </th>
-                        <th>Created By </th>
-                        <th>Status </th>
-                        <th>Creation Time </th>
-                        <th></th>
+                        <td>@Html.DisplayFor(d => Model.Results[i].RequestID)</td>
+                        <td>@Html.DisplayFor(d => Model.Results[i].RequesterTypeString)</td>
+                        <td>@Html.DisplayFor(d => Model.Results[i].CreatedBy)</td>
+                        <td>@Html.DisplayFor(d => Model.Results[i].Status)</td>
+                        <td>@Html.DisplayFor(d => Model.Results[i].CreationTime)</td>
+                        <td>
+                            @Html.ActionLink("View", "ViewRequest", "Requests", new { id = Model.Results[i].RequestID }, new { }) |
+                    @Html.ActionLink("Edit", "Edit", "Requests", new { id = Model.Results[i].RequestID }, new { })
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < Model.Results.Count; i++)
-                    {
-                        <tr>
-                            <td>@Html.DisplayFor(d => Model.Results[i].RequestID)</td>
-                            <td>@Html.DisplayFor(d => Model.Results[i].RequesterTypeString)</td>
-                            <td>@Html.DisplayFor(d => Model.Results[i].CreatedBy)</td>
-                            <td>@Html.DisplayFor(d => Model.Results[i].Status)</td>
-                            <td>@Html.DisplayFor(d => Model.Results[i].CreationTime)</td>
-                            <td>
-                                @Html.ActionLink("View", "ViewRequest", "Requests", new { id = Model.Results[i].RequestID }, new { }) |
-                        @Html.ActionLink("Edit", "Edit", "Requests", new { id = Model.Results[i].RequestID }, new { })
-                            </td>
-                        </tr>
-                    }
-                </tbody>
+                }
             </table>
         }
     }
@@ -67,11 +63,12 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     <script src="@Url.Content("~/Scripts/jQuery.tmpl.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>
-    <link href="@Url.Content("~/Content/themes/base/minified/jquery-ui.min.css")" rel="stylesheet" type="text/css"></link>
+    <script src="@Url.Content("~/bundles/jqueryui")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/themes/base/css")" rel="stylesheet" type="text/css" />
+    <!--
     <script src="@Url.Content("~/Scripts/jquery.dataTables.js")" type="text/javascript"></script>
     <link href="@Url.Content("~/Content/jquery.dataTables.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/jquery.dataTables_themeroller.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/jquery.dataTables_themeroller.css")" rel="stylesheet" type="text/css" />-->
 
     <script type="text/javascript">
         $(function () {
@@ -106,6 +103,7 @@
         });
     </script>
 
+    <!--
     <script type="text/javascript">
         $(document).ready(function () {
             $('#results').dataTable({
@@ -115,4 +113,5 @@
             });
         });
     </script>
+        -->
 }

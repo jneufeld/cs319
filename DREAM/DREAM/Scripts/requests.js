@@ -5,6 +5,7 @@
         var idx = count.val();
         var $obj = $("#questionTemplate").tmpl({ Questions_index: viewModel._generateGuid(), Keywords_index: viewModel._generateGuid(), References_index: viewModel._generateGuid(), QIndex: idx });
         viewModel.addImpactUpdateHandler($obj);
+        viewModel.applyKeywordAutocomplete($(".keywordAutocomplete", $obj));
         $("#questionList").append($obj);
         var next = +idx + 1;
         count.val(next);
@@ -169,7 +170,7 @@ $(function () {
     });
 
     $keywordInputs = $(".keywordAutocomplete");
-    $.each($keywordInputs, function(i, val) {
+    $.each($keywordInputs, function (i, val) {
         viewModel.applyKeywordAutocomplete(val);
     });
 

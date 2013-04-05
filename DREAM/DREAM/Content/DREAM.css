@@ -63,3 +63,8 @@ label
 {
     font-weight: 600;
 }
+
+ul.ui-autocomplete
+{
+    list-style: none;
+}

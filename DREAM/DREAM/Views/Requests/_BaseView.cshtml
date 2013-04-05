@@ -168,7 +168,7 @@
                     @Html.LabelFor(m => m.CallerRegionStringID)
                     <div class="controls">
                         @Html.ControlDropDownFor((bool)ViewBag.ReadOnly, m => m.CallerRegionString, m => m.CallerRegionStringID,
-                                                 (IEnumerable<SelectListItem>)ViewData["RegionList"])
+                                                 (IEnumerable<SelectListItem>)ViewData["RegionList"], new { @class = "span4" })
                     </div>
                 </div>
             </div>
@@ -249,9 +249,7 @@
 
         @Html.ValidationSummary(true)
 
-        <hr />
-
-        <div class="row">
+        <div class="row form-actions">
             <div class="span12">
                 @if(!ViewBag.ReadOnly)
                 {
@@ -269,9 +267,9 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/Scripts/jQuery.tmpl.min.js")
     @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/jqueryui")
     <script type="text/javascript"> if (!window.console) console = { log: function () { } }; </script>
 
     <script type="text/x-jquery-tmpl" id="questionTemplate">
