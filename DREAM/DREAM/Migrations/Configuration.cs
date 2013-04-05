@@ -128,17 +128,11 @@ namespace DREAM.Migrations
             };
             groups.ForEach(g => context.Groups.AddOrUpdate(g));
 
-            foreach (MembershipUser user in Membership.GetAllUsers())
+            // add a default admin user            
+            if (Membership.GetUser("admin") == null)
             {
-                if (context.UserProfiles.Find((Guid)user.ProviderUserKey) == null)
-                {
-                    UserProfile up = new UserProfile
-                    {
-                        UserId = (Guid)user.ProviderUserKey,
-                        FirstName = "First",
-                        LastName = "Last",
-                    };
-                }
+                Membership.CreateUser("admin", "Admin1!", "admin@example.com");
+                Roles.AddUsersToRoles(new string[] {"admin"}, new string[] {Role.ADMIN, Role.DI_SPECIALIST, Role.REPORTER, Role.VIEWER});
             }
         }
     }

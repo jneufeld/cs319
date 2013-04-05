@@ -64,6 +64,7 @@ namespace DREAM.Controllers
             return View();
         }
 
+        [Authorize(Roles=Role.ADMIN)]
         public ActionResult Admin()
         {
             ViewBag.Message = "Administration Panel";

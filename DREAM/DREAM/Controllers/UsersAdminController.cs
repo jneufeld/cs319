@@ -10,6 +10,7 @@ using System.Web.Security;
 
 namespace DREAM.Controllers
 {
+    [Authorize(Roles=Role.ADMIN)]
     public class UsersAdminController : Controller
     {
         private DREAMContext db = new DREAMContext();
