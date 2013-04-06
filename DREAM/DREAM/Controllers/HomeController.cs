@@ -46,6 +46,11 @@ namespace DREAM.Controllers
                 .Select(r => RequestViewModel.CreateFromRequest(r))
                 .ToList();
 
+            if (User.IsInRole(Role.VIEWER) && !User.IsInRole(Role.DI_SPECIALIST))
+            {
+                hv.RecentRequests = hv.RecentRequests.Where(rv => !String.IsNullOrEmpty(rv.CompletionTime)).ToList();
+            }
+
             ViewBag.Message = "Home Page";
             return View(hv);
         }
