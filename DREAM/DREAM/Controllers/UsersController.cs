@@ -10,6 +10,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using DREAM.Models;
 using System.Web.Routing;
+using DREAM.CustomMembership;
 
 namespace DREAM.Controllers
 {
@@ -110,7 +111,14 @@ namespace DREAM.Controllers
                 MembershipUser user = Membership.GetUser(model.UserName);
                 if (user != null)
                 {
-                    bool success = ViewBag.success = user.ChangePassword(model.CurrentPassword, model.NewPassword);
+                    bool success = ViewBag.success = false;
+
+                    try
+                    {
+                        success = user.ChangePassword(model.CurrentPassword, model.NewPassword);
+                    }
+                    catch (PreviouslyUsedPasswordException) { }
+
                     RouteValueDictionary routes = new RouteValueDictionary();
                     routes.Add("user", model.UserName);
                     if (success)
