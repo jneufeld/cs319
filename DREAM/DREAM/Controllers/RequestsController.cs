@@ -876,7 +876,7 @@ namespace DREAM.Controllers
 
         private IEnumerable<SelectListItem> BuildTypedDropdownList<T>(DbSet<T> dbSet) where T : DropDown
         {
-            IEnumerable<T> ts = dbSet.AsEnumerable<T>();
+            IEnumerable<T> ts = dbSet.Where(d => d.Enabled).AsEnumerable<T>();
             IEnumerable<SelectListItem> list = ts.Select(r => new SelectListItem
             {
                 Value = r.ID.ToString(),
