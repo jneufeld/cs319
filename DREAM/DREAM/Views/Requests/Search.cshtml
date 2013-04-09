@@ -14,7 +14,7 @@
 {
     <div class="row">
         <div class="span12 input-append">
-            @Html.TextBoxFor(m => m.Query, new { @class = "search-input-disabled", placeholder = "Enter Keywords" })
+            @Html.TextBoxFor(m => m.Query, new { @class = "search-query", placeholder = "Enter Keywords" })
             <button type="submit" class="btn">Search</button>
 
             @Html.ValidationMessageFor(m => m.Query)

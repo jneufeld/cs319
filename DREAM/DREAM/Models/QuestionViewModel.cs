@@ -169,13 +169,39 @@ namespace DREAM.Models
         [Display(Name = "Reference Type")]
         public string ReferenceType { get; set; }
 
+        private ReferenceType TypeEnum { get; set; }
+
+        public bool IsLink
+        {
+            get
+            {
+                return TypeEnum == Models.ReferenceType.URL || TypeEnum == Models.ReferenceType.Request;
+            }
+        }
+
+        public string LinkLocation
+        {
+            get
+            {
+                if (TypeEnum == Models.ReferenceType.Request)
+                    return "/Requests/ViewRequest/" + Text;
+                else if (TypeEnum == Models.ReferenceType.URL)
+                {
+                    if (!Text.StartsWith("http://") && !Text.StartsWith("https://"))
+                        return "http://" + Text;
+                }
+                return Text;
+            }
+        }
+
         public static ReferenceViewModel CreateFromReference(Reference r)
         {
             ReferenceViewModel referenceViewModel = new ReferenceViewModel
             {
                 ReferenceID = r.ID,
                 Text = r.Value,
-                ReferenceType = ((ReferenceType)r.ReferenceType).ToString(),
+                TypeEnum = (ReferenceType)r.ReferenceType,
+                ReferenceType = ((ReferenceType)r.ReferenceType).ToString()
             };
             return referenceViewModel;
         }

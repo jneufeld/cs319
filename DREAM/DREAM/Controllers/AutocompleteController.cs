@@ -7,15 +7,14 @@ using System.Web;
 using System.Web.Mvc;
 using DREAM.Models;
 
-
 namespace DREAM.Controllers
 {
     public class AutocompleteController : Controller
     {
         private DREAMContext db = new DREAMContext();
 
-        //private SearchAutoComplete SearchAutocomplete =
-        //    new SearchAutoComplete(AppDomain.CurrentDomain.BaseDirectory + "/App_Data/SearchAutocompleteIndex");
+        private SearchAutoComplete SearchAutocomplete =
+            new SearchAutoComplete(AppDomain.CurrentDomain.BaseDirectory + "/App_Data/SearchAutocompleteIndex");
 
         //
         // POST: /Autocomplete/Keyword/
@@ -67,13 +66,16 @@ namespace DREAM.Controllers
         {
             List<string> response = new List<string>();
             if (string.IsNullOrWhiteSpace(query))
-                return Json(new string[] { });
+                return Json(new string[0]);
 
+            // Get the last keyword in the list
             query = query.Split().Last();
 
-            // Fetch suggestions
-            //string[] suggestions = SearchAutocomplete.SuggestTermsFor(query).ToArray();
-            string[] suggestions = new string[0];
+            // All this does is keyword autocomplete. For the moment, there's no difference
+            //  between the two lines... So use the simpler one
+            //string[]  suggestions = SearchAutocomplete.SuggestTermsFor(query).ToArray();
+            string[] suggestions = db.Keywords.Where(k => k.KeywordText.StartsWith(query))
+                                              .Select(k => k.KeywordText).ToArray();
 
             return Json(suggestions, JsonRequestBehavior.AllowGet);
         }

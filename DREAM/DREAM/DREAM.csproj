@@ -279,6 +279,7 @@
     <Compile Include="Controllers\LogsAdminController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
+    <Compile Include="Controllers\SearchAdminController.cs" />
     <Compile Include="Controllers\UsersAdminController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -289,6 +290,7 @@
     <Compile Include="CustomMembership\DREAMMembershipProvider.cs" />
     <Compile Include="Helpers\CollectionEditingHtmlExtensions.cs" />
     <Compile Include="Helpers\ConditionalEditorTemplates.cs" />
+    <Compile Include="Helpers\HtmlHelpers.cs" />
     <Compile Include="Helpers\TimeRangeStepper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AutoMapperConfiguration.cs" />
@@ -299,7 +301,9 @@
     <Compile Include="Models\AssignedGroupModel.cs" />
     <Compile Include="Models\AssignedRoleModel.cs" />
     <Compile Include="Models\Caller.cs" />
+    <Compile Include="Models\IIndexDefinition.cs" />
     <Compile Include="Models\MsgViewModel.cs" />
+    <Compile Include="Models\SearchAdminViewModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\ExternalLogin.cs" />
     <Compile Include="Models\Group.cs" />
@@ -458,8 +462,9 @@
     <Content Include="Views\Requests\_BaseView.cshtml" />
     <Content Include="Views\Home\Admin.cshtml" />
     <Content Include="Views\UsersAdmin\_Base.cshtml" />
-    <Content Include="Views\Requests\MsgView.cshtml" />
+    <Content Include="Views\Shared\MsgView.cshtml" />
     <Content Include="Views\Home\InvalidPermissions.cshtml" />
+    <Content Include="Views\SearchAdmin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

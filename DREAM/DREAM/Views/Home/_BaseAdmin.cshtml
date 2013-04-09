@@ -1,4 +1,6 @@
-﻿@{
+﻿@using DREAM.Models
+
+@{
     ViewBag.Title = "Admin";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -62,6 +64,14 @@
                     }
                 >
                     @Html.ActionLink("Logs", "Index", "LogsAdmin")
+                </li>
+                <li
+                    @if (ViewBag.SearchAdminActive != null && ViewBag.SearchAdminActive)
+                    {
+                        @:class="active"
+                    }
+                >
+                    @Html.ActionLink("Search", "Index", "SearchAdmin")
                 </li>
             </ul>
         </div>

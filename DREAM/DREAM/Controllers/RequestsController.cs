@@ -24,9 +24,9 @@ namespace DREAM.Controllers
     {
         private DREAMContext db = new DREAMContext();
 
-        private TimeSpan LockDuration = TimeSpan.FromSeconds(60);
+        private SearchIndex<Request, RequestIndexDefinition> SearchIndex = new SearchIndex<Request, RequestIndexDefinition>();
 
-        //private SearchIndex SearchIndex = new SearchIndex();
+        private TimeSpan LockDuration = TimeSpan.FromSeconds(60);
 
         //
         // GET: /Requests/
@@ -107,12 +107,14 @@ namespace DREAM.Controllers
                 db.Callers.Add(request.Caller);
                 if (request.Patient.ID == 0)
                     db.Patients.Add(request.Patient);
-                //SearchIndex.AddOrUpdateIndex(request);
                 db.Logs.Add(Log.Create(request, Membership.GetUser()));
 
                 AddQuestions(request, rv);
 
                 db.SaveChanges();
+
+                // Has to be done after SaveChanges because we need the request's ID in order to index it
+                SearchIndex.AddOrUpdateIndex(request);
 
                 return RedirectToAction("Edit", new RouteValueDictionary(new { id = request.ID }));
             }
@@ -142,24 +144,15 @@ namespace DREAM.Controllers
         [HttpPost]
         public ActionResult Search(SearchViewModel search)
         {
-            ISet<Request> requests = new HashSet<Request>();
-            
-            if (search.Query != null)
+            if (!String.IsNullOrWhiteSpace(search.Query))
             {
-                string[] keywords = search.Query.Split(null);
-
-                IEnumerable<Keyword> matched = db.Keywords.Where(k => keywords.Any(keyword => k.KeywordText.Contains(keyword)))
-                    .Include(k => k.AssociatedQuestions.Select(c => c.Request)).ToList();
-                foreach (var k in matched)
-                {
-                    List<int> ints = k.AssociatedQuestions.Select(q => q.Request.ID).ToList();
-                    requests.UnionWith(ints.Select(id => FindRequest(id)));
-                }
+                var ids = SearchIndex.Search(search.Query);
+                var requests = ids.Select(id => FindRequest(id)).Where(r => r != null);
                 if (User.IsInRole(Role.VIEWER) && !User.IsInRole(Role.DI_SPECIALIST))
                 {
-                    requests = new HashSet<Request>(requests.Where(r => r.CompletionTime != null));
+                    requests = requests.Where(r => r.CompletionTime != null);
                 }
-                search.Results = new List<RequestViewModel>(requests.Select(r => RequestViewModel.CreateFromRequest(r)));
+                search.Results = requests.ToList().Select(r => RequestViewModel.CreateFromRequest(r)).ToList();
                 search.Executed = true;
             }
             else
@@ -193,24 +186,12 @@ namespace DREAM.Controllers
 
             if (!String.IsNullOrWhiteSpace(errorMsg))
             {
-                MsgViewModel msg = new MsgViewModel()
-                {
-                    MsgType = MsgType.Error,
-                    Title = "Error",
-                    Message = errorMsg,
-                };
-                messages.Add(msg);
+                messages.Add(MsgViewModel.ErrorMsg(errorMsg));
             }
 
             if (!String.IsNullOrWhiteSpace(successMsg))
             {
-                MsgViewModel msg = new MsgViewModel()
-                {
-                    MsgType = MsgType.Success,
-                    Title = "Success",
-                    Message = successMsg,
-                };
-                messages.Add(msg);
+                messages.Add(MsgViewModel.SuccessMsg(successMsg));
             }
 
             ViewBag.Alerts = messages;
@@ -310,11 +291,11 @@ namespace DREAM.Controllers
                 request.Caller.Type = db.RequesterTypes.SingleOrDefault(rt => rt.ID == rv.RequesterTypeID);
                 request.Caller.Region = db.Regions.SingleOrDefault(reg => reg.ID == rv.CallerRegionID);
 
-                //SearchIndex.AddOrUpdateIndex(request);
-
                 db.Logs.Add(Log.Edit(request, Membership.GetUser()));
 
                 db.SaveChanges();
+
+                SearchIndex.AddOrUpdateIndex(request);
 
                 UnlockRequest(request.ID);
                 return RedirectToAction("ViewRequest", new { id = request.ID, successMsg = "Request has been saved" });
@@ -714,7 +695,7 @@ namespace DREAM.Controllers
                               .Include(p => p.Questions.Select(c => c.References))
                               .Include(p => p.Questions.Select(c => c.QuestionType))
                               .Include(p => p.Questions.Select(c => c.TumourGroup))
-                              .Single(r => r.ID == id && r.Enabled == true);
+                              .SingleOrDefault(r => r.ID == id && r.Enabled == true);
         }
 
         private bool TryLockRequest(int requestID, out Guid lockingUser)
@@ -876,7 +857,7 @@ namespace DREAM.Controllers
 
         private IEnumerable<SelectListItem> BuildTypedDropdownList<T>(DbSet<T> dbSet) where T : DropDown
         {
-            IEnumerable<T> ts = dbSet.Where(d => d.Enabled).AsEnumerable<T>();
+            IEnumerable<T> ts = dbSet.Where(d => d.Enabled);
             IEnumerable<SelectListItem> list = ts.Select(r => new SelectListItem
             {
                 Value = r.ID.ToString(),

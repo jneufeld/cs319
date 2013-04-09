@@ -1,0 +1,22 @@
+﻿@model DREAM.Models.SearchAdminViewModel
+
+@{
+    ViewBag.Title = "Search Administrator";
+    Layout = "~/Views/Home/_BaseAdmin.cshtml";
+}
+
+<h2>Search Administrator</h2>
+
+@using (@Html.BeginForm())
+{
+    <div class="row form-actions">
+        <div class="span12">
+            <button name="Action" type="submit" value="Requests" class="btn btn-primary">Index All Requests</button>
+            @* <button name="Action" type="submit" value="Autocomplete" class="btn btn-primary">Rebuild Autocomplete Index</button> *@
+        </div>
+    </div>
+}
+
+
+@section ExtraScripts {
+}

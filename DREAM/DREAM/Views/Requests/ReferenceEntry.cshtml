@@ -6,25 +6,33 @@
     {
         if (ViewBag.ReadOnly)
         {
-            <div class="row">
-                <div class="span1">
-                    @Html.DisplayFor(m => m.ReferenceType)
-                </div>
-                <div class="span4">
-                    @Html.DisplayFor(m => m.Text)
-                </div>
+        <div class="row">
+
+            <div class="span1">
+                @Html.DisplayFor(m => m.ReferenceType)
             </div>
+            <div class="span4">
+                @if (Model.IsLink)
+                {
+                    @Html.HtmlLink(Model.LinkLocation, Model.Text)
+                }
+                else
+                {
+                    @Html.DisplayFor(m => m.Text)
+                }
+            </div>
+        </div>
         }
         else
         {
-            @Html.HiddenFor(m => m.ReferenceID)
-            @Html.HiddenFor(m => m.Delete)
-            <div class="input-append">
-                @Html.DropDownListFor(m => m.ReferenceType, (IEnumerable<SelectListItem>)ViewData["ReferenceTypeList"], new { @class = "span2" })
-                @Html.TextBoxFor(m => m.Text, new { @class = "span3" })
-                <a href="javascript:void(0);" class="deleteReference btn btn-danger">x</a>
-                @Html.ValidationMessageFor(m => m.Text)
-            </div>
+        @Html.HiddenFor(m => m.ReferenceID)
+        @Html.HiddenFor(m => m.Delete)
+        <div class="input-append">
+            @Html.DropDownListFor(m => m.ReferenceType, (IEnumerable<SelectListItem>)ViewData["ReferenceTypeList"], new { @class = "span2" })
+            @Html.TextBoxFor(m => m.Text, new { @class = "span3" })
+            <a href="javascript:void(0);" class="deleteReference btn btn-danger">x</a>
+            @Html.ValidationMessageFor(m => m.Text)
+        </div>
         }
     }
 </li>

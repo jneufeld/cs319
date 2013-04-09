@@ -72,6 +72,18 @@
 
         <div class="container">
             @RenderSection("featured", required: false)
+
+            @if (ViewBag.Alerts != null)
+            {
+                <div class="row">
+                    <ul style="list-style-type: none; margin-top: 10px">
+                        @foreach (var msg in (IList<MsgViewModel>)ViewBag.Alerts)
+                        {
+                            Html.RenderPartial("MsgView", msg);
+                        }
+                    </ul>
+                </div>
+            }
             <section class="content-wrapper main-content clear-fix">
                 @RenderBody()
             </section>
@@ -88,7 +100,39 @@
         </div>
 
         @Scripts.Render("~/bundles/jquery")
+        @Styles.Render("~/Content/themes/base/css")
+        @Scripts.Render("~/bundles/jqueryui")
         @Scripts.Render("~/bundles/bootstrap")
         @RenderSection("scripts", required: false)
+
+        <script>
+            $(function () {
+                $(".search-query").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/Autocomplete/Search", type: "POST", dataType: "json",
+                            contentType: "application/json; charset=utf-8",
+                            data: "{ \"query\": \"" + request.term + "\" }",
+                            async: true,
+                            success: function (data) {
+                                response(data);
+                            },
+                            error: function (result) {
+                                response(null);
+                            }
+                        });
+                    },
+                    delay: 500,
+                    minLength: 2,
+                    select: function (event, ui) {
+                        var query = $(this).val();
+                        var kws = query.split(' ').slice(0, -1);
+                        kws.push(ui.item.value);
+                        $(this).val(kws.join(' '));
+                        return false;
+                    },
+                });
+            });
+        </script>
     </body>
 </html>

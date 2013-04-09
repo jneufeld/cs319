@@ -17,114 +17,90 @@ using Version = Lucene.Net.Util.Version;
 
 namespace DREAM.Models
 {
-    public class SearchIndex : IDisposable
+    public class SearchIndex<T, IndexDef> : IDisposable where IndexDef : IIndexDefinition<T>, new()
     {
         private FSDirectory Dir;
         private StandardAnalyzer Analyzer;
 
-        private IndexWriter Writer;
+        private IndexDef Converter = new IndexDef();
 
-        private IndexReader Reader;
-        private IndexSearcher Searcher;
+        private Version LuceneVersion = Version.LUCENE_30;
+        private int HitsLimit = 200;
+
+        public static string DirPath = AppDomain.CurrentDomain.BaseDirectory + @"App_Data\LuceneIndex";
 
         public SearchIndex()
         {
-            Dir = FSDirectory.Open(new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "/App_Data/LuceneIndex"));
-            Analyzer = new StandardAnalyzer(Version.LUCENE_30);
-            Writer = new IndexWriter(Dir, Analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
-
-            Reader = IndexReader.Open(Dir, true);
-            Searcher = new IndexSearcher(Dir, true);
+            Dir = FSDirectory.Open(new DirectoryInfo(DirPath));
+            Analyzer = new StandardAnalyzer(LuceneVersion);
         }
 
-        public void AddOrUpdateIndex(Request r)
+        private void AddOrUpdateWithWriter(IndexWriter writer, T obj)
         {
-            var searchQuery = new TermQuery(new Term("ID", r.ID.ToString()));
-            Writer.DeleteDocuments(searchQuery);
+            var idx = Converter.GetIndex(obj);
+            var searchQuery = new TermQuery(idx);
+            writer.DeleteDocuments(searchQuery);
 
-            Document doc = ConvertRequest(r);
+            Document doc = Converter.Convert(obj);
 
-            Writer.AddDocument(doc);
+            writer.AddDocument(doc);
+            writer.Optimize();
+        }
+
+        public void AddOrUpdateIndex(T obj)
+        {
+            using (var writer = new IndexWriter(Dir, Analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+            {
+                AddOrUpdateWithWriter(writer, obj);
+            }
+        }
+
+        public void AddOrUpdateAll(IEnumerable<T> objs)
+        {
+            using (var writer = new IndexWriter(Dir, Analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+            {
+                foreach (var obj in objs)
+                    AddOrUpdateWithWriter(writer, obj);
+            }
         }
 
         public IList<int> Search(string queryStr)
         {
-            var hitsLimit = 500;
-
-            var fieldNames = Reader.GetFieldNames(IndexReader.FieldOption.ALL).ToArray();
-            var parser = new MultiFieldQueryParser(Version.LUCENE_30, fieldNames, Analyzer);
-            Query query = parser.Parse(queryStr);
-
-            TopDocs docs = Searcher.Search(query, hitsLimit);
-
-            List<int> requestIds = new List<int>();
-
-            foreach (var scoreDoc in docs.ScoreDocs)
+            using (var reader = IndexReader.Open(Dir, true))
             {
-                Document d = Searcher.Doc(scoreDoc.Doc);
-            }
-
-            return requestIds;
-        }
-
-        public Document ConvertRequest(Request r)
-        {
-            Document d = new Document();
-            d.Add(new NumericField("ID", Field.Store.YES, true));
-            d.Add(CreateField("", "Creator", r.Creator));
-            if (r.Caller != null)
-            {
-                string prefix = "Caller";
-                d.Add(CreateField(prefix, "Name", r.Caller.FirstName + " " + r.Caller.LastName));
-                d.Add(CreateField(prefix, "Email", r.Caller.Email));
-                d.Add(CreateField(prefix, "Region", r.Caller.Region.FullName));
-                d.Add(CreateField(prefix, "Type", r.Caller.Type.FullName));
-            }
-            if (r.Patient != null)
-            {
-                string prefix = "Patient";
-                d.Add(CreateField(prefix, "Name", r.Patient.FirstName + " " + r.Patient.LastName));
-                d.Add(CreateField(prefix, "AgencyID", r.Patient.AgencyID));
-            }
-            int i = 0;
-            StringBuilder keywords = new StringBuilder();
-            foreach (Question q in r.Questions)
-            {
-                string prefix = "Question[" + i + "]";
-                d.Add(CreateField(prefix, "QuestionText", q.QuestionText));
-                d.Add(CreateField(prefix, "Response", q.Response));
-                d.Add(CreateField(prefix, "Name", q.QuestionType.FullName));
-                d.Add(CreateField(prefix, "Name", q.TumourGroup.FullName));
-                foreach (Keyword k in q.Keywords)
+                using (var searcher = new IndexSearcher(reader))
                 {
-                    keywords.Append(k.KeywordText);
-                    keywords.Append(" ");
+                    var fieldNames = reader.GetFieldNames(IndexReader.FieldOption.ALL).ToArray();
+                    var parser = new MultiFieldQueryParser(LuceneVersion, fieldNames, Analyzer);
+                    Query query = parser.Parse(queryStr);
+
+                    TopDocs docs = searcher.Search(query, HitsLimit);
+
+                    List<int> ids = new List<int>();
+
+                    foreach (var scoreDoc in docs.ScoreDocs)
+                    {
+                        Document d = searcher.Doc(scoreDoc.Doc);
+                        // FIXME Not generic in the slightest...
+                        string val = d.Get("ID");
+                        int id = 0;
+                        Int32.TryParse(val, out id);
+                        ids.Add(id);
+                    }
+
+                    return ids;
                 }
-                i++;
             }
-            d.Add(CreateField("", "Keywords", keywords.ToString()));
-            return d;
-        }
-
-        public Field CreateField(string prefix, string prop, string value)
-        {
-            return new Field(prefix + prop, value, Field.Store.NO, Field.Index.ANALYZED);
-        }
-
-        public Term GetIndexTerm(Request r)
-        {
-            return new Term("ID", r.ID.ToString());
         }
 
         public bool ClearLuceneIndex()
         {
             try
             {
-                Writer.DeleteAll();
-
-                // close handles
-                Analyzer.Close();
-                Writer.Dispose();
+                using (var writer = new IndexWriter(Dir, Analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+                {
+                    writer.DeleteAll();
+                }
             }
             catch (Exception)
             {
@@ -136,7 +112,6 @@ namespace DREAM.Models
         public void Dispose()
         {
             Analyzer.Dispose();
-            Writer.Dispose();
         }
     }
 }

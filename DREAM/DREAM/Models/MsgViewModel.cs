@@ -44,5 +44,27 @@ namespace DREAM.Models
                     return "";
             }
         }
+
+        public static MsgViewModel SuccessMsg(string msg)
+        {
+            MsgViewModel mvm = new MsgViewModel()
+            {
+                MsgType = MsgType.Success,
+                Title = "Success",
+                Message = msg,
+            };
+            return mvm;
+        }
+
+        public static MsgViewModel ErrorMsg(string msg)
+        {
+            MsgViewModel mvm = new MsgViewModel()
+            {
+                MsgType = MsgType.Error,
+                Title = "Error",
+                Message = msg,
+            };
+            return mvm;
+        }
     }
 }

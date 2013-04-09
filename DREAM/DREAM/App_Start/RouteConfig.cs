@@ -26,6 +26,11 @@ namespace DREAM
                 defaults: new { controller = "LogsAdmin", action = "Index" }
             );
             routes.MapRoute(
+                name: "SearchAdmin",
+                url: "Admin/Search",
+                defaults: new { controller = "SearchAdmin", action = "Index" }
+            );
+            routes.MapRoute(
                 name: "Search",
                 url: "Search",
                 defaults: new { controller = "Requests", action = "Search" }

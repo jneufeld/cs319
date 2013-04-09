@@ -36,7 +36,7 @@ namespace DREAM
             //initializeDomain.InitializeDatabase(context);
             //initializeMigrations.InitializeDatabase(context);
 
-            //using (FSDirectory d = FSDirectory.Open(new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory + "/App_Data/LuceneIndex")))
+            //using (FSDirectory d = FSDirectory.Open(new DirectoryInfo(SearchIndex.DirPath)))
             //{
             //    SearchAutoComplete sac = new SearchAutoComplete(AppDomain.CurrentDomain.BaseDirectory + "/App_Data/SearchAutocompleteIndex");
             //    sac.BuildAutoCompleteIndex(d, "Keywords");
