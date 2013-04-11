@@ -112,22 +112,32 @@ namespace DREAM.Controllers
                 if (user != null)
                 {
                     bool success = ViewBag.success = false;
+                    RouteValueDictionary routes = new RouteValueDictionary();
+                    routes.Add("user", model.UserName);
 
                     try
                     {
                         success = user.ChangePassword(model.CurrentPassword, model.NewPassword);
                     }
-                    catch (PreviouslyUsedPasswordException) { }
-
-                    RouteValueDictionary routes = new RouteValueDictionary();
-                    routes.Add("user", model.UserName);
-                    if (success)
+                    catch (PreviouslyUsedPasswordException)
                     {
-                        routes.Add("statusMessage", "Your Password has been successfully changed");
+                        routes.Add("statusMessage", "Your Password was not changed, please enter a new password that does not match any of the previous passwords you have used for the last 252 days.");
                     }
-                    else
+                    catch (ArgumentException)
                     {
-                        routes.Add("statusMessage", "Your Password was not changed");
+                        if (!routes.ContainsKey("statusMessage"))
+                        {
+                            routes.Add("statusMessage", "Your Password was not changed.  Please check that the current password you have entered is correct, and enter a new password that contains a capital letter, a number, a special character, and is at least 8 characters in length.");
+                        }
+                    }
+
+                    if (success && !routes.ContainsKey("statusMessage"))
+                    {
+                        routes.Add("statusMessage", "Your Password has been successfully changed.");
+                    }
+                    else if (!routes.ContainsKey("statusMessage"))
+                    {
+                        routes.Add("statusMessage", "Your Password was not changed, please check that the current password you have entered is correct.");
                     }
                     if (Request.IsAuthenticated)
                         return RedirectToAction("PasswordChangeConfirm", "Users", routes);

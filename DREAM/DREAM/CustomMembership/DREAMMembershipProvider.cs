@@ -91,6 +91,11 @@ namespace DREAM.CustomMembership
                 recordCurrentPassword(user);
             }
 
+            if (!success)
+            {
+                throw new ArgumentException();
+            }
+
             return success;
         }
     }
